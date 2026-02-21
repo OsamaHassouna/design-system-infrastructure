@@ -1,0 +1,726 @@
+/*
+ * =============================================================================
+ * FILE:  docs/css/docs.css
+ *
+ * PURPOSE:
+ *   Documentation shell chrome.
+ *   This file styles the documentation layout, typography, and structural
+ *   UI only — sidebar, header, tables, callouts, rule annotations.
+ *
+ * SCOPE CONTRACT:
+ *   - Uses --doc-* custom property namespace exclusively.
+ *   - Must NOT override any DS token (--primitive-*, --semantic-*, --component-*,
+ *     --base-*).
+ *   - Must NOT use DS component classes for shell layout.
+ *   - DS component classes (.ds-btn, .ds-btn--*) are used only inside demo stages.
+ *
+ * ISOLATION STRATEGY:
+ *   All doc shell properties are declared on :root inside plain (unlayered) CSS,
+ *   which naturally sits above @layer declarations in cascade priority.
+ *   This ensures the doc shell is never affected by DS layer changes.
+ * =============================================================================
+ */
+
+/* =============================================================================
+   0. Doc custom properties (--doc-* namespace)
+   ============================================================================= */
+:root {
+  /* Layout */
+  --doc-sidebar-width:      240px;
+  --doc-header-height:      56px;
+  --doc-content-max-width:  900px;
+
+  /* Colour (intentionally independent of DS tokens) */
+  --doc-color-bg:           #f8f9fa;
+  --doc-color-surface:      #ffffff;
+  --doc-color-border:       #e9ecef;
+  --doc-color-border-strong:#ced4da;
+  --doc-color-text:         #212529;
+  --doc-color-text-subtle:  #868e96;
+  --doc-color-text-code:    #c92a2a;
+  --doc-color-accent:       #228be6;
+  --doc-color-accent-subtle:#e7f5ff;
+
+  /* Layer badge colours */
+  --doc-layer-tokens:       #7950f2;
+  --doc-layer-base:         #2f9e44;
+  --doc-layer-utils:        #f08c00;
+  --doc-layer-components:   #228be6;
+  --doc-layer-themes:       #c2255c;
+  --doc-layer-adapters:     #e8590c;
+
+  /* Callout colours */
+  --doc-callout-info-bg:    #e7f5ff;
+  --doc-callout-info-border:#74c0fc;
+  --doc-callout-rule-bg:    #f3f0ff;
+  --doc-callout-rule-border:#9775fa;
+  --doc-callout-warn-bg:    #fff9db;
+  --doc-callout-warn-border:#ffd43b;
+
+  /* Rule colours */
+  --doc-rule-forbidden:     #fff5f5;
+  --doc-rule-forbidden-border: #ffa8a8;
+  --doc-rule-allowed:       #ebfbee;
+  --doc-rule-allowed-border:#8ce99a;
+
+  /* Typography */
+  --doc-font-sans:    system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --doc-font-mono:    "Cascadia Code", "JetBrains Mono", ui-monospace, monospace;
+  --doc-font-size-xs: 11px;
+  --doc-font-size-sm: 12px;
+  --doc-font-size-md: 14px;
+  --doc-font-size-lg: 16px;
+  --doc-font-size-xl: 20px;
+  --doc-font-size-2xl:24px;
+
+  /* Spacing */
+  --doc-gap-xs:  4px;
+  --doc-gap-sm:  8px;
+  --doc-gap-md:  12px;
+  --doc-gap-lg:  16px;
+  --doc-gap-xl:  24px;
+  --doc-gap-2xl: 32px;
+  --doc-gap-3xl: 48px;
+
+  /* Radius */
+  --doc-radius-sm: 4px;
+  --doc-radius-md: 6px;
+  --doc-radius-lg: 8px;
+}
+
+/* =============================================================================
+   1. Reset & base
+   ============================================================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family:      var(--doc-font-sans);
+  font-size:        var(--doc-font-size-md);
+  color:            var(--doc-color-text);
+  background-color: var(--doc-color-bg);
+  line-height:      1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+code {
+  font-family:     var(--doc-font-mono);
+  font-size:       0.85em;
+  color:           var(--doc-color-text-code);
+  background:      rgba(201, 42, 42, 0.06);
+  padding:         1px 4px;
+  border-radius:   var(--doc-radius-sm);
+}
+
+ul { padding-left: var(--doc-gap-xl); }
+li { margin-block-start: var(--doc-gap-xs); }
+
+/* =============================================================================
+   2. Shell layout
+   ============================================================================= */
+.doc-shell {
+  display:        flex;
+  flex-direction: column;
+  min-height:     100vh;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────────── */
+.doc-header {
+  position:         sticky;
+  top:              0;
+  z-index:          100;
+  height:           var(--doc-header-height);
+  background:       var(--doc-color-surface);
+  border-bottom:    1px solid var(--doc-color-border);
+  box-shadow:       0 1px 3px rgba(0, 0, 0, .06);
+}
+
+.doc-header__inner {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  height:          100%;
+  max-width:       calc(var(--doc-sidebar-width) + var(--doc-content-max-width) + 96px);
+  margin-inline:   auto;
+  padding-inline:  var(--doc-gap-xl);
+  gap:             var(--doc-gap-xl);
+}
+
+.doc-header__brand {
+  display:     flex;
+  align-items: center;
+  gap:         var(--doc-gap-md);
+  flex-shrink: 0;
+}
+
+.doc-header__mark {
+  width:          36px;
+  height:         36px;
+  border-radius:  var(--doc-radius-md);
+  background:     var(--doc-color-accent);
+  color:          #fff;
+  font-weight:    700;
+  font-size:      var(--doc-font-size-sm);
+  display:        flex;
+  align-items:    center;
+  justify-content:center;
+  letter-spacing: 0.04em;
+  flex-shrink:    0;
+}
+
+.doc-header__title {
+  font-size:   var(--doc-font-size-md);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.doc-header__subtitle {
+  font-size:  var(--doc-font-size-xs);
+  color:      var(--doc-color-text-subtle);
+  line-height:1.2;
+}
+
+/* ── Layer badges in header ──────────────────────────────────────────────────── */
+.doc-header__nav {
+  display:     flex;
+  align-items: center;
+  gap:         var(--doc-gap-xs);
+  flex-wrap:   wrap;
+}
+
+.doc-layer-badge {
+  font-family:  var(--doc-font-mono);
+  font-size:    var(--doc-font-size-xs);
+  font-weight:  600;
+  padding:      2px 8px;
+  border-radius:var(--doc-radius-sm);
+  color:        #fff;
+  white-space:  nowrap;
+}
+
+.doc-layer-badge--tokens     { background: var(--doc-layer-tokens); }
+.doc-layer-badge--base       { background: var(--doc-layer-base); }
+.doc-layer-badge--utils      { background: var(--doc-layer-utils); }
+.doc-layer-badge--components { background: var(--doc-layer-components); }
+.doc-layer-badge--themes     { background: var(--doc-layer-themes); }
+.doc-layer-badge--adapters   { background: var(--doc-layer-adapters); }
+
+.doc-layer-arrow {
+  font-size:  var(--doc-font-size-xs);
+  color:      var(--doc-color-text-subtle);
+}
+
+/* ── Body layout ─────────────────────────────────────────────────────────────── */
+.doc-body {
+  display:   flex;
+  flex:      1;
+  max-width: calc(var(--doc-sidebar-width) + var(--doc-content-max-width) + 96px);
+  margin:    0 auto;
+  width:     100%;
+  padding:   var(--doc-gap-xl);
+  gap:       var(--doc-gap-2xl);
+}
+
+/* ── Sidebar ──────────────────────────────────────────────────────────────────── */
+.doc-sidebar {
+  width:       var(--doc-sidebar-width);
+  flex-shrink: 0;
+  padding-top: var(--doc-gap-lg);
+}
+
+.doc-sidebar__section {
+  margin-block-end: var(--doc-gap-xl);
+}
+
+.doc-sidebar__label {
+  font-size:      var(--doc-font-size-xs);
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color:          var(--doc-color-text-subtle);
+  margin-block-end:var(--doc-gap-sm);
+}
+
+.doc-sidebar__layer-pill {
+  font-family:   var(--doc-font-mono);
+  font-size:     var(--doc-font-size-sm);
+  font-weight:   600;
+  padding:       3px 10px;
+  border-radius: var(--doc-radius-sm);
+  background:    var(--doc-layer-components);
+  color:         #fff;
+  display:       inline-block;
+}
+
+.doc-sidebar__link {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  text-decoration: none;
+  color:           var(--doc-color-text);
+  font-size:       var(--doc-font-size-md);
+  padding:         var(--doc-gap-sm) var(--doc-gap-md);
+  border-radius:   var(--doc-radius-md);
+  font-weight:     500;
+  transition:      background 150ms ease, color 150ms ease;
+}
+
+.doc-sidebar__link:hover {
+  background: var(--doc-color-accent-subtle);
+}
+
+.doc-sidebar__link--active {
+  background: var(--doc-color-accent-subtle);
+  color:      var(--doc-color-accent);
+  font-weight:600;
+}
+
+.doc-sidebar__version {
+  font-size:  var(--doc-font-size-xs);
+  font-weight:500;
+  color:      var(--doc-color-text-subtle);
+  font-family:var(--doc-font-mono);
+}
+
+/* ── Table of contents ─────────────────────────────────────────────────────── */
+.doc-toc {
+  display:        flex;
+  flex-direction: column;
+  gap:            2px;
+}
+
+.doc-toc__link {
+  text-decoration: none;
+  color:           var(--doc-color-text-subtle);
+  font-size:       var(--doc-font-size-sm);
+  padding:         var(--doc-gap-xs) var(--doc-gap-md);
+  border-radius:   var(--doc-radius-sm);
+  transition:      color 150ms ease, background 150ms ease;
+}
+
+.doc-toc__link:hover {
+  color:      var(--doc-color-accent);
+  background: var(--doc-color-accent-subtle);
+}
+
+/* ── Main content ─────────────────────────────────────────────────────────── */
+.doc-main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* =============================================================================
+   3. Sections
+   ============================================================================= */
+.doc-section {
+  padding-block-end: var(--doc-gap-3xl);
+  border-bottom:     1px solid var(--doc-color-border);
+  margin-block-end:  var(--doc-gap-2xl);
+}
+
+.doc-section:last-child {
+  border-bottom: none;
+}
+
+.doc-section__header {
+  display:     flex;
+  align-items: baseline;
+  gap:         var(--doc-gap-md);
+  margin-block-end: var(--doc-gap-lg);
+}
+
+.doc-section__title {
+  font-size:   var(--doc-font-size-2xl);
+  font-weight: 700;
+  line-height: 1.2;
+  color:       var(--doc-color-text);
+}
+
+h2.doc-section__title {
+  font-size:        var(--doc-font-size-xl);
+  padding-block-end:var(--doc-gap-md);
+  border-bottom:    2px solid var(--doc-color-border);
+  margin-block-end: var(--doc-gap-lg);
+}
+
+h3.doc-section__subtitle {
+  font-size:        var(--doc-font-size-lg);
+  font-weight:      600;
+  color:            var(--doc-color-text);
+  margin-block:     var(--doc-gap-xl) var(--doc-gap-md);
+}
+
+.doc-section__badge {
+  font-family:  var(--doc-font-mono);
+  font-size:    var(--doc-font-size-sm);
+  font-weight:  600;
+  padding:      3px 10px;
+  border-radius:var(--doc-radius-sm);
+  background:   var(--doc-layer-components);
+  color:        #fff;
+}
+
+.doc-section__desc {
+  color:            var(--doc-color-text);
+  margin-block-end: var(--doc-gap-xl);
+  line-height:      1.7;
+  max-width:        72ch;
+}
+
+/* =============================================================================
+   4. Metadata table
+   ============================================================================= */
+.doc-meta-table {
+  border-collapse: collapse;
+  width:           100%;
+  max-width:       700px;
+  font-size:       var(--doc-font-size-md);
+  margin-block-end:var(--doc-gap-xl);
+}
+
+.doc-meta-table th,
+.doc-meta-table td {
+  padding:       var(--doc-gap-sm) var(--doc-gap-md);
+  border-bottom: 1px solid var(--doc-color-border);
+  text-align:    left;
+  vertical-align:top;
+}
+
+.doc-meta-table th {
+  width:       160px;
+  font-weight: 600;
+  color:       var(--doc-color-text-subtle);
+  white-space: nowrap;
+}
+
+/* =============================================================================
+   5. Callouts
+   ============================================================================= */
+.doc-callout {
+  border-radius:    var(--doc-radius-md);
+  border-left:      3px solid;
+  padding:          var(--doc-gap-md) var(--doc-gap-lg);
+  margin-block-end: var(--doc-gap-xl);
+}
+
+.doc-callout--info {
+  background:   var(--doc-callout-info-bg);
+  border-color: var(--doc-callout-info-border);
+}
+
+.doc-callout--rule {
+  background:   var(--doc-callout-rule-bg);
+  border-color: var(--doc-callout-rule-border);
+}
+
+.doc-callout--warning {
+  background:   var(--doc-callout-warn-bg);
+  border-color: var(--doc-callout-warn-border);
+}
+
+.doc-callout__label {
+  font-size:        var(--doc-font-size-xs);
+  font-weight:      700;
+  text-transform:   uppercase;
+  letter-spacing:   0.08em;
+  color:            var(--doc-color-text-subtle);
+  margin-block-end: var(--doc-gap-sm);
+}
+
+.doc-callout__flow {
+  display:     flex;
+  align-items: center;
+  gap:         var(--doc-gap-sm);
+  flex-wrap:   wrap;
+  font-size:   var(--doc-font-size-sm);
+}
+
+.doc-callout__flow span {
+  color: var(--doc-color-text-subtle);
+}
+
+.doc-callout__body {
+  font-size:   var(--doc-font-size-sm);
+  line-height: 1.6;
+}
+
+/* =============================================================================
+   6. Demo grids
+   ============================================================================= */
+.doc-demo-grid {
+  display:          flex;
+  flex-direction:   column;
+  gap:              0;
+  border:           1px solid var(--doc-color-border);
+  border-radius:    var(--doc-radius-lg);
+  overflow:         hidden;
+  margin-block-end: var(--doc-gap-xl);
+}
+
+.doc-demo-row {
+  display:       grid;
+  grid-template-columns: 280px 1fr;
+  align-items:   center;
+  border-bottom: 1px solid var(--doc-color-border);
+}
+
+.doc-demo-row:last-child {
+  border-bottom: none;
+}
+
+.doc-demo-row__label {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--doc-gap-xs);
+  padding:        var(--doc-gap-md) var(--doc-gap-lg);
+  background:     var(--doc-color-bg);
+  border-right:   1px solid var(--doc-color-border);
+  min-height:     56px;
+  justify-content:center;
+}
+
+.doc-demo-row__label code {
+  font-size:  var(--doc-font-size-sm);
+  font-weight:600;
+}
+
+.doc-demo-row__desc {
+  font-size:  var(--doc-font-size-xs);
+  color:      var(--doc-color-text-subtle);
+}
+
+.doc-demo-row__stage {
+  display:    flex;
+  align-items:center;
+  gap:        var(--doc-gap-md);
+  padding:    var(--doc-gap-lg) var(--doc-gap-xl);
+  background: var(--doc-color-surface);
+  flex-wrap:  wrap;
+}
+
+/* =============================================================================
+   7. State simulation classes (documentation-only — never ship in DS)
+   ============================================================================= */
+
+/*
+ * These classes apply the same style rules as the :hover / :focus-visible /
+ * :active pseudo-classes so static documentation can show forced state visuals
+ * without JavaScript. They reference --component-button-* tokens directly.
+ *
+ * Why not just use :hover? Browsers do not expose a CSS-only way to demonstrate
+ * hover states statically in documentation.
+ */
+
+/* Force hover — primary */
+.ds-btn--primary.doc-force-hover {
+  background-color: var(--component-button-primary-bg-hover);
+}
+
+/* Force focus — primary: same box-shadow logic as :focus-visible in ds */
+.ds-btn--primary.doc-force-focus {
+  outline:    none;
+  box-shadow: 0 0 0
+    var(--component-button-focus-ring-width)
+    var(--component-button-focus-ring-offset, 2px)
+    var(--component-button-focus-ring-color);
+}
+
+/* Force active — primary */
+.ds-btn--primary.doc-force-active {
+  background-color: var(--component-button-primary-bg-active);
+  transform:        translateY(1px);
+}
+
+/* =============================================================================
+   8. Token table
+   ============================================================================= */
+.doc-table-wrap {
+  overflow-x:       auto;
+  margin-block-end: var(--doc-gap-xl);
+}
+
+.doc-token-table {
+  border-collapse: collapse;
+  width:           100%;
+  font-size:       var(--doc-font-size-sm);
+  white-space:     nowrap;
+}
+
+.doc-token-table th {
+  padding:          var(--doc-gap-sm) var(--doc-gap-md);
+  background:       var(--doc-color-bg);
+  border-bottom:    2px solid var(--doc-color-border-strong);
+  text-align:       left;
+  font-weight:      700;
+  color:            var(--doc-color-text-subtle);
+  text-transform:   uppercase;
+  font-size:        var(--doc-font-size-xs);
+  letter-spacing:   0.06em;
+  white-space:      nowrap;
+}
+
+.doc-token-table td {
+  padding:       var(--doc-gap-sm) var(--doc-gap-md);
+  border-bottom: 1px solid var(--doc-color-border);
+  vertical-align:middle;
+  color:         var(--doc-color-text);
+}
+
+.doc-token-table tr:last-child td {
+  border-bottom: none;
+}
+
+.doc-token-table__divider td {
+  border-top: 2px solid var(--doc-color-border-strong);
+}
+
+.doc-swatch {
+  display:       inline-block;
+  width:         20px;
+  height:        20px;
+  border-radius: var(--doc-radius-sm);
+  vertical-align:middle;
+}
+
+/* =============================================================================
+   9. State matrix
+   ============================================================================= */
+.doc-state-matrix {
+  border:           1px solid var(--doc-color-border);
+  border-radius:    var(--doc-radius-lg);
+  overflow:         hidden;
+  margin-block-end: var(--doc-gap-xl);
+}
+
+.doc-state-matrix__header,
+.doc-state-matrix__row {
+  display:       grid;
+  grid-template-columns: 100px repeat(5, 1fr);
+  align-items:   center;
+}
+
+.doc-state-matrix__header {
+  background:   var(--doc-color-bg);
+  border-bottom:1px solid var(--doc-color-border-strong);
+  font-size:    var(--doc-font-size-xs);
+  font-weight:  700;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+  color:        var(--doc-color-text-subtle);
+}
+
+.doc-state-matrix__header > div,
+.doc-state-matrix__row > div {
+  padding:    var(--doc-gap-md);
+  border-right:1px solid var(--doc-color-border);
+}
+
+.doc-state-matrix__header > div:last-child,
+.doc-state-matrix__row > div:last-child {
+  border-right: none;
+}
+
+.doc-state-matrix__row {
+  border-bottom:1px solid var(--doc-color-border);
+  background:   var(--doc-color-surface);
+}
+
+.doc-state-matrix__row:last-child {
+  border-bottom:none;
+}
+
+.doc-state-matrix__row-label {
+  font-size:  var(--doc-font-size-xs);
+  font-weight:600;
+  color:      var(--doc-color-text-subtle);
+  white-space:nowrap;
+}
+
+/* =============================================================================
+   10. Architecture rule list
+   ============================================================================= */
+.doc-rule-list {
+  display:          flex;
+  flex-direction:   column;
+  gap:              var(--doc-gap-sm);
+  margin-block-end: var(--doc-gap-xl);
+}
+
+.doc-rule {
+  display:      flex;
+  align-items:  flex-start;
+  gap:          var(--doc-gap-md);
+  padding:      var(--doc-gap-md) var(--doc-gap-lg);
+  border-radius:var(--doc-radius-md);
+  border-left:  3px solid;
+  font-size:    var(--doc-font-size-md);
+}
+
+.doc-rule--forbidden {
+  background:   var(--doc-rule-forbidden);
+  border-color: var(--doc-rule-forbidden-border);
+}
+
+.doc-rule--allowed {
+  background:   var(--doc-rule-allowed);
+  border-color: var(--doc-rule-allowed-border);
+}
+
+.doc-rule__icon {
+  font-size:  var(--doc-font-size-lg);
+  font-weight:700;
+  flex-shrink:0;
+  width:      20px;
+  text-align: center;
+  margin-top: 1px;
+}
+
+.doc-rule--forbidden .doc-rule__icon { color: #c92a2a; }
+.doc-rule--allowed   .doc-rule__icon { color: #2b8a3e; }
+
+.doc-rule__body {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--doc-gap-xs);
+  line-height:    1.5;
+}
+
+.doc-rule__body span {
+  font-size:  var(--doc-font-size-sm);
+  color:      var(--doc-color-text-subtle);
+}
+
+/* =============================================================================
+   11. Responsive
+   ============================================================================= */
+@media (max-width: 900px) {
+  .doc-body {
+    flex-direction: column;
+    padding:        var(--doc-gap-lg);
+    gap:            var(--doc-gap-lg);
+  }
+
+  .doc-sidebar {
+    width:      100%;
+    display:    flex;
+    flex-wrap:  wrap;
+    gap:        var(--doc-gap-xl);
+    padding-top:0;
+  }
+
+  .doc-sidebar__section {
+    margin-block-end: 0;
+  }
+
+  .doc-header__nav {
+    display: none;
+  }
+
+  .doc-demo-row {
+    grid-template-columns: 1fr;
+  }
+
+  .doc-demo-row__label {
+    border-right:  none;
+    border-bottom: 1px solid var(--doc-color-border);
+  }
+}
