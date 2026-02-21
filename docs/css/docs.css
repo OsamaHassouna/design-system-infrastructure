@@ -15,11 +15,19 @@
  *   - DS component classes (.ds-btn, .ds-btn--*) are used only inside demo stages.
  *
  * ISOLATION STRATEGY:
- *   All doc shell properties are declared on :root inside plain (unlayered) CSS,
- *   which naturally sits above @layer declarations in cascade priority.
- *   This ensures the doc shell is never affected by DS layer changes.
+ *   All rules in this file are wrapped in @layer doc-shell.
+ *   The HTML head declares the full layer order with doc-shell FIRST:
+ *
+ *     @layer tokens, base, doc-shell, utilities, components, themes, adapters;
+ *
+ *   doc-shell sits AFTER base — so doc layout rules (padding, margin, gap on
+ *   .doc-section, .doc-sidebar, etc.) are not wiped by the base * reset.
+ *   doc-shell sits BEFORE components — so DS component styles always win over
+ *   the doc-shell universal reset and any other doc-shell rule.
  * =============================================================================
  */
+
+@layer doc-shell {
 
 /* =============================================================================
    0. Doc custom properties (--doc-* namespace)
@@ -89,7 +97,32 @@
 }
 
 /* =============================================================================
-   1. Reset & base
+   1. Animation initial states (set before Motion runs)
+   Only active when JS is present (.doc-js on <html>, set synchronously).
+   Motion.js will animate each from 0 → 1 / offset → 0.
+   If JS fails or is absent, .doc-js is never added and everything renders
+   at full opacity (progressive enhancement).
+   ============================================================================= */
+.doc-js .doc-header,
+.doc-js .doc-layer-badge,
+.doc-js .doc-sidebar,
+.doc-js #section-overview,
+.doc-js .doc-toc__link {
+  opacity: 0;
+}
+
+.doc-js .doc-section:not(#section-overview),
+.doc-js .doc-demo-row,
+.doc-js .doc-callout,
+.doc-js .doc-token-table tbody tr,
+.doc-js .doc-rule,
+.doc-js .doc-state-matrix__row,
+.doc-js .doc-meta-table tr {
+  opacity: 0;
+}
+
+/* =============================================================================
+   2. Reset & base
    ============================================================================= */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -300,6 +333,13 @@ li { margin-block-start: var(--doc-gap-xs); }
 .doc-toc__link:hover {
   color:      var(--doc-color-accent);
   background: var(--doc-color-accent-subtle);
+}
+
+.doc-toc__link--active {
+  color:       var(--doc-color-accent);
+  background:  var(--doc-color-accent-subtle);
+  font-weight: 600;
+  padding-left: var(--doc-gap-lg);
 }
 
 /* ── Main content ─────────────────────────────────────────────────────────── */
@@ -724,3 +764,5 @@ h3.doc-section__subtitle {
     border-bottom: 1px solid var(--doc-color-border);
   }
 }
+
+} /* end @layer doc-shell */

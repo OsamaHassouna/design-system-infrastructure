@@ -1,18 +1,33 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
+  <!-- Set doc-js class before any render so CSS initial states apply immediately -->
+  <script>document.documentElement.classList.add('doc-js');</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Design System — Documentation</title>
 
   <!--
+    CASCADE LAYER ORDER — declared before any stylesheet loads.
+    ─────────────────────────────────────────────────────────────────────────
+    Priority (lowest → highest):
+      tokens < base < doc-shell < utilities < components < themes < adapters
+
+    doc-shell sits AFTER base so doc layout rules are not wiped by the
+    base reset (* { margin:0; padding:0 }).
+    doc-shell sits BEFORE components so DS component styles always win.
+    ─────────────────────────────────────────────────────────────────────────
+  -->
+  <style>
+    @layer tokens, base, doc-shell, utilities, components, themes, adapters;
+  </style>
+
+  <!--
     CSS LOAD ORDER
     ─────────────────────────────────────────────────────────────────────────
     1. ds-preview.css   →  compiled DS output (tokens + base + components + themes)
-                           Uses @layer tokens, base, utilities, components, themes, adapters
-    2. docs.css         →  documentation shell chrome only
-                           Intentionally NOT part of the DS layer stack.
-                           Uses a separate --doc-* namespace; never overrides DS tokens.
+    2. docs.css         →  documentation shell chrome — wrapped in @layer doc-shell
+                           Uses --doc-* namespace; never overrides DS-layered rules.
     ─────────────────────────────────────────────────────────────────────────
   -->
   <link rel="stylesheet" href="../preview/css/ds-preview.css">
@@ -681,6 +696,176 @@
   classes that simulate visual states. CSS below in docs.css adds matching
   styles. These classes are never part of the DS component API.
 -->
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     MOTION.JS — Animations + Smooth Scroll
+     https://motion.dev  (Motion v11 — ES module via CDN)
+     ═══════════════════════════════════════════════════════════════════════════
+     Architecture note:
+       All animations are additive and respect prefers-reduced-motion.
+       Initial opacity:0 states are set with .doc-js CSS class so elements
+       are never visible before JS runs — no flash.
+       Motion runs entirely outside the DS @layer stack.
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<script type="module">
+import { animate, stagger, inView }
+  from 'https://cdn.jsdelivr.net/npm/motion@latest/+esm';
+
+/*
+  spring() cannot be used as a CSS `easing` value alongside array keyframes
+  in Motion v11 — spring has its own duration model that conflicts.
+  Use a bouncy cubic-bezier instead.
+*/
+const BOUNCE   = 'cubic-bezier(0.34, 1.56, 0.64, 1)';
+const EASE_OUT = 'ease-out';
+
+const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   PAGE ENTRANCE — runs once on load
+───────────────────────────────────────────────────────────────────────────── */
+if (!reduced) {
+
+  // Header drops in from top
+  animate('.doc-header',
+    { opacity: [0, 1], y: [-8, 0] },
+    { duration: 0.4, easing: EASE_OUT }
+  );
+
+  // Layer badges — stagger with bouncy easing
+  animate('.doc-layer-badge',
+    { opacity: [0, 1], y: [6, 0], scale: [0.88, 1] },
+    { duration: 0.45, delay: stagger(0.06, { start: 0.18 }), easing: BOUNCE }
+  );
+
+  // Sidebar slides in from left
+  animate('.doc-sidebar',
+    { opacity: [0, 1], x: [-16, 0] },
+    { duration: 0.45, delay: 0.12, easing: EASE_OUT }
+  );
+
+  // First section (above fold — no scroll needed)
+  animate('#section-overview',
+    { opacity: [0, 1], y: [18, 0] },
+    { duration: 0.5, delay: 0.2, easing: EASE_OUT }
+  );
+
+  // TOC links stagger in
+  animate('.doc-toc__link',
+    { opacity: [0, 1], x: [-8, 0] },
+    { duration: 0.3, delay: stagger(0.05, { start: 0.3 }), easing: EASE_OUT }
+  );
+
+  /* ───────────────────────────────────────────────────────────────────────────
+     SCROLL-DRIVEN ENTRANCE — inView triggers as elements enter the viewport.
+     Always pass the DOM element directly (never a selector string to inView
+     when the callback needs to reference children).
+  ─────────────────────────────────────────────────────────────────────────── */
+
+  // Sections — fade + rise (skip overview, already done above)
+  document.querySelectorAll('.doc-section:not(#section-overview)').forEach(el => {
+    inView(el,
+      () => { animate(el, { opacity: [0, 1], y: [22, 0] }, { duration: 0.48, easing: EASE_OUT }); },
+      { amount: 0.06 }
+    );
+  });
+
+  // Demo rows — stagger inside each grid as it enters
+  document.querySelectorAll('.doc-demo-grid').forEach(grid => {
+    const rows = grid.querySelectorAll('.doc-demo-row');
+    if (!rows.length) return;
+    inView(grid,
+      () => { animate(rows, { opacity: [0, 1], y: [10, 0] }, { duration: 0.32, delay: stagger(0.07), easing: EASE_OUT }); },
+      { amount: 0.04 }
+    );
+  });
+
+  // Token table rows — slide in from left
+  document.querySelectorAll('.doc-token-table').forEach(table => {
+    const rows = table.querySelectorAll('tbody tr');
+    if (!rows.length) return;
+    inView(table,
+      () => { animate(rows, { opacity: [0, 1], x: [-8, 0] }, { duration: 0.28, delay: stagger(0.05), easing: EASE_OUT }); },
+      { amount: 0.08 }
+    );
+  });
+
+  // Architecture rule items
+  const ruleList = document.querySelector('.doc-rule-list');
+  if (ruleList) {
+    inView(ruleList,
+      () => { animate(ruleList.querySelectorAll('.doc-rule'), { opacity: [0, 1], x: [-10, 0] }, { duration: 0.32, delay: stagger(0.08), easing: EASE_OUT }); },
+      { amount: 0.04 }
+    );
+  }
+
+  // Callouts
+  document.querySelectorAll('.doc-callout').forEach(el => {
+    inView(el,
+      () => { animate(el, { opacity: [0, 1], y: [8, 0] }, { duration: 0.38, easing: EASE_OUT }); },
+      { amount: 0.1 }
+    );
+  });
+
+  // State × Variant matrix rows
+  const matrix = document.querySelector('.doc-state-matrix');
+  if (matrix) {
+    inView(matrix,
+      () => { animate(matrix.querySelectorAll('.doc-state-matrix__row'), { opacity: [0, 1], y: [8, 0] }, { duration: 0.3, delay: stagger(0.1), easing: EASE_OUT }); },
+      { amount: 0.1 }
+    );
+  }
+
+  // Meta table rows
+  const metaTable = document.querySelector('.doc-meta-table');
+  if (metaTable) {
+    inView(metaTable,
+      () => { animate(metaTable.querySelectorAll('tr'), { opacity: [0, 1], x: [-6, 0] }, { duration: 0.26, delay: stagger(0.05), easing: EASE_OUT }); },
+      { amount: 0.1 }
+    );
+  }
+
+} else {
+  // Reduced motion: reveal everything immediately — no animation
+  document.documentElement.classList.remove('doc-js');
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   SMOOTH SCROLL — enhanced anchor navigation
+───────────────────────────────────────────────────────────────────────────── */
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', e => {
+    const id = link.getAttribute('href').slice(1);
+    const target = document.getElementById(id);
+    if (!target) return;
+    e.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   ACTIVE TOC LINK — highlights the current section in the sidebar
+───────────────────────────────────────────────────────────────────────────── */
+const sections = document.querySelectorAll('.doc-section[id]');
+const tocLinks = document.querySelectorAll('.doc-toc__link');
+
+const tocObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const id = entry.target.id;
+    tocLinks.forEach(l => {
+      const isActive = l.getAttribute('href') === `#${id}`;
+      l.classList.toggle('doc-toc__link--active', isActive);
+      // Nudge the newly active link
+      if (isActive && !reduced) {
+        animate(l, { x: [0, 4, 0] }, { duration: 0.28, easing: 'ease-out' });
+      }
+    });
+  });
+}, { rootMargin: '-15% 0px -72% 0px', threshold: 0 });
+
+sections.forEach(s => tocObserver.observe(s));
+</script>
 
 </body>
 </html>
