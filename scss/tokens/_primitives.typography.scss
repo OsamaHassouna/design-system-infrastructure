@@ -1,0 +1,79 @@
+// =============================================================================
+// LAYER: tokens
+// FILE:  tokens/_primitives.typography.scss
+//
+// PURPOSE:
+//   Raw typography scale — font families, sizes, weights, line-heights.
+//   These are raw catalogue values with no semantic meaning attached.
+//
+// ALLOWED REFERENCES: none (raw values only)
+// FORBIDDEN:          semantic tokens, component tokens, utility classes
+// =============================================================================
+
+@layer tokens {
+
+  :root {
+    // -------------------------------------------------------------------------
+    // Font families
+    // Naming: --primitive-font-family-{name}
+    // -------------------------------------------------------------------------
+    --primitive-font-family-sans:  'Inter', system-ui, -apple-system, BlinkMacSystemFont,
+                                   'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    --primitive-font-family-serif: 'Georgia', 'Times New Roman', Times, serif;
+    --primitive-font-family-mono:  'JetBrains Mono', 'Fira Code', 'Courier New',
+                                   Courier, monospace;
+
+    // -------------------------------------------------------------------------
+    // Font size scale — modular, 1.25 ratio (Major Third)
+    // Naming: --primitive-font-size-{step}
+    // -------------------------------------------------------------------------
+    --primitive-font-size-2xs:  0.625rem;   // 10px
+    --primitive-font-size-xs:   0.75rem;    // 12px
+    --primitive-font-size-sm:   0.875rem;   // 14px
+    --primitive-font-size-md:   1rem;       // 16px  (base)
+    --primitive-font-size-lg:   1.125rem;   // 18px
+    --primitive-font-size-xl:   1.25rem;    // 20px
+    --primitive-font-size-2xl:  1.5rem;     // 24px
+    --primitive-font-size-3xl:  1.875rem;   // 30px
+    --primitive-font-size-4xl:  2.25rem;    // 36px
+    --primitive-font-size-5xl:  3rem;       // 48px
+    --primitive-font-size-6xl:  3.75rem;    // 60px
+
+    // -------------------------------------------------------------------------
+    // Font weights
+    // Naming: --primitive-font-weight-{name}
+    // -------------------------------------------------------------------------
+    --primitive-font-weight-thin:       100;
+    --primitive-font-weight-extralight: 200;
+    --primitive-font-weight-light:      300;
+    --primitive-font-weight-regular:    400;
+    --primitive-font-weight-medium:     500;
+    --primitive-font-weight-semibold:   600;
+    --primitive-font-weight-bold:       700;
+    --primitive-font-weight-extrabold:  800;
+    --primitive-font-weight-black:      900;
+
+    // -------------------------------------------------------------------------
+    // Line heights
+    // Naming: --primitive-line-height-{name}
+    // -------------------------------------------------------------------------
+    --primitive-line-height-none:    1;
+    --primitive-line-height-tight:   1.25;
+    --primitive-line-height-snug:    1.375;
+    --primitive-line-height-normal:  1.5;
+    --primitive-line-height-relaxed: 1.625;
+    --primitive-line-height-loose:   2;
+
+    // -------------------------------------------------------------------------
+    // Letter spacing
+    // Naming: --primitive-letter-spacing-{name}
+    // -------------------------------------------------------------------------
+    --primitive-letter-spacing-tighter: -0.05em;
+    --primitive-letter-spacing-tight:   -0.025em;
+    --primitive-letter-spacing-normal:   0em;
+    --primitive-letter-spacing-wide:     0.025em;
+    --primitive-letter-spacing-wider:    0.05em;
+    --primitive-letter-spacing-widest:   0.1em;
+  }
+
+}

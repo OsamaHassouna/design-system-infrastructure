@@ -1,0 +1,446 @@
+// =============================================================================
+// LAYER: components
+// FILE:  components/button/_button.scss
+//
+// PURPOSE:
+//   Button component structural styles — BEM methodology.
+//   All visual values flow exclusively through --component-button-* variables
+//   declared in _button.variables.scss. No raw values, no semantic or primitive
+//   token references are permitted here.
+//
+// SEPARATION OF CONCERNS:
+//   _button.variables.scss  ← change for token remapping or theming
+//   _button.scss            ← change for structural or behavioural rules
+//
+// ALLOWED REFERENCES: --component-button-* variables only
+// FORBIDDEN:          --primitive-*, --semantic-*, raw values,
+//                     utility class names, other component variables,
+//                     vendor selectors (.p-button, [_nghost], etc.)
+//
+// -----------------------------------------------------------------------------
+// BEM API
+// -----------------------------------------------------------------------------
+//
+//   BLOCK:    .ds-btn
+//
+//   VARIANTS (mutually exclusive, exactly one required):
+//     .ds-btn--primary    Filled brand button   — highest visual weight
+//     .ds-btn--secondary  Outlined brand button — medium visual weight
+//     .ds-btn--tertiary   Tonal brand button    — low visual weight
+//     .ds-btn--ghost      Transparent button    — lowest visual weight
+//     .ds-btn--danger     Destructive action    — red-filled
+//
+//   SIZES (mutually exclusive, default = md):
+//     .ds-btn--sm         min-height: 32px
+//     .ds-btn--md         min-height: 40px
+//     .ds-btn--lg         min-height: 48px
+//
+//   MODIFIERS (additive):
+//     .ds-btn--loading    Shows spinner, hides label, blocks interaction
+//     .ds-btn--icon-only  Removes horizontal padding asymmetry (square button)
+//     .ds-btn--full-width Stretches to 100% container width
+//     .ds-btn--disabled   Class-based disabled for non-<button> elements
+//
+//   ELEMENTS:
+//     .ds-btn__icon       Leading/trailing icon slot (1em × 1em)
+//     .ds-btn__label      Text label slot
+//     .ds-btn__spinner    Loading indicator slot
+//
+// -----------------------------------------------------------------------------
+// USAGE EXAMPLES
+// -----------------------------------------------------------------------------
+//
+//   Text button (primary, medium):
+//     <button class="ds-btn ds-btn--primary ds-btn--md">
+//       <span class="ds-btn__label">Save</span>
+//     </button>
+//
+//   Icon + label (secondary, small):
+//     <button class="ds-btn ds-btn--secondary ds-btn--sm">
+//       <svg class="ds-btn__icon" aria-hidden="true">…</svg>
+//       <span class="ds-btn__label">Delete</span>
+//     </button>
+//
+//   Icon-only (ghost):
+//     <button class="ds-btn ds-btn--ghost ds-btn--icon-only" aria-label="Close">
+//       <svg class="ds-btn__icon">…</svg>
+//     </button>
+//
+//   Link styled as button:
+//     <a href="/action" class="ds-btn ds-btn--primary ds-btn--md">
+//       <span class="ds-btn__label">Go</span>
+//     </a>
+//
+//   Disabled on <a> (no native :disabled):
+//     <a class="ds-btn ds-btn--primary ds-btn--md ds-btn--disabled"
+//        aria-disabled="true" tabindex="-1">Label</a>
+//
+//   Loading state:
+//     <button class="ds-btn ds-btn--primary ds-btn--md ds-btn--loading"
+//             aria-busy="true" aria-label="Saving…">
+//       <span class="ds-btn__spinner" aria-hidden="true"></span>
+//       <span class="ds-btn__label">Save</span>
+//     </button>
+//
+// =============================================================================
+
+@layer components {
+
+  // ===========================================================================
+  // BLOCK — shared base across all variants and sizes
+  // Defaults to md sizing; always pair with a variant and size modifier.
+  // ===========================================================================
+  .ds-btn {
+    // Layout
+    display:         inline-flex;
+    align-items:     center;
+    justify-content: center;
+    gap:             var(--component-button-md-gap);
+
+    // Sizing defaults (md — overridden by size modifier classes)
+    padding-block:   var(--component-button-md-padding-block);
+    padding-inline:  var(--component-button-md-padding-inline);
+    min-height:      var(--component-button-md-min-height);
+
+    // Typography defaults (md — overridden by size modifier classes)
+    font-size:       var(--component-button-md-font-size);
+    font-weight:     var(--component-button-md-font-weight);
+    line-height:     var(--component-button-line-height);
+    letter-spacing:  var(--component-button-letter-spacing);
+    white-space:     nowrap;
+    text-decoration: none;
+    vertical-align:  middle;
+
+    // Shape
+    border-width:    var(--component-button-border-width);
+    border-style:    var(--component-button-border-style);
+    border-radius:   var(--component-button-border-radius);
+
+    // Behaviour
+    cursor:           pointer;
+    user-select:      none;
+    -webkit-tap-highlight-color: transparent;
+
+    // Transition — all visual properties toggled by state/variant use this
+    transition:
+      background-color var(--component-button-transition-duration) var(--component-button-transition-easing),
+      border-color     var(--component-button-transition-duration) var(--component-button-transition-easing),
+      color            var(--component-button-transition-duration) var(--component-button-transition-easing),
+      box-shadow       var(--component-button-transition-duration) var(--component-button-transition-easing),
+      opacity          var(--component-button-transition-duration) var(--component-button-transition-easing);
+
+    // Focus-visible — accessible ring, low specificity
+    &:focus-visible {
+      outline:        var(--component-button-focus-ring-width) solid var(--component-button-focus-ring-color);
+      outline-offset: var(--component-button-focus-ring-offset);
+    }
+  }
+
+  // ===========================================================================
+  // VARIANTS
+  // Each variant modifier is a flat class — specificity (0,1,0).
+  // Interaction states are nested to keep the selector targetted and readable.
+  // ===========================================================================
+
+  // ---------------------------------------------------------------------------
+  // Primary — filled brand
+  // ---------------------------------------------------------------------------
+  .ds-btn--primary {
+    background:   var(--component-button-primary-bg);
+    color:        var(--component-button-primary-color);
+    border-color: var(--component-button-primary-border-color);
+
+    &:hover:not(:disabled):not(.ds-btn--disabled) {
+      background: var(--component-button-primary-bg-hover);
+    }
+
+    &:active:not(:disabled):not(.ds-btn--disabled) {
+      background: var(--component-button-primary-bg-active);
+    }
+
+    &:disabled,
+    &.ds-btn--disabled {
+      background:   var(--component-button-primary-bg-disabled);
+      color:        var(--component-button-primary-color-disabled);
+      border-color: var(--component-button-primary-border-color);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Secondary — outlined brand
+  // ---------------------------------------------------------------------------
+  .ds-btn--secondary {
+    background:   var(--component-button-secondary-bg);
+    color:        var(--component-button-secondary-color);
+    border-color: var(--component-button-secondary-border-color);
+
+    &:hover:not(:disabled):not(.ds-btn--disabled) {
+      background:   var(--component-button-secondary-bg-hover);
+      border-color: var(--component-button-secondary-border-color-hover);
+    }
+
+    &:active:not(:disabled):not(.ds-btn--disabled) {
+      background:   var(--component-button-secondary-bg-active);
+      border-color: var(--component-button-secondary-border-color-hover);
+    }
+
+    &:disabled,
+    &.ds-btn--disabled {
+      background:   var(--component-button-secondary-bg-disabled);
+      color:        var(--component-button-secondary-color-disabled);
+      border-color: var(--component-button-secondary-border-color-disabled);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Tertiary — tonal brand
+  // ---------------------------------------------------------------------------
+  .ds-btn--tertiary {
+    background:   var(--component-button-tertiary-bg);
+    color:        var(--component-button-tertiary-color);
+    border-color: var(--component-button-tertiary-border-color);
+
+    &:hover:not(:disabled):not(.ds-btn--disabled) {
+      background: var(--component-button-tertiary-bg-hover);
+    }
+
+    &:active:not(:disabled):not(.ds-btn--disabled) {
+      background: var(--component-button-tertiary-bg-active);
+    }
+
+    &:disabled,
+    &.ds-btn--disabled {
+      background:   var(--component-button-tertiary-bg-disabled);
+      color:        var(--component-button-tertiary-color-disabled);
+      border-color: var(--component-button-tertiary-border-color);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Ghost — no fill, no border
+  // ---------------------------------------------------------------------------
+  .ds-btn--ghost {
+    background:   var(--component-button-ghost-bg);
+    color:        var(--component-button-ghost-color);
+    border-color: var(--component-button-ghost-border-color);
+
+    &:hover:not(:disabled):not(.ds-btn--disabled) {
+      background: var(--component-button-ghost-bg-hover);
+    }
+
+    &:active:not(:disabled):not(.ds-btn--disabled) {
+      background: var(--component-button-ghost-bg-active);
+    }
+
+    &:disabled,
+    &.ds-btn--disabled {
+      background:   var(--component-button-ghost-bg-disabled);
+      color:        var(--component-button-ghost-color-disabled);
+      border-color: var(--component-button-ghost-border-color);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Danger — destructive action
+  // ---------------------------------------------------------------------------
+  .ds-btn--danger {
+    background:   var(--component-button-danger-bg);
+    color:        var(--component-button-danger-color);
+    border-color: var(--component-button-danger-border-color);
+
+    &:hover:not(:disabled):not(.ds-btn--disabled) {
+      background: var(--component-button-danger-bg-hover);
+    }
+
+    &:active:not(:disabled):not(.ds-btn--disabled) {
+      background: var(--component-button-danger-bg-active);
+    }
+
+    &:disabled,
+    &.ds-btn--disabled {
+      background:   var(--component-button-danger-bg-disabled);
+      color:        var(--component-button-danger-color-disabled);
+      border-color: var(--component-button-danger-border-color);
+    }
+  }
+
+  // ===========================================================================
+  // SIZES
+  // Each size modifier is a flat class — specificity (0,1,0).
+  // Override the md defaults set on .ds-btn.
+  // ===========================================================================
+
+  .ds-btn--sm {
+    padding-block:  var(--component-button-sm-padding-block);
+    padding-inline: var(--component-button-sm-padding-inline);
+    font-size:      var(--component-button-sm-font-size);
+    font-weight:    var(--component-button-sm-font-weight);
+    gap:            var(--component-button-sm-gap);
+    min-height:     var(--component-button-sm-min-height);
+  }
+
+  .ds-btn--md {
+    // Explicit md for when a parent resets to sm/lg and this must re-assert md
+    padding-block:  var(--component-button-md-padding-block);
+    padding-inline: var(--component-button-md-padding-inline);
+    font-size:      var(--component-button-md-font-size);
+    font-weight:    var(--component-button-md-font-weight);
+    gap:            var(--component-button-md-gap);
+    min-height:     var(--component-button-md-min-height);
+  }
+
+  .ds-btn--lg {
+    padding-block:  var(--component-button-lg-padding-block);
+    padding-inline: var(--component-button-lg-padding-inline);
+    font-size:      var(--component-button-lg-font-size);
+    font-weight:    var(--component-button-lg-font-weight);
+    gap:            var(--component-button-lg-gap);
+    min-height:     var(--component-button-lg-min-height);
+  }
+
+  // ===========================================================================
+  // STATE MODIFIERS
+  // ===========================================================================
+
+  // ---------------------------------------------------------------------------
+  // Disabled (shared — handles cursor, opacity, event-blocking)
+  // Per-variant color overrides are declared inside each variant above.
+  // This rule fires on native :disabled AND on the class-based equivalent.
+  // ---------------------------------------------------------------------------
+  .ds-btn:disabled,
+  .ds-btn--disabled {
+    cursor:         not-allowed;
+    opacity:        0.6;
+    pointer-events: none;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Loading — hides label, shows spinner, blocks interaction
+  // ---------------------------------------------------------------------------
+  .ds-btn--loading {
+    cursor:         wait;
+    pointer-events: none;
+    opacity:        0.8;
+    position:       relative; // anchor for absolute spinner
+  }
+
+  // ---------------------------------------------------------------------------
+  // Icon-only — collapse padding-inline to match padding-block (square button)
+  // Must come after size modifier in specificity weight (same class count, so
+  // source order matters — icon-only is declared after sizes, wins correctly).
+  // ---------------------------------------------------------------------------
+  .ds-btn--icon-only {
+    padding-inline: var(--component-button-md-padding-block); // default = md
+
+    &.ds-btn--sm { padding-inline: var(--component-button-sm-padding-block); }
+    &.ds-btn--lg { padding-inline: var(--component-button-lg-padding-block); }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Full width
+  // ---------------------------------------------------------------------------
+  .ds-btn--full-width {
+    width: 100%;
+  }
+
+  // ===========================================================================
+  // ELEMENTS
+  // ===========================================================================
+
+  // Icon slot — inline SVG or icon component
+  .ds-btn__icon {
+    display:     inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    width:       1em;   // scales with the button's font-size
+    height:      1em;
+  }
+
+  // Text label — fades out during loading state
+  .ds-btn__label {
+    transition: opacity var(--component-button-transition-duration)
+                        var(--component-button-transition-easing);
+
+    .ds-btn--loading & {
+      opacity: 0; // hidden but preserves button width during loading
+    }
+  }
+
+  // Spinner slot — centred absolutely so it appears where the label was
+  .ds-btn__spinner {
+    display:      inline-flex;
+    align-items:  center;
+    justify-content: center;
+    width:        1em;
+    height:       1em;
+    flex-shrink:  0;
+
+    // Centred over the button content during loading
+    // For absolute positioning to work, .ds-btn--loading sets position: relative
+    .ds-btn--loading & {
+      position:           absolute;
+      inset-block-start:  50%;
+      inset-inline-start: 50%;
+      transform:          translate(-50%, -50%);
+    }
+
+    // TODO (Phase 6): Replace with animated SVG or CSS keyframe spinner
+    // Placeholder ring — visible in Phase 5 preview builds
+    &::before {
+      content: '';
+      display: block;
+      width:   0.9em;
+      height:  0.9em;
+      border-radius: 50%;
+      border: 2px solid currentColor;
+      border-block-start-color: transparent;
+      // animation: ds-spin 0.65s linear infinite; // uncomment with keyframe
+    }
+  }
+
+}
+
+// =============================================================================
+// SCALABILITY NOTES (how this pattern extends to all components)
+// =============================================================================
+//
+//  1. VARIABLE SEPARATION
+//     Every component owns a _component-name.variables.scss file that declares
+//     --component-{name}-* custom properties referencing semantic or base tokens.
+//     The structural SCSS file references ONLY those variables — never tokens
+//     directly. This means theming only ever touches one file per component.
+//
+//  2. THEME INTEGRATION
+//     To re-theme .ds-btn--primary in a dark context, add to themes/_theme-dark.scss:
+//       [data-theme="dark"] {
+//         --component-button-primary-bg: var(--semantic-color-brand-default);
+//       }
+//     The semantic token already has a dark-adjusted primitive beneath it, so
+//     often zero component overrides are needed — the cascade does the work.
+//     When a component needs a unique dark appearance, only its variables file
+//     entry needs a theme-layer override.
+//
+//  3. @LAYER SAFETY
+//     All button styles are in @layer components. Theme overrides are in
+//     @layer themes (higher priority). Adapter overrides are in @layer adapters
+//     (highest). Even if a third-party stylesheet is imported without a layer
+//     declaration (which places it after all @layer styles in cascade order),
+//     the DS layers remain internally consistent.
+//
+//  4. BEM + LOW SPECIFICITY
+//     All selectors are single-class (0,1,0) or single-class + pseudo-class
+//     (0,1,1). No ID selectors. No !important. Theme and adapter layers win
+//     through cascade layer priority alone, not specificity hacks.
+//
+//  5. NEW COMPONENT CHECKLIST (applying this pattern to card, input, modal, etc.):
+//     a. Create components/{name}/_index.scss
+//     b. Create components/{name}/_{name}.variables.scss
+//        — declare --component-{name}-* with semantic token defaults
+//     c. Create components/{name}/_{name}.scss
+//        — import @layer components, use only --component-{name}-* vars
+//        — BEM: .ds-{name}, .ds-{name}--{modifier}, .ds-{name}__{element}
+//     d. Register in components/_index.scss
+//     e. If themes need overrides, add to themes/{theme}.scss (primitives only)
+//     f. If adapters need framework mapping, add to adapters/{fw}/{fw}.adapter.scss
+//
+// =============================================================================

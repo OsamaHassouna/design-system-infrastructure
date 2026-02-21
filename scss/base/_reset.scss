@@ -1,0 +1,140 @@
+// =============================================================================
+// LAYER: base
+// FILE:  base/_reset.scss
+//
+// PURPOSE:
+//   Minimal opinionated reset that normalises browser defaults.
+//   Uses semantic tokens for any values that are not truly browser-reset
+//   (e.g. box-sizing, font inheritance). No component-specific styles here.
+//
+// ALLOWED REFERENCES: semantic tokens only
+// FORBIDDEN:          primitive tokens, component tokens, utility classes,
+//                     any class selectors with component names
+// =============================================================================
+
+@layer base {
+
+  // ---------------------------------------------------------------------------
+  // Box model
+  // ---------------------------------------------------------------------------
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Document
+  // ---------------------------------------------------------------------------
+  html {
+    // Force consistent font rendering across platforms
+    -webkit-font-smoothing:  antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+
+    // Prevent iOS from bumping font sizes on landscape
+    -webkit-text-size-adjust: 100%;
+
+    // Smooth scroll — respect user preference
+    @media (prefers-reduced-motion: no-preference) {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    font-family:   var(--semantic-font-family-body);
+    font-size:     var(--semantic-font-size-body-md);
+    font-weight:   var(--semantic-font-weight-body);
+    line-height:   var(--semantic-line-height-body);
+    color:         var(--semantic-color-text-default);
+    background:    var(--semantic-color-surface-base);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Typography reset
+  // ---------------------------------------------------------------------------
+  h1, h2, h3, h4, h5, h6 {
+    font-family:    var(--semantic-font-family-heading);
+    font-weight:    var(--semantic-font-weight-heading);
+    line-height:    var(--semantic-line-height-heading);
+    letter-spacing: var(--semantic-letter-spacing-heading);
+    color:          var(--semantic-color-text-default);
+  }
+
+  p {
+    line-height: var(--semantic-line-height-body);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Links — unstyled base; component/utility layers style them
+  // ---------------------------------------------------------------------------
+  a {
+    color:           inherit;
+    text-decoration: none;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Lists
+  // ---------------------------------------------------------------------------
+  ul,
+  ol {
+    list-style: none;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Media
+  // ---------------------------------------------------------------------------
+  img,
+  video,
+  svg {
+    display:  block;
+    max-width: 100%;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Form elements — inherit font from body, browsers don't always do this
+  // ---------------------------------------------------------------------------
+  button,
+  input,
+  select,
+  textarea {
+    font:           inherit;
+    letter-spacing: inherit;
+    color:          inherit;
+  }
+
+  button {
+    cursor:     pointer;
+    background: none;
+    border:     none;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Code
+  // ---------------------------------------------------------------------------
+  code,
+  kbd,
+  pre,
+  samp {
+    font-family: var(--semantic-font-family-code);
+    font-size:   var(--semantic-font-size-body-sm);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Tables
+  // ---------------------------------------------------------------------------
+  table {
+    border-collapse: collapse;
+    border-spacing:  0;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Hidden utility — accessible hide
+  // ---------------------------------------------------------------------------
+  [hidden] {
+    display: none !important;
+  }
+
+}

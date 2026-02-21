@@ -1,0 +1,75 @@
+// =============================================================================
+// LAYER: base
+// FILE:  base/_root.scss
+//
+// PURPOSE:
+//   Declares the @layer stack order for the entire design system.
+//   This MUST be the first @layer declaration encountered by the browser —
+//   it defines layer priority (last declared = highest priority).
+//
+//   Also provides :root-level typography and layout baseline values that
+//   complement the token system (e.g. fluid type scale helpers, REM anchor).
+//
+// CRITICAL RULE:
+//   The @layer order declaration below governs ALL later @layer blocks.
+//   Importing this file FIRST (via main.scss) is mandatory.
+//
+// ALLOWED REFERENCES: semantic tokens only
+// FORBIDDEN:          primitive tokens, component tokens, utility classes
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// @layer stack declaration — determines cascade priority
+//
+// Priority order (lowest → highest):
+//   tokens < base < utilities < components < themes < adapters
+//
+// Why this order:
+//   - tokens:     foundational values; never override other layers
+//   - base:       browser resets; low specificity
+//   - utilities:  atomic helpers; intentionally low, not trumping components
+//   - components: structured UI elements; override utilities when scoped
+//   - themes:     visual overrides; must win over components
+//   - adapters:   framework glue; must win over themes for framework compat
+// -----------------------------------------------------------------------------
+@layer tokens, base, utilities, components, themes, adapters;
+
+// -----------------------------------------------------------------------------
+// Root baseline
+// -----------------------------------------------------------------------------
+@layer base {
+
+  :root {
+    // REM anchor — 1rem = 16px (browser default; do not change)
+    // Changing this would invalidate the entire spacing and type scale.
+    font-size: 100%;
+
+    // Color scheme hint — informs browser and OS-native scrollbars / inputs
+    // Overridden by [data-theme] selectors in the themes layer.
+    color-scheme: light;
+
+    // Focus outline — accessible default; overridden per-component only
+    --base-focus-ring-width:  2px;
+    --base-focus-ring-offset: 2px;
+    --base-focus-ring-color:  var(--semantic-color-border-focus);
+
+    // Transition defaults — components opt in to these values
+    --base-transition-duration-fast:   120ms;
+    --base-transition-duration-normal: 200ms;
+    --base-transition-duration-slow:   350ms;
+    --base-transition-easing-default:  cubic-bezier(0.4, 0, 0.2, 1);
+    --base-transition-easing-in:       cubic-bezier(0.4, 0, 1, 1);
+    --base-transition-easing-out:      cubic-bezier(0, 0, 0.2, 1);
+
+    // Z-index scale — shared contract for layering
+    --base-z-index-below:   -1;
+    --base-z-index-base:     0;
+    --base-z-index-raised:   10;
+    --base-z-index-dropdown: 100;
+    --base-z-index-sticky:   200;
+    --base-z-index-overlay:  300;
+    --base-z-index-modal:    400;
+    --base-z-index-toast:    500;
+  }
+
+}

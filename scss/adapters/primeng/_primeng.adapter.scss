@@ -1,0 +1,605 @@
+// =============================================================================
+// LAYER: adapters
+// FILE:  adapters/primeng/_primeng.adapter.scss
+//
+// PURPOSE:
+//   PrimeNG adapter — maps Design System component tokens onto PrimeNG's
+//   CSS variable system so that PrimeNG components reflect the DS appearance
+//   without the DS itself coupling to any framework internals.
+//
+// ─── ADAPTER CONTRACT ────────────────────────────────────────────────────────
+//
+//   RULE 1 — TOKEN REFERENCE BOUNDARY
+//     This file MUST reference only --component-* variables.
+//     Direct use of --semantic-*, --primitive-*, or raw values is FORBIDDEN.
+//     Component variables are the public API; semantic/primitive tokens are
+//     implementation details that must not leak into the adapter layer.
+//
+//   RULE 2 — NO TOKEN REDEFINITION
+//     Adapters MUST NOT redefine or shadow DS token values.
+//     Token values flow from: primitives → semantics → components → adapter.
+//     Breaking this chain by setting --component-button-* inside an adapter
+//     creates a silent override and is FORBIDDEN.
+//
+//   RULE 3 — VENDOR SCOPE ONLY
+//     All selectors in this file must target PrimeNG vendor classes (.p-*)
+//     or PrimeNG's :root token block.  DS classes (.ds-btn, etc.) MUST NOT
+//     appear here — they are owned by the components layer.
+//
+//   RULE 4 — FULL REMOVABILITY
+//     Removing this file entirely must leave the core DS fully functional.
+//     The adapter adds PrimeNG compatibility; it does not alter DS behaviour.
+//
+//   RULE 5 — NO CROSS-ADAPTER REFERENCES
+//     This file MUST NOT import from or reference selectors owned by
+//     adapters/angular/ or any other adapter directory.
+//
+// ─── MAPPING STRATEGY ────────────────────────────────────────────────────────
+//
+//   TWO-PASS APPROACH
+//
+//   Pass 1 — PrimeNG token override (`:root` block, PrimeNG v17+ styled mode)
+//     Override --p-button-* CSS variables so PrimeNG's internal stylesheet
+//     reads DS values. This is the preferred technique because it survives
+//     PrimeNG version upgrades without selector changes.
+//
+//   Pass 2 — Structural class overrides (`.p-button` selectors)
+//     For states and sizes that PrimeNG does not expose through tokens,
+//     target the rendered PrimeNG classes directly. All values MUST still
+//     reference --component-button-* variables — never raw values.
+//
+//   ALLOWED REFERENCES: --component-* variables only
+//   FORBIDDEN:          --primitive-*, --semantic-*, raw hex/rgb/rem values,
+//                       DS utility classes, cross-adapter references
+//
+// ─── THEME COMPATIBILITY ─────────────────────────────────────────────────────
+//
+//   Theme switching is automatic: when [data-theme="dark"] is applied to the
+//   root element, the themes layer overrides --component-button-* variables.
+//   Because this adapter references those variables by name, PrimeNG components
+//   inherit the active theme with zero additional adapter code.
+//
+// ─── EXTENDING THIS PATTERN ──────────────────────────────────────────────────
+//
+//   To add a new component mapping (e.g. Card, Input, Dialog):
+//     1. Add a Pass 1 block in :root mapping --p-{component}-* tokens.
+//     2. Add a Pass 2 block with .p-{component} class overrides if needed.
+//     3. Reference only --component-{name}-* variables — add them to
+//        components/{name}/_{name}.variables.scss first if they don't exist.
+//
+//   To add a new adapter (React, Vue, Bootstrap):
+//     1. Create adapters/{framework}/_index.scss
+//     2. Create adapters/{framework}/_{framework}.adapter.scss
+//     3. Follow this same two-pass pattern; replace --p-* with the vendor's
+//        token namespace.
+//     4. Register in adapters/_index.scss under conditional loading comments.
+//     Rules 1–5 above apply to every adapter without exception.
+//
+// =============================================================================
+
+@layer adapters {
+
+  // ===========================================================================
+  // PASS 1 — PrimeNG design-token override (v17+ Styled Mode)
+  //
+  // PrimeNG v17+ reads --p-button-* CSS variables from :root to paint its
+  // button components. We point them at DS component variables so the token
+  // pipeline (not this file) controls the final resolved values.
+  //
+  // Reference: https://primeng.org/button#theming
+  //            https://primeng.org/theming#csslayer
+  // ===========================================================================
+
+  :root {
+
+    // -------------------------------------------------------------------------
+    // Structure — shared across all button variants
+    // -------------------------------------------------------------------------
+    --p-button-border-radius:   var(--component-button-border-radius);
+    --p-button-border-width:    var(--component-button-border-width);
+    --p-button-border-style:    var(--component-button-border-style);
+    --p-button-transition:
+      background-color var(--component-button-transition-duration) var(--component-button-transition-easing),
+      border-color     var(--component-button-transition-duration) var(--component-button-transition-easing),
+      color            var(--component-button-transition-duration) var(--component-button-transition-easing),
+      box-shadow       var(--component-button-transition-duration) var(--component-button-transition-easing),
+      opacity          var(--component-button-transition-duration) var(--component-button-transition-easing);
+
+    // Disabled opacity — shared
+    --p-button-disabled-opacity: 0.6;
+
+    // -------------------------------------------------------------------------
+    // Focus ring — mapped from DS base contract via component variables
+    // -------------------------------------------------------------------------
+    --p-focus-ring-width:  var(--component-button-focus-ring-width);
+    --p-focus-ring-offset: var(--component-button-focus-ring-offset);
+    --p-focus-ring-color:  var(--component-button-focus-ring-color);
+    --p-focus-ring-style:  solid;
+
+    // -------------------------------------------------------------------------
+    // Typography + spacing defaults — PrimeNG uses a single font-size token
+    // for all sizes; size variants are handled in Pass 2 via class overrides.
+    // -------------------------------------------------------------------------
+    --p-button-font-size:   var(--component-button-md-font-size);
+    --p-button-font-weight: var(--component-button-md-font-weight);
+    --p-button-gap:         var(--component-button-md-gap);
+    --p-button-padding-y:   var(--component-button-md-padding-block);
+    --p-button-padding-x:   var(--component-button-md-padding-inline);
+
+    // =========================================================================
+    // VARIANT: primary  (PrimeNG default severity / no severity attribute)
+    //
+    //   DS mapping:  --component-button-primary-*
+    //   PrimeNG ref: --p-button-primary-*
+    // =========================================================================
+    --p-button-primary-background:                var(--component-button-primary-bg);
+    --p-button-primary-hover-background:          var(--component-button-primary-bg-hover);
+    --p-button-primary-active-background:         var(--component-button-primary-bg-active);
+    --p-button-primary-disabled-background:       var(--component-button-primary-bg-disabled);
+    --p-button-primary-color:                     var(--component-button-primary-color);
+    --p-button-primary-hover-color:               var(--component-button-primary-color);
+    --p-button-primary-active-color:              var(--component-button-primary-color);
+    --p-button-primary-disabled-color:            var(--component-button-primary-color-disabled);
+    --p-button-primary-border-color:              var(--component-button-primary-border-color);
+    --p-button-primary-hover-border-color:        var(--component-button-primary-border-color);
+    --p-button-primary-active-border-color:       var(--component-button-primary-border-color);
+    --p-button-primary-disabled-border-color:     var(--component-button-primary-border-color);
+
+    // =========================================================================
+    // VARIANT: secondary  (PrimeNG severity="secondary")
+    //
+    //   DS mapping:  --component-button-secondary-*  (outlined button)
+    //   PrimeNG ref: --p-button-secondary-*
+    // =========================================================================
+    --p-button-secondary-background:              var(--component-button-secondary-bg);
+    --p-button-secondary-hover-background:        var(--component-button-secondary-bg-hover);
+    --p-button-secondary-active-background:       var(--component-button-secondary-bg-active);
+    --p-button-secondary-disabled-background:     var(--component-button-secondary-bg-disabled);
+    --p-button-secondary-color:                   var(--component-button-secondary-color);
+    --p-button-secondary-hover-color:             var(--component-button-secondary-color);
+    --p-button-secondary-active-color:            var(--component-button-secondary-color);
+    --p-button-secondary-disabled-color:          var(--component-button-secondary-color-disabled);
+    --p-button-secondary-border-color:            var(--component-button-secondary-border-color);
+    --p-button-secondary-hover-border-color:      var(--component-button-secondary-border-color-hover);
+    --p-button-secondary-active-border-color:     var(--component-button-secondary-border-color-hover);
+    --p-button-secondary-disabled-border-color:   var(--component-button-secondary-border-color-disabled);
+
+    // =========================================================================
+    // VARIANT: tertiary  (PrimeNG [text] modifier — nearest equivalent)
+    //
+    //   DS mapping:  --component-button-tertiary-*  (tonal button)
+    //   PrimeNG ref: --p-button-text-*
+    //   Note: PrimeNG has no direct "tonal" variant. The [text] modifier
+    //   (no border, light fill) is the closest structural match. The tonal
+    //   background is supplied by DS component tokens.
+    // =========================================================================
+    --p-button-text-primary-color:                var(--component-button-tertiary-color);
+    --p-button-text-primary-hover-color:          var(--component-button-tertiary-color);
+    --p-button-text-primary-active-color:         var(--component-button-tertiary-color);
+    --p-button-text-primary-hover-background:     var(--component-button-tertiary-bg-hover);
+    --p-button-text-primary-active-background:    var(--component-button-tertiary-bg-active);
+
+    // =========================================================================
+    // VARIANT: ghost  (PrimeNG [text][plain] or text without severity)
+    //
+    //   DS mapping:  --component-button-ghost-*  (no background, no border)
+    //   PrimeNG ref: --p-button-text-*  (plain variant)
+    // =========================================================================
+    --p-button-text-plain-color:                  var(--component-button-ghost-color);
+    --p-button-text-plain-hover-color:            var(--component-button-ghost-color);
+    --p-button-text-plain-active-color:           var(--component-button-ghost-color);
+    --p-button-text-plain-hover-background:       var(--component-button-ghost-bg-hover);
+    --p-button-text-plain-active-background:      var(--component-button-ghost-bg-active);
+
+    // =========================================================================
+    // VARIANT: danger  (PrimeNG severity="danger")
+    //
+    //   DS mapping:  --component-button-danger-*
+    //   PrimeNG ref: --p-button-danger-*
+    // =========================================================================
+    --p-button-danger-background:                 var(--component-button-danger-bg);
+    --p-button-danger-hover-background:           var(--component-button-danger-bg-hover);
+    --p-button-danger-active-background:          var(--component-button-danger-bg-active);
+    --p-button-danger-disabled-background:        var(--component-button-danger-bg-disabled);
+    --p-button-danger-color:                      var(--component-button-danger-color);
+    --p-button-danger-hover-color:                var(--component-button-danger-color);
+    --p-button-danger-active-color:               var(--component-button-danger-color);
+    --p-button-danger-disabled-color:             var(--component-button-danger-color-disabled);
+    --p-button-danger-border-color:               var(--component-button-danger-border-color);
+    --p-button-danger-hover-border-color:         var(--component-button-danger-border-color);
+    --p-button-danger-active-border-color:        var(--component-button-danger-border-color);
+    --p-button-danger-disabled-border-color:      var(--component-button-danger-border-color);
+
+    // =========================================================================
+    // FUTURE COMPONENT TOKENS — placeholder blocks
+    // Uncomment and fill once the corresponding DS component variables exist.
+    // =========================================================================
+
+    // ── Card ─────────────────────────────────────────────────────────────────
+    // --p-card-background:      var(--component-card-bg);
+    // --p-card-border-radius:   var(--component-card-border-radius);
+    // --p-card-shadow:          var(--component-card-shadow);
+    // --p-card-body-padding:    var(--component-card-body-padding-block)
+    //                           var(--component-card-body-padding-inline);
+    // --p-card-color:           var(--component-card-color);
+
+    // ── Input / Dropdown / MultiSelect ───────────────────────────────────────
+    // --p-inputtext-background: var(--component-input-bg);
+    // --p-inputtext-color:      var(--component-input-color);
+    // --p-inputtext-border:     var(--component-input-border-color);
+    // --p-inputtext-hover-border-color: var(--component-input-border-color-hover);
+    // --p-inputtext-focus-border-color: var(--component-input-border-color-focus);
+
+    // ── Dialog / Overlay ─────────────────────────────────────────────────────
+    // --p-overlay-modal-background: var(--component-modal-bg);
+    // --p-overlay-modal-border-radius: var(--component-modal-border-radius);
+    // --p-overlay-modal-padding:    var(--component-modal-padding);
+    // --p-overlay-modal-shadow:     var(--component-modal-shadow);
+
+  }
+
+  // ===========================================================================
+  // PASS 2 — Structural class overrides
+  //
+  // Targets PrimeNG's rendered HTML class selectors directly.
+  // Used for:
+  //   a. Size variants — PrimeNG v17 exposes .p-button-sm / .p-button-lg
+  //      but font-size and spacing inside them need DS size tokens.
+  //   b. States (loading, icon-only) not fully covered by --p-* tokens.
+  //   c. Any PrimeNG rendering quirk that PrimeNG tokens cannot address.
+  //
+  // Specificity target: one class (0,1,0) or class + pseudo-class (0,2,0).
+  // No !important — cascade layer priority (adapters > components) ensures
+  // these overrides win without specificity escalation.
+  //
+  // ALL VALUES MUST reference --component-button-* variables.
+  // Raw values are FORBIDDEN here.
+  // ===========================================================================
+
+  // ---------------------------------------------------------------------------
+  // Base structural reset
+  //
+  // Aligns PrimeNG's default .p-button element with DS structural expectations.
+  // Shape, transition, and cursor are enforced here because PrimeNG may set
+  // its own defaults that need to be neutralised.
+  // ---------------------------------------------------------------------------
+  .p-button {
+    border-radius:   var(--component-button-border-radius);
+    border-width:    var(--component-button-border-width);
+    border-style:    var(--component-button-border-style);
+    letter-spacing:  var(--component-button-letter-spacing);
+    line-height:     var(--component-button-line-height);
+    cursor:          pointer;
+    user-select:     none;
+    transition:
+      background-color var(--component-button-transition-duration) var(--component-button-transition-easing),
+      border-color     var(--component-button-transition-duration) var(--component-button-transition-easing),
+      color            var(--component-button-transition-duration) var(--component-button-transition-easing),
+      box-shadow       var(--component-button-transition-duration) var(--component-button-transition-easing),
+      opacity          var(--component-button-transition-duration) var(--component-button-transition-easing);
+
+    // Focus-visible ring — overrides PrimeNG outline defaults
+    &:focus-visible {
+      outline:        var(--component-button-focus-ring-width) solid var(--component-button-focus-ring-color);
+      outline-offset: var(--component-button-focus-ring-offset);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // VARIANT: primary
+  //
+  //   PrimeNG usage: <p-button />  (default)  or  severity="primary"
+  //   Class:         .p-button  (no severity modifier class)
+  //   DS source:     --component-button-primary-*
+  // ---------------------------------------------------------------------------
+  .p-button.p-button-primary,
+  .p-button:not([class*='p-button-']) {
+    background:   var(--component-button-primary-bg);
+    color:        var(--component-button-primary-color);
+    border-color: var(--component-button-primary-border-color);
+
+    &:hover:not(:disabled) {
+      background:   var(--component-button-primary-bg-hover);
+      border-color: var(--component-button-primary-border-color);
+    }
+
+    &:active:not(:disabled) {
+      background:   var(--component-button-primary-bg-active);
+      border-color: var(--component-button-primary-border-color);
+    }
+
+    &:disabled,
+    &.p-disabled {
+      background:   var(--component-button-primary-bg-disabled);
+      color:        var(--component-button-primary-color-disabled);
+      border-color: var(--component-button-primary-border-color);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // VARIANT: secondary  (outlined)
+  //
+  //   PrimeNG usage: severity="secondary"
+  //   Class:         .p-button-secondary
+  //   DS source:     --component-button-secondary-*
+  // ---------------------------------------------------------------------------
+  .p-button.p-button-secondary {
+    background:   var(--component-button-secondary-bg);
+    color:        var(--component-button-secondary-color);
+    border-color: var(--component-button-secondary-border-color);
+
+    &:hover:not(:disabled) {
+      background:   var(--component-button-secondary-bg-hover);
+      border-color: var(--component-button-secondary-border-color-hover);
+    }
+
+    &:active:not(:disabled) {
+      background:   var(--component-button-secondary-bg-active);
+      border-color: var(--component-button-secondary-border-color-hover);
+    }
+
+    &:disabled,
+    &.p-disabled {
+      background:   var(--component-button-secondary-bg-disabled);
+      color:        var(--component-button-secondary-color-disabled);
+      border-color: var(--component-button-secondary-border-color-disabled);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // VARIANT: tertiary  (tonal — mapped to PrimeNG [text] modifier)
+  //
+  //   PrimeNG usage: [text] attribute  (adds .p-button-text class)
+  //   Class:         .p-button-text  (+ no severity = plain ghost)
+  //                  .p-button-text.p-button-primary = tonal
+  //   DS source:     --component-button-tertiary-*
+  //
+  //   Implementation note:
+  //     PrimeNG does not have a "tonal" variant natively. We map it to
+  //     [text] + primary which gives a transparent base. The tonal fill is
+  //     applied here via Pass 2 since --p-button-text-* tokens only cover
+  //     hover/active backgrounds, not the default resting background.
+  // ---------------------------------------------------------------------------
+  .p-button.p-button-text.p-button-primary {
+    background:   var(--component-button-tertiary-bg);
+    color:        var(--component-button-tertiary-color);
+    border-color: var(--component-button-tertiary-border-color);
+
+    &:hover:not(:disabled) {
+      background:   var(--component-button-tertiary-bg-hover);
+      border-color: var(--component-button-tertiary-border-color);
+    }
+
+    &:active:not(:disabled) {
+      background:   var(--component-button-tertiary-bg-active);
+      border-color: var(--component-button-tertiary-border-color);
+    }
+
+    &:disabled,
+    &.p-disabled {
+      background:   var(--component-button-tertiary-bg-disabled);
+      color:        var(--component-button-tertiary-color-disabled);
+      border-color: var(--component-button-tertiary-border-color);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // VARIANT: ghost  (no background, no border)
+  //
+  //   PrimeNG usage: [text][plain]  (adds .p-button-text .p-button-plain)
+  //   Class:         .p-button-text.p-button-plain
+  //   DS source:     --component-button-ghost-*
+  // ---------------------------------------------------------------------------
+  .p-button.p-button-text.p-button-plain {
+    background:   var(--component-button-ghost-bg);
+    color:        var(--component-button-ghost-color);
+    border-color: var(--component-button-ghost-border-color);
+
+    &:hover:not(:disabled) {
+      background:   var(--component-button-ghost-bg-hover);
+      border-color: var(--component-button-ghost-border-color);
+    }
+
+    &:active:not(:disabled) {
+      background:   var(--component-button-ghost-bg-active);
+      border-color: var(--component-button-ghost-border-color);
+    }
+
+    &:disabled,
+    &.p-disabled {
+      background:   var(--component-button-ghost-bg-disabled);
+      color:        var(--component-button-ghost-color-disabled);
+      border-color: var(--component-button-ghost-border-color);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // VARIANT: danger
+  //
+  //   PrimeNG usage: severity="danger"
+  //   Class:         .p-button-danger
+  //   DS source:     --component-button-danger-*
+  // ---------------------------------------------------------------------------
+  .p-button.p-button-danger {
+    background:   var(--component-button-danger-bg);
+    color:        var(--component-button-danger-color);
+    border-color: var(--component-button-danger-border-color);
+
+    &:hover:not(:disabled) {
+      background:   var(--component-button-danger-bg-hover);
+      border-color: var(--component-button-danger-border-color);
+    }
+
+    &:active:not(:disabled) {
+      background:   var(--component-button-danger-bg-active);
+      border-color: var(--component-button-danger-border-color);
+    }
+
+    &:disabled,
+    &.p-disabled {
+      background:   var(--component-button-danger-bg-disabled);
+      color:        var(--component-button-danger-color-disabled);
+      border-color: var(--component-button-danger-border-color);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // SIZE VARIANTS
+  //
+  //   PrimeNG uses size="small" → .p-button-sm
+  //                  size="large" → .p-button-lg
+  //   Default (no size) is equivalent to md.
+  //
+  //   Each size override sets ALL typography and spacing properties so the
+  //   result is fully self-contained regardless of PrimeNG's own size defaults.
+  //   DS source: --component-button-{sm|md|lg}-*
+  // ---------------------------------------------------------------------------
+
+  // SM — 32px min-height
+  .p-button.p-button-sm {
+    padding-block:  var(--component-button-sm-padding-block);
+    padding-inline: var(--component-button-sm-padding-inline);
+    font-size:      var(--component-button-sm-font-size);
+    font-weight:    var(--component-button-sm-font-weight);
+    gap:            var(--component-button-sm-gap);
+    min-height:     var(--component-button-sm-min-height);
+  }
+
+  // MD — 40px min-height (explicit re-assertion for components that reset size)
+  .p-button.p-button-md {
+    padding-block:  var(--component-button-md-padding-block);
+    padding-inline: var(--component-button-md-padding-inline);
+    font-size:      var(--component-button-md-font-size);
+    font-weight:    var(--component-button-md-font-weight);
+    gap:            var(--component-button-md-gap);
+    min-height:     var(--component-button-md-min-height);
+  }
+
+  // LG — 48px min-height
+  .p-button.p-button-lg {
+    padding-block:  var(--component-button-lg-padding-block);
+    padding-inline: var(--component-button-lg-padding-inline);
+    font-size:      var(--component-button-lg-font-size);
+    font-weight:    var(--component-button-lg-font-weight);
+    gap:            var(--component-button-lg-gap);
+    min-height:     var(--component-button-lg-min-height);
+  }
+
+  // ---------------------------------------------------------------------------
+  // STATE: disabled (shared structural state — cursor, opacity, event-blocking)
+  // Per-variant colour overrides are declared inside each variant block above.
+  // ---------------------------------------------------------------------------
+  .p-button:disabled,
+  .p-button.p-disabled {
+    cursor:         not-allowed;
+    opacity:        0.6;
+    pointer-events: none;
+  }
+
+  // ---------------------------------------------------------------------------
+  // STATE: loading
+  //
+  //   PrimeNG adds .p-button-loading when [loading]="true".
+  //   The spinner is rendered as .p-button-loading-icon (an SVG or icon).
+  //   The label is rendered as .p-button-label.
+  //   DS source: --component-button-transition-* for animation timing.
+  //
+  //   Integration note:
+  //     PrimeNG handles spinner rendering natively via its icon slot.
+  //     These overrides align the loading UX with DS motion tokens and
+  //     ensure the label fade matches _button.scss behaviour.
+  // ---------------------------------------------------------------------------
+  .p-button.p-button-loading {
+    cursor:         wait;
+    pointer-events: none;
+    opacity:        0.8;
+    position:       relative;
+  }
+
+  .p-button.p-button-loading .p-button-label {
+    transition: opacity var(--component-button-transition-duration)
+                        var(--component-button-transition-easing);
+    opacity: 0.15; // dim (not hidden) to preserve button width during loading
+  }
+
+  .p-button.p-button-loading .p-button-loading-icon {
+    // Spinner icon — PrimeNG renders this as an SVG or icon component.
+    // Sizing uses current font-size so it scales with .p-button-sm / .p-button-lg.
+    width:   1em;
+    height:  1em;
+    // Position and animation are managed by PrimeNG natively.
+    // If a custom spinner animation is needed, add keyframes to base/_root.scss
+    // and reference the animation name as a DS token (--base-animation-spin).
+  }
+
+  // ---------------------------------------------------------------------------
+  // STRUCTURE: icon slot
+  //
+  //   PrimeNG renders leading/trailing icons as .p-button-icon elements.
+  //   This keeps icon sizing consistent with the DS 1em × 1em contract.
+  // ---------------------------------------------------------------------------
+  .p-button .p-button-icon {
+    display:     inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    width:       1em;
+    height:      1em;
+  }
+
+  // ---------------------------------------------------------------------------
+  // STRUCTURE: icon-only button
+  //
+  //   PrimeNG usage: no [label] + icon provided → PrimeNG adds .p-button-icon-only
+  //   Collapses padding-inline to match padding-block, yielding a square button.
+  //   DS source: --component-button-{size}-padding-block
+  // ---------------------------------------------------------------------------
+  .p-button.p-button-icon-only {
+    padding-inline: var(--component-button-md-padding-block); // default = md
+
+    &.p-button-sm { padding-inline: var(--component-button-sm-padding-block); }
+    &.p-button-lg { padding-inline: var(--component-button-lg-padding-block); }
+  }
+
+  // ===========================================================================
+  // FUTURE COMPONENT OVERRIDES — placeholder blocks
+  // Uncomment and implement once DS component variables exist for each component.
+  // ===========================================================================
+
+  // ── PrimeNG Card ─────────────────────────────────────────────────────────
+  // .p-card {
+  //   background:    var(--component-card-bg);
+  //   border-radius: var(--component-card-border-radius);
+  //   box-shadow:    var(--component-card-shadow);
+  //   color:         var(--component-card-color);
+  //
+  //   .p-card-body { padding: var(--component-card-body-padding-block)
+  //                           var(--component-card-body-padding-inline); }
+  // }
+
+  // ── PrimeNG InputText ─────────────────────────────────────────────────────
+  // .p-inputtext {
+  //   background:    var(--component-input-bg);
+  //   color:         var(--component-input-color);
+  //   border-color:  var(--component-input-border-color);
+  //   border-radius: var(--component-input-border-radius);
+  //   padding-block:  var(--component-input-padding-block);
+  //   padding-inline: var(--component-input-padding-inline);
+  //
+  //   &:hover:not(:disabled)  { border-color: var(--component-input-border-color-hover);  }
+  //   &:focus:not(:disabled)  { border-color: var(--component-input-border-color-focus);  }
+  //   &:disabled              { background:   var(--component-input-bg-disabled);
+  //                             color:        var(--component-input-color-disabled); }
+  // }
+
+  // ── PrimeNG Dialog ───────────────────────────────────────────────────────
+  // .p-dialog {
+  //   background:    var(--component-modal-bg);
+  //   border-radius: var(--component-modal-border-radius);
+  //   box-shadow:    var(--component-modal-shadow);
+  //
+  //   .p-dialog-header { padding: var(--component-modal-header-padding); }
+  //   .p-dialog-content { padding: var(--component-modal-body-padding); }
+  //   .p-dialog-footer  { padding: var(--component-modal-footer-padding); }
+  // }
+
+}

@@ -1,0 +1,99 @@
+// =============================================================================
+// LAYER: tokens
+// FILE:  tokens/_semantic.color.scss
+//
+// PURPOSE:
+//   Semantic color tokens — map design intent onto primitive palette values.
+//   These tokens communicate PURPOSE (brand, feedback, surface) not palette.
+//
+//   Theme files override THESE tokens (or the primitives they reference)
+//   via [data-theme] selectors. Never override component tokens in themes.
+//
+// ALLOWED REFERENCES: primitive color tokens only
+// FORBIDDEN:          raw hex/rgb values, component tokens, utility classes
+//
+// MERGE RULE (from Phase 2):
+//   Semantic tokens are the stable contract surface.
+//   If a primitive value changes, only the primitive file changes.
+//   If intent mapping changes, only this file changes.
+// =============================================================================
+
+@layer tokens {
+
+  :root {
+    // -------------------------------------------------------------------------
+    // Brand
+    // -------------------------------------------------------------------------
+    --semantic-color-brand-default:     var(--primitive-color-blue-600);
+    --semantic-color-brand-hover:       var(--primitive-color-blue-700);
+    --semantic-color-brand-active:      var(--primitive-color-blue-800);
+    --semantic-color-brand-subtle:      var(--primitive-color-blue-50);
+    --semantic-color-brand-contrast:    var(--primitive-color-neutral-0);
+    // Tonal: filled but low-contrast — used by tertiary/tonal button variant
+    --semantic-color-brand-tonal-bg:    var(--primitive-color-blue-50);
+    --semantic-color-brand-tonal-hover: var(--primitive-color-blue-100);
+    --semantic-color-brand-tonal-active:var(--primitive-color-blue-200);
+
+    // -------------------------------------------------------------------------
+    // Surface (backgrounds)
+    // -------------------------------------------------------------------------
+    --semantic-color-surface-base:      var(--primitive-color-neutral-0);
+    --semantic-color-surface-raised:    var(--primitive-color-neutral-50);
+    --semantic-color-surface-overlay:   var(--primitive-color-neutral-100);
+    --semantic-color-surface-sunken:    var(--primitive-color-neutral-200);
+    --semantic-color-surface-inverse:   var(--primitive-color-neutral-900);
+
+    // -------------------------------------------------------------------------
+    // Text
+    // -------------------------------------------------------------------------
+    --semantic-color-text-default:      var(--primitive-color-neutral-900);
+    --semantic-color-text-subtle:       var(--primitive-color-neutral-600);
+    --semantic-color-text-disabled:     var(--primitive-color-neutral-400);
+    --semantic-color-text-inverse:      var(--primitive-color-neutral-0);
+    --semantic-color-text-brand:        var(--primitive-color-blue-600);
+    --semantic-color-text-on-brand:     var(--primitive-color-neutral-0);
+
+    // -------------------------------------------------------------------------
+    // Border
+    // -------------------------------------------------------------------------
+    --semantic-color-border-default:    var(--primitive-color-neutral-300);
+    --semantic-color-border-strong:     var(--primitive-color-neutral-500);
+    --semantic-color-border-focus:      var(--primitive-color-blue-500);
+    --semantic-color-border-brand:      var(--primitive-color-blue-600);
+
+    // -------------------------------------------------------------------------
+    // Feedback — Success
+    // -------------------------------------------------------------------------
+    --semantic-color-feedback-success-default:  var(--primitive-color-green-600);
+    --semantic-color-feedback-success-subtle:   var(--primitive-color-green-50);
+    --semantic-color-feedback-success-text:     var(--primitive-color-green-800);
+
+    // -------------------------------------------------------------------------
+    // Feedback — Warning
+    // -------------------------------------------------------------------------
+    --semantic-color-feedback-warning-default:  var(--primitive-color-yellow-500);
+    --semantic-color-feedback-warning-subtle:   var(--primitive-color-yellow-50);
+    --semantic-color-feedback-warning-text:     var(--primitive-color-yellow-900);
+
+    // -------------------------------------------------------------------------
+    // Feedback — Danger
+    // -------------------------------------------------------------------------
+    --semantic-color-feedback-danger-default:   var(--primitive-color-red-600);
+    --semantic-color-feedback-danger-hover:     var(--primitive-color-red-700);
+    --semantic-color-feedback-danger-active:    var(--primitive-color-red-800);
+    --semantic-color-feedback-danger-subtle:    var(--primitive-color-red-50);
+    --semantic-color-feedback-danger-text:      var(--primitive-color-red-800);
+    // Text rendered ON a danger-coloured surface (e.g. danger button label)
+    --semantic-color-feedback-danger-contrast:  var(--primitive-color-neutral-0);
+
+    // -------------------------------------------------------------------------
+    // Interactive states (shared cross-component)
+    // -------------------------------------------------------------------------
+    --semantic-color-interactive-default:  var(--primitive-color-blue-600);
+    --semantic-color-interactive-hover:    var(--primitive-color-blue-700);
+    --semantic-color-interactive-active:   var(--primitive-color-blue-800);
+    --semantic-color-interactive-focus:    var(--primitive-color-blue-400);
+    --semantic-color-interactive-disabled: var(--primitive-color-neutral-300);
+  }
+
+}

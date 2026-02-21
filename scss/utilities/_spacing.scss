@@ -1,0 +1,102 @@
+// =============================================================================
+// LAYER: utilities
+// FILE:  utilities/_spacing.scss
+//
+// PURPOSE:
+//   Atomic spacing utility classes — margin, padding, gap.
+//   Generated from semantic spacing tokens only; never from primitives.
+//   Classes are intentionally low-specificity (single class, no nesting).
+//
+// ALLOWED REFERENCES: semantic spacing tokens only
+// FORBIDDEN:          primitive tokens, component tokens, raw values,
+//                     any structural/component-level styles
+//
+// NAMING CONVENTION:
+//   .u-{property}-{scale}-{size}
+//   e.g. .u-p-component-md  (padding, component scale, medium)
+//        .u-mt-stack-sm      (margin-top, stack scale, small)
+//        .u-gap-inline-md    (gap, inline scale, medium)
+// =============================================================================
+
+@layer utilities {
+
+  // ---------------------------------------------------------------------------
+  // Padding — all sides
+  // ---------------------------------------------------------------------------
+  .u-p-component-2xs { padding: var(--semantic-spacing-component-2xs); }
+  .u-p-component-xs  { padding: var(--semantic-spacing-component-xs);  }
+  .u-p-component-sm  { padding: var(--semantic-spacing-component-sm);  }
+  .u-p-component-md  { padding: var(--semantic-spacing-component-md);  }
+  .u-p-component-lg  { padding: var(--semantic-spacing-component-lg);  }
+  .u-p-component-xl  { padding: var(--semantic-spacing-component-xl);  }
+
+  .u-p-layout-xs  { padding: var(--semantic-spacing-layout-xs);  }
+  .u-p-layout-sm  { padding: var(--semantic-spacing-layout-sm);  }
+  .u-p-layout-md  { padding: var(--semantic-spacing-layout-md);  }
+  .u-p-layout-lg  { padding: var(--semantic-spacing-layout-lg);  }
+  .u-p-layout-xl  { padding: var(--semantic-spacing-layout-xl);  }
+  .u-p-layout-2xl { padding: var(--semantic-spacing-layout-2xl); }
+
+  // ---------------------------------------------------------------------------
+  // Padding — inline (horizontal)
+  // ---------------------------------------------------------------------------
+  .u-px-component-2xs { padding-inline: var(--semantic-spacing-component-2xs); }
+  .u-px-component-xs  { padding-inline: var(--semantic-spacing-component-xs);  }
+  .u-px-component-sm  { padding-inline: var(--semantic-spacing-component-sm);  }
+  .u-px-component-md  { padding-inline: var(--semantic-spacing-component-md);  }
+  .u-px-component-lg  { padding-inline: var(--semantic-spacing-component-lg);  }
+  .u-px-component-xl  { padding-inline: var(--semantic-spacing-component-xl);  }
+
+  // ---------------------------------------------------------------------------
+  // Padding — block (vertical)
+  // ---------------------------------------------------------------------------
+  .u-py-component-2xs { padding-block: var(--semantic-spacing-component-2xs); }
+  .u-py-component-xs  { padding-block: var(--semantic-spacing-component-xs);  }
+  .u-py-component-sm  { padding-block: var(--semantic-spacing-component-sm);  }
+  .u-py-component-md  { padding-block: var(--semantic-spacing-component-md);  }
+  .u-py-component-lg  { padding-block: var(--semantic-spacing-component-lg);  }
+  .u-py-component-xl  { padding-block: var(--semantic-spacing-component-xl);  }
+
+  // ---------------------------------------------------------------------------
+  // Margin — top (stack rhythm)
+  // ---------------------------------------------------------------------------
+  .u-mt-stack-xs { margin-top: var(--semantic-spacing-stack-xs); }
+  .u-mt-stack-sm { margin-top: var(--semantic-spacing-stack-sm); }
+  .u-mt-stack-md { margin-top: var(--semantic-spacing-stack-md); }
+  .u-mt-stack-lg { margin-top: var(--semantic-spacing-stack-lg); }
+  .u-mt-stack-xl { margin-top: var(--semantic-spacing-stack-xl); }
+
+  // ---------------------------------------------------------------------------
+  // Margin — bottom
+  // ---------------------------------------------------------------------------
+  .u-mb-stack-xs { margin-bottom: var(--semantic-spacing-stack-xs); }
+  .u-mb-stack-sm { margin-bottom: var(--semantic-spacing-stack-sm); }
+  .u-mb-stack-md { margin-bottom: var(--semantic-spacing-stack-md); }
+  .u-mb-stack-lg { margin-bottom: var(--semantic-spacing-stack-lg); }
+  .u-mb-stack-xl { margin-bottom: var(--semantic-spacing-stack-xl); }
+
+  // ---------------------------------------------------------------------------
+  // Gap — flex/grid container gaps
+  // ---------------------------------------------------------------------------
+  .u-gap-inline-xs { gap: var(--semantic-spacing-inline-xs); }
+  .u-gap-inline-sm { gap: var(--semantic-spacing-inline-sm); }
+  .u-gap-inline-md { gap: var(--semantic-spacing-inline-md); }
+  .u-gap-inline-lg { gap: var(--semantic-spacing-inline-lg); }
+
+  .u-gap-stack-xs  { gap: var(--semantic-spacing-stack-xs); }
+  .u-gap-stack-sm  { gap: var(--semantic-spacing-stack-sm); }
+  .u-gap-stack-md  { gap: var(--semantic-spacing-stack-md); }
+  .u-gap-stack-lg  { gap: var(--semantic-spacing-stack-lg); }
+  .u-gap-stack-xl  { gap: var(--semantic-spacing-stack-xl); }
+
+  // ---------------------------------------------------------------------------
+  // Display helpers — complementary to spacing utilities
+  // ---------------------------------------------------------------------------
+  .u-flex         { display: flex; }
+  .u-flex-col     { display: flex; flex-direction: column; }
+  .u-flex-center  { display: flex; align-items: center; justify-content: center; }
+  .u-flex-between { display: flex; align-items: center; justify-content: space-between; }
+  .u-inline-flex  { display: inline-flex; align-items: center; }
+  .u-grid         { display: grid; }
+
+}

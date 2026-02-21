@@ -1,0 +1,24 @@
+// =============================================================================
+// LAYER: adapters / primeng
+// FILE:  adapters/primeng/_index.scss
+//
+// PURPOSE:
+//   Barrel entry point for the PrimeNG adapter.
+//   Import this directory to apply DS → PrimeNG token mappings.
+//
+// CONTENTS:
+//   _primeng.adapter.scss  — full PrimeNG button (and future component) bridge
+//
+// USAGE:
+//   Consumed by adapters/_index.scss for the monolithic build.
+//   For PrimeNG-only builds, import this file directly:
+//     @use 'scss/adapters/primeng';
+//
+// ADAPTER CONTRACT SUMMARY:
+//   • Only --component-* variables are referenced (never --semantic-* / --primitive-*).
+//   • Only PrimeNG vendor selectors/tokens are targeted (never DS .ds-* classes).
+//   • Removing this entire directory leaves the core DS unaffected.
+//   • Theme switching works automatically — no adapter changes required.
+// =============================================================================
+
+@use 'primeng.adapter';

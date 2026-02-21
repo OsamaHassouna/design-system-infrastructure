@@ -1,0 +1,19 @@
+// =============================================================================
+// LAYER: base
+// FILE:  base/_index.scss
+//
+// PURPOSE:
+//   Barrel export for the base layer.
+//
+// IMPORT ORDER:
+//   1. _root.scss  — MUST be first: declares @layer stack priority order
+//   2. _reset.scss — browser normalisation, references semantic tokens
+//
+// FORBIDDEN: importing anything outside the base/ directory here
+// =============================================================================
+
+// 1. Root — layer declaration + CSS baseline variables (MUST be first)
+@use 'root';
+
+// 2. Reset — browser normalisation using semantic tokens
+@use 'reset';

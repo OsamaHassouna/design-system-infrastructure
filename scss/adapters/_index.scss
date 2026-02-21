@@ -1,0 +1,66 @@
+// =============================================================================
+// LAYER: adapters
+// FILE:  adapters/_index.scss
+//
+// PURPOSE:
+//   Barrel export for all framework adapters.
+//   Adapters are the outermost layer — they have the highest cascade priority
+//   and can override any layer below them.
+//
+// ─── ADAPTER CONTRACT (applies to EVERY adapter in this directory) ───────────
+//
+//   RULE 1 — TOKEN REFERENCE BOUNDARY
+//     Adapters MUST reference only --component-* variables.
+//     --semantic-*, --primitive-*, and raw values are FORBIDDEN in adapter files.
+//
+//   RULE 2 — NO TOKEN REDEFINITION
+//     Adapters MUST NOT redefine, shadow, or re-assign DS token values.
+//     The token pipeline (primitives → semantics → components) is the single
+//     source of truth. Adapters are read-only consumers of component tokens.
+//
+//   RULE 3 — VENDOR SCOPE ONLY
+//     Each adapter targets only its framework's own class names / CSS tokens.
+//     DS classes (.ds-*) are owned by the components layer and are off-limits.
+//
+//   RULE 4 — FULL REMOVABILITY
+//     Any adapter directory must be removable without breaking the core DS.
+//     Adapters are additive compatibility shims, not structural dependencies.
+//
+//   RULE 5 — NO CROSS-ADAPTER REFERENCES
+//     Adapters are isolated siblings. angular/ MUST NOT reference primeng/
+//     selectors or tokens, and vice versa.
+//
+// ─── ISOLATION CONTRACT ──────────────────────────────────────────────────────
+//   Each adapter sub-directory is self-contained:
+//     adapters/{framework}/_index.scss        — barrel entry point
+//     adapters/{framework}/_{framework}.adapter.scss — token + class mapping
+//
+// ─── EXTENDING WITH A NEW ADAPTER ────────────────────────────────────────────
+//   1. Create  adapters/{framework}/_index.scss
+//   2. Create  adapters/{framework}/_{framework}.adapter.scss
+//   3. Apply the two-pass pattern from adapters/primeng/_primeng.adapter.scss:
+//        Pass 1: override vendor CSS variables in :root { }
+//        Pass 2: target vendor class selectors with --component-* references
+//   4. Register the adapter below under the correct build-profile comment.
+//   5. Rules 1–5 above apply without exception.
+//
+// ─── CONDITIONAL LOADING ─────────────────────────────────────────────────────
+//   main.scss includes all adapters for the monolithic build.
+//   Framework-specific entry points should include only what is needed:
+//     Angular-only build:  adapters/angular/
+//     PrimeNG project:     adapters/angular/ + adapters/primeng/
+//     React / Vue:         adapters/{react|vue}/  (add directories below)
+//
+// FORBIDDEN: —  importing tokens, base, utilities, or components from here
+//            —  cross-adapter imports (angular importing from primeng, etc.)
+// =============================================================================
+
+// Angular framework adapter
+@use 'angular';
+
+// PrimeNG component library adapter
+@use 'primeng';
+
+// TODO: Add React adapter  → adapters/react/
+// TODO: Add Vue adapter    → adapters/vue/
+// TODO: Add Bootstrap adapter → adapters/bootstrap/

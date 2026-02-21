@@ -1,0 +1,219 @@
+// =============================================================================
+// LAYER: components
+// FILE:  components/card/_card.scss
+//
+// PURPOSE:
+//   Card component structural styles. All values flow through component
+//   variables — no raw values or direct token references permitted here.
+//
+//   The Card is a container primitive with named slots:
+//   - ds-card__media   — optional image/visual strip
+//   - ds-card__header  — title, subtitle, optional action
+//   - ds-card__body    — main content area
+//   - ds-card__footer  — action row
+//
+// ALLOWED REFERENCES: --component-card-* variables only
+// FORBIDDEN:          primitive tokens, semantic tokens, raw values,
+//                     utility class names, references to other components
+//
+// COMPONENT API:
+//   Variant:     data-variant="default | raised | flat | sunken"
+//   Interactive: data-interactive="true"  (hover/click behaviour)
+//   Orientation: data-orientation="horizontal"
+//
+// USAGE EXAMPLE:
+//   <article class="ds-card" data-variant="raised">
+//     <div class="ds-card__media">...</div>
+//     <header class="ds-card__header">
+//       <span class="ds-card__title">Title</span>
+//       <span class="ds-card__subtitle">Subtitle</span>
+//     </header>
+//     <div class="ds-card__body">Content</div>
+//     <footer class="ds-card__footer">...</footer>
+//   </article>
+// =============================================================================
+
+@layer components {
+
+  // ---------------------------------------------------------------------------
+  // Base card
+  // ---------------------------------------------------------------------------
+  .ds-card {
+    // Layout
+    display:        flex;
+    flex-direction: column;
+    position:       relative;
+
+    // Shape
+    border-width:   var(--component-card-border-width);
+    border-style:   var(--component-card-border-style);
+    border-color:   var(--component-card-border-color);
+    border-radius:  var(--component-card-border-radius);
+    overflow:       hidden;
+
+    // Default appearance
+    background:     var(--component-card-bg);
+    box-shadow:     var(--component-card-shadow);
+
+    // Transition
+    transition:
+      box-shadow var(--component-card-transition-duration) var(--component-card-transition-easing),
+      border-color var(--component-card-transition-duration) var(--component-card-transition-easing),
+      background-color var(--component-card-transition-duration) var(--component-card-transition-easing);
+
+    // ---------------------------------------------------------------------------
+    // VARIANTS
+    // ---------------------------------------------------------------------------
+
+    // Default — already set above
+    &[data-variant="default"] {
+      background: var(--component-card-bg);
+      box-shadow: var(--component-card-shadow-sm);
+    }
+
+    // Raised — elevated shadow
+    &[data-variant="raised"] {
+      background: var(--component-card-bg-raised);
+      box-shadow: var(--component-card-shadow-md);
+    }
+
+    // Flat — no shadow, subtle border
+    &[data-variant="flat"] {
+      background: var(--component-card-bg);
+      box-shadow: var(--component-card-shadow-none);
+      border-color: var(--component-card-border-color);
+    }
+
+    // Sunken — indented, no shadow
+    &[data-variant="sunken"] {
+      background: var(--component-card-bg-sunken);
+      box-shadow: var(--component-card-shadow-none);
+    }
+
+    // ---------------------------------------------------------------------------
+    // INTERACTIVE (clickable card)
+    // ---------------------------------------------------------------------------
+    &[data-interactive="true"] {
+      cursor: pointer;
+
+      &:hover {
+        box-shadow:   var(--component-card-shadow-md);
+        border-color: var(--component-card-focus-ring-color);
+      }
+
+      &:active {
+        box-shadow: var(--component-card-shadow-sm);
+      }
+
+      &:focus-visible {
+        outline:        var(--component-card-focus-ring-width) solid var(--component-card-focus-ring-color);
+        outline-offset: var(--component-card-focus-ring-offset);
+      }
+    }
+
+    // ---------------------------------------------------------------------------
+    // HORIZONTAL ORIENTATION
+    // ---------------------------------------------------------------------------
+    &[data-orientation="horizontal"] {
+      flex-direction: row;
+
+      .ds-card__media {
+        flex-shrink: 0;
+        width:       30%;
+        aspect-ratio: auto;
+
+        // TODO (Phase 5): add responsive breakpoint behaviour
+      }
+
+      .ds-card__body {
+        flex: 1;
+      }
+    }
+
+  }
+
+  // ---------------------------------------------------------------------------
+  // Media slot
+  // ---------------------------------------------------------------------------
+  .ds-card__media {
+    aspect-ratio:    var(--component-card-media-aspect-ratio);
+    background:      var(--component-card-media-bg);
+    overflow:        hidden;
+    flex-shrink:     0;
+
+    img,
+    video {
+      width:       100%;
+      height:      100%;
+      object-fit:  cover;
+      display:     block;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Header slot
+  // ---------------------------------------------------------------------------
+  .ds-card__header {
+    display:         flex;
+    flex-direction:  column;
+    gap:             var(--semantic-spacing-stack-xs);
+    padding-block:   var(--component-card-header-padding-block);
+    padding-inline:  var(--component-card-header-padding-inline);
+    border-bottom:   var(--component-card-border-width) var(--component-card-border-style) var(--component-card-header-border-color);
+
+    // Remove border when no body/footer follows
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .ds-card__title {
+    font-size:   var(--component-card-header-title-font-size);
+    font-weight: var(--component-card-header-title-font-weight);
+    color:       var(--component-card-header-title-color);
+    line-height: var(--semantic-line-height-heading);
+  }
+
+  .ds-card__subtitle {
+    font-size:   var(--component-card-header-subtitle-font-size);
+    color:       var(--component-card-header-subtitle-color);
+    line-height: var(--semantic-line-height-ui);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Body slot
+  // ---------------------------------------------------------------------------
+  .ds-card__body {
+    display:        flex;
+    flex-direction: column;
+    gap:            var(--component-card-body-gap);
+    padding-block:  var(--component-card-body-padding-block);
+    padding-inline: var(--component-card-body-padding-inline);
+    flex:           1;                  // grows to fill available space
+    font-size:      var(--component-card-body-font-size);
+    color:          var(--component-card-body-color);
+    line-height:    var(--semantic-line-height-body);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Footer slot
+  // ---------------------------------------------------------------------------
+  .ds-card__footer {
+    display:         flex;
+    align-items:     center;
+    gap:             var(--component-card-footer-gap);
+    padding-block:   var(--component-card-footer-padding-block);
+    padding-inline:  var(--component-card-footer-padding-inline);
+    background:      var(--component-card-footer-bg);
+    border-top:      var(--component-card-border-width) var(--component-card-border-style) var(--component-card-footer-border-color);
+
+    // Right-align footer actions by default
+    justify-content: flex-end;
+
+    // Override to left-align
+    &[data-align="start"] { justify-content: flex-start; }
+    &[data-align="center"]{ justify-content: center; }
+    &[data-align="space-between"] { justify-content: space-between; }
+  }
+
+}

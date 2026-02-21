@@ -1,0 +1,18 @@
+// =============================================================================
+// LAYER: utilities
+// FILE:  utilities/_index.scss
+//
+// PURPOSE:
+//   Barrel export for the utilities layer.
+//   Utilities are intentionally single-purpose: one class, one property.
+//   Order here has no cascade significance since each class targets
+//   different properties — but maintain alphabetical order for clarity.
+//
+// FORBIDDEN: importing anything outside the utilities/ directory here
+// =============================================================================
+
+// Spacing utilities (padding, margin, gap)
+@use 'spacing';
+
+// Typography utilities (font-size, weight, line-height, color)
+@use 'typography';

@@ -1,0 +1,88 @@
+// =============================================================================
+// LAYER: themes
+// FILE:  themes/_theme-light.scss
+//
+// PURPOSE:
+//   Light theme — reasserts or explicitly declares the primitive-level values
+//   that form the light appearance. This file is the canonical source of
+//   truth for light mode; the default :root values in the tokens layer also
+//   produce light mode, but this file allows:
+//   - Explicit opt-in via [data-theme="light"]
+//   - Forced light mode inside a dark-themed document
+//   - Future A/B variation on the light palette
+//
+// OVERRIDE RULES (from Phase 2 contract):
+//   Themes ONLY override primitive tokens.
+//   If a theme needs a different blue-600, override --primitive-color-blue-600.
+//   Semantic tokens then automatically resolve to the new value.
+//   NEVER define --semantic-* or --component-* overrides in theme files.
+//
+// TARGET:  [data-theme="light"] attribute on any element
+// ALLOWED REFERENCES: raw values (hex/rgb) only — this is the primitive layer
+// FORBIDDEN:          semantic tokens, component tokens, utility classes
+// =============================================================================
+
+@layer themes {
+
+  [data-theme="light"] {
+
+    // Inform browser of color scheme for native controls
+    color-scheme: light;
+
+    // -------------------------------------------------------------------------
+    // Neutral palette override
+    // Light theme uses the standard neutral scale (same as default :root)
+    // Explicitly declared here to enable future light variant modifications.
+    // -------------------------------------------------------------------------
+    --primitive-color-neutral-0:    #ffffff;
+    --primitive-color-neutral-50:   #f8f9fa;
+    --primitive-color-neutral-100:  #f1f3f5;
+    --primitive-color-neutral-200:  #e9ecef;
+    --primitive-color-neutral-300:  #dee2e6;
+    --primitive-color-neutral-400:  #ced4da;
+    --primitive-color-neutral-500:  #adb5bd;
+    --primitive-color-neutral-600:  #868e96;
+    --primitive-color-neutral-700:  #495057;
+    --primitive-color-neutral-800:  #343a40;
+    --primitive-color-neutral-900:  #212529;
+    --primitive-color-neutral-1000: #000000;
+
+    // -------------------------------------------------------------------------
+    // Brand / Blue palette override
+    // -------------------------------------------------------------------------
+    --primitive-color-blue-50:  #e7f5ff;
+    --primitive-color-blue-100: #d0ebff;
+    --primitive-color-blue-200: #a5d8ff;
+    --primitive-color-blue-300: #74c0fc;
+    --primitive-color-blue-400: #4dabf7;
+    --primitive-color-blue-500: #339af0;
+    --primitive-color-blue-600: #228be6;
+    --primitive-color-blue-700: #1c7ed6;
+    --primitive-color-blue-800: #1971c2;
+    --primitive-color-blue-900: #1864ab;
+
+    // -------------------------------------------------------------------------
+    // Success / Green palette override
+    // -------------------------------------------------------------------------
+    --primitive-color-green-600: #40c057;
+    --primitive-color-green-700: #37b24d;
+    --primitive-color-green-800: #2f9e44;
+
+    // -------------------------------------------------------------------------
+    // Warning / Yellow palette override
+    // -------------------------------------------------------------------------
+    --primitive-color-yellow-500: #fcc419;
+    --primitive-color-yellow-600: #fab005;
+    --primitive-color-yellow-900: #e67700;
+
+    // -------------------------------------------------------------------------
+    // Danger / Red palette override
+    // -------------------------------------------------------------------------
+    --primitive-color-red-50:  #fff5f5;
+    --primitive-color-red-600: #fa5252;
+    --primitive-color-red-700: #f03e3e;
+    --primitive-color-red-800: #e03131;
+
+  }
+
+}

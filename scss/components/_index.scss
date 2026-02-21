@@ -1,0 +1,31 @@
+// =============================================================================
+// LAYER: components
+// FILE:  components/_index.scss
+//
+// PURPOSE:
+//   Barrel export for all components. Each component sub-directory has its
+//   own _index.scss that enforces variables-before-styles load order.
+//
+//   Add new components here in alphabetical order.
+//   Each component follows the pattern:
+//     components/{name}/_index.scss
+//       └── uses {name}.variables (declares --component-{name}-* props)
+//       └── uses {name}           (structural styles)
+//
+// LAYER NOTE:
+//   All component files declare @layer components internally — the cascade
+//   order within the layer is determined by the import order below.
+//   Components that build on other components MUST be listed after their deps.
+//
+// FORBIDDEN: importing anything outside the components/ directory here
+// =============================================================================
+
+// B
+@use 'badge';
+@use 'button';
+
+// C
+@use 'card';
+
+// TODO: Add additional components here as they are developed (alphabetical order)
+// Examples: input, select, modal, table, tooltip, tag, avatar, etc.

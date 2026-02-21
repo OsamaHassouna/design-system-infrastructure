@@ -1,0 +1,141 @@
+// =============================================================================
+// LAYER: components
+// FILE:  components/badge/_badge.variables.scss
+//
+// PURPOSE:
+//   Component-scoped CSS custom properties for the Badge component.
+//   Badges are inline status indicators (pills, counts, labels) that
+//   communicate state, category, or metadata.
+//
+// ALLOWED REFERENCES: semantic tokens only
+//   Exception — structural primitives with no semantic equivalent:
+//     --primitive-radius-full  (pill shape; no semantic radius scale yet)
+//     --primitive-spacing-*    (used for min-height sizing)
+//
+// FORBIDDEN: raw hex/rgb values, direct primitive color references,
+//            other component tokens, utility classes
+//
+// OVERRIDE CONTRACT:
+//   To theme the badge:
+//     1. Override --component-badge-* vars in [data-theme] (themes layer)
+//     2. Or scope overrides to an adapter wrapper (adapters layer)
+//   Never edit this file for per-theme or per-framework customisation.
+//
+// =============================================================================
+//
+// TOKEN MAPPING TABLE
+//
+//  SEMANTIC TOKEN                                  COMPONENT VARIABLE
+//  ─────────────────────────────────────────────────────────────────────────
+//  --semantic-color-feedback-success-default       --component-badge-success-bg
+//  --semantic-color-feedback-success-subtle        --component-badge-success-subtle-bg
+//  --semantic-color-feedback-success-text          --component-badge-success-color
+//  --semantic-color-feedback-warning-default       --component-badge-warning-bg
+//  --semantic-color-feedback-warning-subtle        --component-badge-warning-subtle-bg
+//  --semantic-color-feedback-warning-text          --component-badge-warning-color
+//  --semantic-color-feedback-danger-default        --component-badge-danger-bg
+//  --semantic-color-feedback-danger-subtle         --component-badge-danger-subtle-bg
+//  --semantic-color-feedback-danger-text           --component-badge-danger-color
+//  --semantic-color-interactive-default            --component-badge-info-bg
+//  --semantic-color-brand-subtle                   --component-badge-info-subtle-bg
+//  --semantic-color-text-brand                     --component-badge-info-color
+//  --semantic-color-surface-overlay                --component-badge-neutral-bg
+//  --semantic-color-text-subtle                    --component-badge-neutral-color
+//  --semantic-color-brand-contrast                 --component-badge-*-filled-color
+//  --semantic-color-border-default                 --component-badge-outline-border-color
+//  --semantic-font-size-ui-xs / ui-sm              --component-badge-{size}-font-size
+//  --semantic-font-weight-label                    --component-badge-font-weight
+//  --semantic-letter-spacing-caps                  --component-badge-letter-spacing
+//  --semantic-spacing-component-2xs / xs           --component-badge-{size}-padding-*
+//  --primitive-radius-full                         --component-badge-border-radius
+//  --primitive-spacing-4 / 5                       --component-badge-{size}-min-height
+// =============================================================================
+
+@layer components {
+
+  :root {
+    // -------------------------------------------------------------------------
+    // Structure
+    // -------------------------------------------------------------------------
+    --component-badge-border-width:    1px;
+    --component-badge-border-style:    solid;
+    --component-badge-border-radius:   var(--primitive-radius-full);      // pill
+    --component-badge-font-weight:     var(--semantic-font-weight-label); // 600
+    --component-badge-letter-spacing:  var(--semantic-letter-spacing-caps); // +0.05em
+    --component-badge-line-height:     1;
+
+    // -------------------------------------------------------------------------
+    // SIZE: sm  —  20px min-height
+    // -------------------------------------------------------------------------
+    --component-badge-sm-font-size:       var(--semantic-font-size-ui-xs);       // 10px
+    --component-badge-sm-padding-block:   var(--semantic-spacing-component-2xs); //  4px
+    --component-badge-sm-padding-inline:  var(--semantic-spacing-component-xs);  //  8px
+    --component-badge-sm-min-height:      var(--primitive-spacing-5);            //  1.25rem / 20px
+    --component-badge-sm-dot-size:        6px;
+
+    // -------------------------------------------------------------------------
+    // SIZE: md  —  24px min-height (default)
+    // -------------------------------------------------------------------------
+    --component-badge-md-font-size:       var(--semantic-font-size-ui-sm);       // 12px
+    --component-badge-md-padding-block:   var(--semantic-spacing-component-2xs); //  4px
+    --component-badge-md-padding-inline:  var(--semantic-spacing-component-sm);  // 12px
+    --component-badge-md-min-height:      var(--primitive-spacing-6);            //  1.5rem / 24px
+    --component-badge-md-dot-size:        8px;
+
+    // =========================================================================
+    // VARIANT: success — green (filled defaults)
+    // =========================================================================
+    --component-badge-success-bg:          var(--semantic-color-feedback-success-default);
+    --component-badge-success-color:       var(--semantic-color-brand-contrast);   // white on green
+    --component-badge-success-border:      transparent;
+    // Subtle variant
+    --component-badge-success-subtle-bg:   var(--semantic-color-feedback-success-subtle);
+    --component-badge-success-subtle-color: var(--semantic-color-feedback-success-text);
+    --component-badge-success-subtle-border: var(--semantic-color-feedback-success-default);
+
+    // =========================================================================
+    // VARIANT: warning — yellow/amber (filled defaults)
+    // =========================================================================
+    --component-badge-warning-bg:          var(--semantic-color-feedback-warning-default);
+    --component-badge-warning-color:       var(--semantic-color-feedback-warning-text); // dark on yellow
+    --component-badge-warning-border:      transparent;
+    // Subtle variant
+    --component-badge-warning-subtle-bg:   var(--semantic-color-feedback-warning-subtle);
+    --component-badge-warning-subtle-color: var(--semantic-color-feedback-warning-text);
+    --component-badge-warning-subtle-border: var(--semantic-color-feedback-warning-default);
+
+    // =========================================================================
+    // VARIANT: danger — red (filled defaults)
+    // =========================================================================
+    --component-badge-danger-bg:           var(--semantic-color-feedback-danger-default);
+    --component-badge-danger-color:        var(--semantic-color-feedback-danger-contrast); // white on red
+    --component-badge-danger-border:       transparent;
+    // Subtle variant
+    --component-badge-danger-subtle-bg:    var(--semantic-color-feedback-danger-subtle);
+    --component-badge-danger-subtle-color: var(--semantic-color-feedback-danger-text);
+    --component-badge-danger-subtle-border: var(--semantic-color-feedback-danger-default);
+
+    // =========================================================================
+    // VARIANT: info — brand/blue (filled defaults)
+    // =========================================================================
+    --component-badge-info-bg:             var(--semantic-color-interactive-default);
+    --component-badge-info-color:          var(--semantic-color-brand-contrast);   // white on blue
+    --component-badge-info-border:         transparent;
+    // Subtle variant
+    --component-badge-info-subtle-bg:      var(--semantic-color-brand-subtle);
+    --component-badge-info-subtle-color:   var(--semantic-color-text-brand);
+    --component-badge-info-subtle-border:  var(--semantic-color-interactive-default);
+
+    // =========================================================================
+    // VARIANT: neutral — grey (filled defaults)
+    // =========================================================================
+    --component-badge-neutral-bg:          var(--semantic-color-surface-overlay);
+    --component-badge-neutral-color:       var(--semantic-color-text-subtle);
+    --component-badge-neutral-border:      var(--semantic-color-border-default);
+    // Subtle variant (same as filled for neutral — surface is already subtle)
+    --component-badge-neutral-subtle-bg:   var(--semantic-color-surface-raised);
+    --component-badge-neutral-subtle-color: var(--semantic-color-text-default);
+    --component-badge-neutral-subtle-border: var(--semantic-color-border-default);
+  }
+
+}

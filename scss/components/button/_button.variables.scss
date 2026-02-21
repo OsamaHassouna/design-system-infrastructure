@@ -1,0 +1,186 @@
+// =============================================================================
+// LAYER: components
+// FILE:  components/button/_button.variables.scss
+//
+// PURPOSE:
+//   Component-scoped CSS custom properties for the Button component.
+//   These are the ONLY values _button.scss is allowed to consume.
+//   They form the public theming API: themes and adapters override these
+//   variables to change appearance without touching structural SCSS.
+//
+// ALLOWED REFERENCES: semantic tokens, base contract variables
+//   Exception — structural primitives with no semantic equivalent:
+//     --primitive-radius-md   (no semantic radius layer yet)
+//     --primitive-spacing-*   (used for min-height sizing, not layout intent)
+//
+// FORBIDDEN: raw hex/rgb values, direct primitive color references,
+//            other component tokens, utility classes
+//
+// OVERRIDE CONTRACT:
+//   To theme the button:
+//     1. Override --component-button-* vars in [data-theme] (themes layer)
+//     2. Or scope overrides to an adapter wrapper (adapters layer)
+//   Never edit this file for per-theme or per-framework customisation.
+//
+// =============================================================================
+//
+// TOKEN MAPPING TABLE
+// All consumed semantic tokens → component variable mappings
+//
+//  SEMANTIC TOKEN                              COMPONENT VARIABLE
+//  ─────────────────────────────────────────────────────────────────────────
+//  --semantic-color-brand-default              --component-button-primary-bg
+//  --semantic-color-brand-hover                --component-button-primary-bg-hover
+//  --semantic-color-brand-active               --component-button-primary-bg-active
+//  --semantic-color-brand-contrast             --component-button-primary-color
+//  --semantic-color-brand-tonal-bg             --component-button-tertiary-bg
+//  --semantic-color-brand-tonal-hover          --component-button-tertiary-bg-hover
+//  --semantic-color-brand-tonal-active         --component-button-tertiary-bg-active
+//  --semantic-color-text-brand                 --component-button-secondary-color
+//                                              --component-button-tertiary-color
+//  --semantic-color-text-default               --component-button-ghost-color
+//  --semantic-color-text-disabled              --component-button-*-color-disabled
+//  --semantic-color-surface-raised             --component-button-*-bg-hover (outlined/ghost)
+//  --semantic-color-surface-overlay            --component-button-*-bg-active (outlined/ghost)
+//  --semantic-color-border-brand               --component-button-secondary-border-color
+//  --semantic-color-brand-hover                --component-button-secondary-border-color-hover
+//  --semantic-color-interactive-disabled       --component-button-*-bg-disabled
+//  --semantic-color-feedback-danger-default    --component-button-danger-bg
+//  --semantic-color-feedback-danger-hover      --component-button-danger-bg-hover
+//  --semantic-color-feedback-danger-active     --component-button-danger-bg-active
+//  --semantic-color-feedback-danger-contrast   --component-button-danger-color
+//  --semantic-letter-spacing-ui                --component-button-letter-spacing
+//  --semantic-font-size-ui-sm/md/lg            --component-button-{size}-font-size
+//  --semantic-font-weight-label                --component-button-{size}-font-weight
+//  --semantic-spacing-component-xs/sm/md/lg    --component-button-{size}-padding-*
+//  --semantic-spacing-inline-xs/sm             --component-button-{size}-gap
+//  --base-focus-ring-*                         --component-button-focus-ring-*
+//  --base-transition-duration-fast             --component-button-transition-duration
+//  --base-transition-easing-default            --component-button-transition-easing
+//  --primitive-radius-md                       --component-button-border-radius
+//  --primitive-spacing-8/10/12                 --component-button-{size}-min-height
+//
+// =============================================================================
+
+@layer components {
+
+  :root {
+    // -------------------------------------------------------------------------
+    // Structure
+    // Structural values use primitives directly — no semantic shape layer exists.
+    // -------------------------------------------------------------------------
+    --component-button-border-width:    1px;
+    --component-button-border-style:    solid;
+    --component-button-border-radius:   var(--primitive-radius-md);     // 6px
+    --component-button-line-height:     1;                              // tight, button-specific
+    --component-button-letter-spacing:  var(--semantic-letter-spacing-ui);
+
+    // -------------------------------------------------------------------------
+    // Focus ring — inherits from base contract
+    // -------------------------------------------------------------------------
+    --component-button-focus-ring-width:  var(--base-focus-ring-width);
+    --component-button-focus-ring-offset: var(--base-focus-ring-offset);
+    --component-button-focus-ring-color:  var(--base-focus-ring-color);
+
+    // -------------------------------------------------------------------------
+    // Transition — inherits from base contract
+    // -------------------------------------------------------------------------
+    --component-button-transition-duration: var(--base-transition-duration-fast);
+    --component-button-transition-easing:   var(--base-transition-easing-default);
+
+    // =========================================================================
+    // VARIANT: primary
+    // Brand-filled button — highest visual weight
+    // =========================================================================
+    --component-button-primary-bg:               var(--semantic-color-brand-default);
+    --component-button-primary-bg-hover:         var(--semantic-color-brand-hover);
+    --component-button-primary-bg-active:        var(--semantic-color-brand-active);
+    --component-button-primary-bg-disabled:      var(--semantic-color-interactive-disabled);
+    --component-button-primary-color:            var(--semantic-color-brand-contrast);
+    --component-button-primary-color-disabled:   var(--semantic-color-text-disabled);
+    --component-button-primary-border-color:     transparent;
+
+    // =========================================================================
+    // VARIANT: secondary
+    // Outlined button — medium visual weight
+    // =========================================================================
+    --component-button-secondary-bg:                    transparent;
+    --component-button-secondary-bg-hover:              var(--semantic-color-surface-raised);
+    --component-button-secondary-bg-active:             var(--semantic-color-surface-overlay);
+    --component-button-secondary-bg-disabled:           transparent;
+    --component-button-secondary-color:                 var(--semantic-color-text-brand);
+    --component-button-secondary-color-disabled:        var(--semantic-color-text-disabled);
+    --component-button-secondary-border-color:          var(--semantic-color-border-brand);
+    --component-button-secondary-border-color-hover:    var(--semantic-color-brand-hover);
+    --component-button-secondary-border-color-disabled: var(--semantic-color-interactive-disabled);
+
+    // =========================================================================
+    // VARIANT: tertiary
+    // Tonal button — brand-tinted fill, low visual weight
+    // Fills from brand-tonal scale; text stays brand-coloured
+    // =========================================================================
+    --component-button-tertiary-bg:              var(--semantic-color-brand-tonal-bg);
+    --component-button-tertiary-bg-hover:        var(--semantic-color-brand-tonal-hover);
+    --component-button-tertiary-bg-active:       var(--semantic-color-brand-tonal-active);
+    --component-button-tertiary-bg-disabled:     var(--semantic-color-interactive-disabled);
+    --component-button-tertiary-color:           var(--semantic-color-text-brand);
+    --component-button-tertiary-color-disabled:  var(--semantic-color-text-disabled);
+    --component-button-tertiary-border-color:    transparent;
+
+    // =========================================================================
+    // VARIANT: ghost
+    // No background, no border — lowest visual weight
+    // =========================================================================
+    --component-button-ghost-bg:             transparent;
+    --component-button-ghost-bg-hover:       var(--semantic-color-surface-raised);
+    --component-button-ghost-bg-active:      var(--semantic-color-surface-overlay);
+    --component-button-ghost-bg-disabled:    transparent;
+    --component-button-ghost-color:          var(--semantic-color-text-default);
+    --component-button-ghost-color-disabled: var(--semantic-color-text-disabled);
+    --component-button-ghost-border-color:   transparent;
+
+    // =========================================================================
+    // VARIANT: danger
+    // Destructive action — all colours resolved through semantic danger tokens
+    // (Previously violated: used --primitive-color-red-* directly. Fixed.)
+    // =========================================================================
+    --component-button-danger-bg:              var(--semantic-color-feedback-danger-default);
+    --component-button-danger-bg-hover:        var(--semantic-color-feedback-danger-hover);
+    --component-button-danger-bg-active:       var(--semantic-color-feedback-danger-active);
+    --component-button-danger-bg-disabled:     var(--semantic-color-interactive-disabled);
+    --component-button-danger-color:           var(--semantic-color-feedback-danger-contrast);
+    --component-button-danger-color-disabled:  var(--semantic-color-text-disabled);
+    --component-button-danger-border-color:    transparent;
+
+    // =========================================================================
+    // SIZE: sm  —  32px min-height
+    // =========================================================================
+    --component-button-sm-padding-block:  var(--semantic-spacing-component-xs);  //  8px
+    --component-button-sm-padding-inline: var(--semantic-spacing-component-sm);  // 12px
+    --component-button-sm-font-size:      var(--semantic-font-size-ui-sm);       // 12px
+    --component-button-sm-font-weight:    var(--semantic-font-weight-label);     // 600
+    --component-button-sm-gap:            var(--semantic-spacing-inline-xs);     //  4px
+    --component-button-sm-min-height:     var(--primitive-spacing-8);            //  2rem / 32px
+
+    // =========================================================================
+    // SIZE: md  —  40px min-height (default)
+    // =========================================================================
+    --component-button-md-padding-block:  var(--semantic-spacing-component-sm);  // 12px
+    --component-button-md-padding-inline: var(--semantic-spacing-component-md);  // 16px
+    --component-button-md-font-size:      var(--semantic-font-size-ui-md);       // 14px
+    --component-button-md-font-weight:    var(--semantic-font-weight-label);     // 600
+    --component-button-md-gap:            var(--semantic-spacing-inline-sm);     //  8px
+    --component-button-md-min-height:     var(--primitive-spacing-10);           //  2.5rem / 40px
+
+    // =========================================================================
+    // SIZE: lg  —  48px min-height
+    // =========================================================================
+    --component-button-lg-padding-block:  var(--semantic-spacing-component-md);  // 16px
+    --component-button-lg-padding-inline: var(--semantic-spacing-component-lg);  // 24px
+    --component-button-lg-font-size:      var(--semantic-font-size-ui-lg);       // 16px
+    --component-button-lg-font-weight:    var(--semantic-font-weight-label);     // 600
+    --component-button-lg-gap:            var(--semantic-spacing-inline-sm);     //  8px
+    --component-button-lg-min-height:     var(--primitive-spacing-12);           //  3rem / 48px
+  }
+
+}

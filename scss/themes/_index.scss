@@ -1,0 +1,33 @@
+// =============================================================================
+// LAYER: themes
+// FILE:  themes/_index.scss
+//
+// PURPOSE:
+//   Barrel export for all theme files.
+//   Themes are ordered: light first, dark second. Both can coexist in the
+//   same document since they are scoped to [data-theme] attribute selectors.
+//
+//   Themes only override primitive tokens — semantic and component tokens
+//   resolve automatically via their var() chains.
+//
+// ACTIVATION:
+//   Apply [data-theme="light"] or [data-theme="dark"] to any element.
+//   Typically applied to <html> or <body> for document-wide theming,
+//   or to a specific container for section-level theme switches.
+//
+//   <html data-theme="dark">
+//     <section data-theme="light">Forces light inside dark doc</section>
+//   </html>
+//
+// FORBIDDEN: importing anything outside the themes/ directory here
+//            defining semantic or component token overrides in theme files
+// =============================================================================
+
+// Light theme (default document palette — mirrors :root defaults)
+@use 'theme-light';
+
+// Dark theme (inverted neutral scale + accessible brand adjustments)
+@use 'theme-dark';
+
+// TODO (Phase 7): Add high-contrast theme for accessibility
+// TODO (Phase 8): Add brand-specific theme files (e.g. theme-brand-acme.scss)

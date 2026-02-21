@@ -1,0 +1,119 @@
+// =============================================================================
+// LAYER: themes
+// FILE:  themes/_theme-dark.scss
+//
+// PURPOSE:
+//   Dark theme — overrides primitive tokens to invert the palette for dark UI.
+//   The semantic and component layers resolve automatically since they reference
+//   primitive tokens via var(). No semantic or component overrides needed.
+//
+// STRATEGY:
+//   1. Invert the neutral scale so --primitive-color-neutral-0 becomes
+//      the darkest surface and --primitive-color-neutral-1000 is lightest.
+//      Semantic tokens referencing "neutral-0" (surface-base) now produce
+//      the dark background; those referencing "neutral-900" (text-default)
+//      now produce near-white text.
+//
+//   2. Shift brand/feedback palette to higher-contrast accessible variants
+//      suitable for dark backgrounds.
+//
+// OVERRIDE RULES (from Phase 2 contract):
+//   ONLY primitive tokens are overridden here.
+//   Semantic and component layers resolve automatically.
+//
+// TARGET:  [data-theme="dark"] attribute on any element
+// ALLOWED REFERENCES: raw values (hex/rgb) only
+// FORBIDDEN:          semantic tokens, component tokens, utility classes
+// =============================================================================
+
+@layer themes {
+
+  [data-theme="dark"] {
+
+    // Inform browser of color scheme for native controls / scrollbars
+    color-scheme: dark;
+
+    // -------------------------------------------------------------------------
+    // Neutral scale — inverted for dark surfaces
+    //
+    // NOTE: We do NOT simply reverse the list — we remap to a custom dark
+    // palette that provides proper contrast ratios. Step numbers stay the
+    // same so structural intent ("50 = lightest surface", "900 = darkest
+    // text") is preserved, but values shift to dark equivalents.
+    //
+    // Mapping:
+    //   neutral-0     → darkest surface (replaces white)
+    //   neutral-50    → slightly lighter dark surface
+    //   neutral-100   → card / elevated surface
+    //   neutral-200   → border / divider
+    //   neutral-300   → subtle border
+    //   neutral-400   → placeholder / disabled
+    //   neutral-500   → muted text
+    //   neutral-600   → secondary text
+    //   neutral-700   → body text
+    //   neutral-800   → emphasis text
+    //   neutral-900   → heading / primary text (replaces near-black)
+    //   neutral-1000  → max contrast (replaces black)
+    // -------------------------------------------------------------------------
+    --primitive-color-neutral-0:    #0d1117;   // darkest bg
+    --primitive-color-neutral-50:   #161b22;   // sidebar / raised bg
+    --primitive-color-neutral-100:  #21262d;   // card bg
+    --primitive-color-neutral-200:  #30363d;   // border
+    --primitive-color-neutral-300:  #484f58;   // subtle border / chevron
+    --primitive-color-neutral-400:  #6e7681;   // placeholder / disabled text
+    --primitive-color-neutral-500:  #8b949e;   // muted text
+    --primitive-color-neutral-600:  #b1bac4;   // secondary text
+    --primitive-color-neutral-700:  #c9d1d9;   // body text
+    --primitive-color-neutral-800:  #e6edf3;   // emphasis text
+    --primitive-color-neutral-900:  #f0f6fc;   // heading / primary text
+    --primitive-color-neutral-1000: #ffffff;   // max contrast
+
+    // -------------------------------------------------------------------------
+    // Brand / Blue — lighter for dark bg contrast (WCAG AA ≥ 4.5:1)
+    // -------------------------------------------------------------------------
+    --primitive-color-blue-50:  #0d2137;   // dark subtle brand bg
+    --primitive-color-blue-100: #0f2f50;
+    --primitive-color-blue-200: #1254a0;
+    --primitive-color-blue-300: #1a6fc4;
+    --primitive-color-blue-400: #4dabf7;   // readable on dark bg
+    --primitive-color-blue-500: #58beff;
+    --primitive-color-blue-600: #79c8ff;   // interactive default on dark
+    --primitive-color-blue-700: #9ad8ff;
+    --primitive-color-blue-800: #bbebff;
+    --primitive-color-blue-900: #daf4ff;
+
+    // -------------------------------------------------------------------------
+    // Success — adjusted for dark backgrounds
+    // -------------------------------------------------------------------------
+    --primitive-color-green-50:  #0a1f0c;
+    --primitive-color-green-600: #56d364;
+    --primitive-color-green-700: #85e89d;
+    --primitive-color-green-800: #b3f0c0;
+
+    // -------------------------------------------------------------------------
+    // Warning — adjusted for dark backgrounds
+    // -------------------------------------------------------------------------
+    --primitive-color-yellow-50:  #2b2000;
+    --primitive-color-yellow-500: #e3b341;
+    --primitive-color-yellow-600: #f0c040;
+    --primitive-color-yellow-900: #fff3a0;
+
+    // -------------------------------------------------------------------------
+    // Danger — adjusted for dark backgrounds
+    // -------------------------------------------------------------------------
+    --primitive-color-red-50:  #2d1115;
+    --primitive-color-red-600: #ff7b72;
+    --primitive-color-red-700: #ff9b96;
+    --primitive-color-red-800: #ffb8b4;
+
+    // -------------------------------------------------------------------------
+    // Border radius changes for dark mode (optional, can be removed)
+    // Dark themes sometimes use slightly less radius for a denser feel.
+    // Uncomment if design requires it:
+    // --primitive-radius-md: 0.25rem;
+    // --primitive-radius-lg: 0.375rem;
+    // -------------------------------------------------------------------------
+
+  }
+
+}

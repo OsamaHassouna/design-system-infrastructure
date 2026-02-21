@@ -1,0 +1,54 @@
+// =============================================================================
+// LAYER: tokens
+// FILE:  tokens/_semantic.spacing.scss
+//
+// PURPOSE:
+//   Semantic spacing tokens — map layout intent onto primitive spacing steps.
+//   Use these in components and utilities; never use primitives directly.
+//
+// ALLOWED REFERENCES: primitive spacing tokens only
+// FORBIDDEN:          raw rem/px values, component tokens, utility classes
+// =============================================================================
+
+@layer tokens {
+
+  :root {
+    // -------------------------------------------------------------------------
+    // Layout spacing — page-level structural gaps
+    // -------------------------------------------------------------------------
+    --semantic-spacing-layout-xs:   var(--primitive-spacing-4);    // 16px
+    --semantic-spacing-layout-sm:   var(--primitive-spacing-6);    // 24px
+    --semantic-spacing-layout-md:   var(--primitive-spacing-8);    // 32px
+    --semantic-spacing-layout-lg:   var(--primitive-spacing-12);   // 48px
+    --semantic-spacing-layout-xl:   var(--primitive-spacing-16);   // 64px
+    --semantic-spacing-layout-2xl:  var(--primitive-spacing-24);   // 96px
+
+    // -------------------------------------------------------------------------
+    // Component spacing — internal padding/gap of UI components
+    // -------------------------------------------------------------------------
+    --semantic-spacing-component-2xs: var(--primitive-spacing-1);  //  4px
+    --semantic-spacing-component-xs:  var(--primitive-spacing-2);  //  8px
+    --semantic-spacing-component-sm:  var(--primitive-spacing-3);  // 12px
+    --semantic-spacing-component-md:  var(--primitive-spacing-4);  // 16px
+    --semantic-spacing-component-lg:  var(--primitive-spacing-6);  // 24px
+    --semantic-spacing-component-xl:  var(--primitive-spacing-8);  // 32px
+
+    // -------------------------------------------------------------------------
+    // Inline spacing — gaps between inline elements (icon + label, etc.)
+    // -------------------------------------------------------------------------
+    --semantic-spacing-inline-xs:  var(--primitive-spacing-1);     //  4px
+    --semantic-spacing-inline-sm:  var(--primitive-spacing-2);     //  8px
+    --semantic-spacing-inline-md:  var(--primitive-spacing-3);     // 12px
+    --semantic-spacing-inline-lg:  var(--primitive-spacing-4);     // 16px
+
+    // -------------------------------------------------------------------------
+    // Stack spacing — vertical flow between stacked elements
+    // -------------------------------------------------------------------------
+    --semantic-spacing-stack-xs:  var(--primitive-spacing-2);      //  8px
+    --semantic-spacing-stack-sm:  var(--primitive-spacing-4);      // 16px
+    --semantic-spacing-stack-md:  var(--primitive-spacing-6);      // 24px
+    --semantic-spacing-stack-lg:  var(--primitive-spacing-8);      // 32px
+    --semantic-spacing-stack-xl:  var(--primitive-spacing-12);     // 48px
+  }
+
+}

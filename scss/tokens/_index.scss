@@ -1,0 +1,26 @@
+// =============================================================================
+// LAYER: tokens
+// FILE:  tokens/_index.scss
+//
+// PURPOSE:
+//   Barrel export for all token files. Import order is strictly enforced:
+//   primitives MUST load before semantics — semantics reference primitives
+//   via var() and will resolve to empty if primitives are missing.
+//
+// IMPORT ORDER:
+//   1. Primitives  (raw values, no dependencies)
+//   2. Semantics   (reference primitives via var())
+//
+// FORBIDDEN: importing anything outside the tokens/ directory here
+// =============================================================================
+
+// 1. Primitives — raw catalogue values (no dependencies)
+@use 'primitives.color';
+@use 'primitives.spacing';
+@use 'primitives.radius';
+@use 'primitives.typography';
+
+// 2. Semantics — intent mappings onto primitives
+@use 'semantic.color';
+@use 'semantic.spacing';
+@use 'semantic.typography';

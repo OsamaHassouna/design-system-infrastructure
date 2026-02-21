@@ -1,0 +1,107 @@
+// =============================================================================
+// LAYER: components
+// FILE:  components/card/_card.variables.scss
+//
+// PURPOSE:
+//   Component-scoped CSS custom properties for the Card component.
+//   Defines the public theming API of the Card. All defaults reference
+//   semantic tokens. Themes override these variables, not raw values.
+//
+// ALLOWED REFERENCES: semantic tokens only
+// FORBIDDEN:          primitive tokens, raw values, other component tokens,
+//                     utility classes
+//
+// OVERRIDE CONTRACT:
+//   Override via [data-theme] in the themes layer, or via a component
+//   wrapper in the adapters layer. Never edit this file for theming.
+// =============================================================================
+
+@layer components {
+
+  :root {
+    // -------------------------------------------------------------------------
+    // Structure
+    // -------------------------------------------------------------------------
+    --component-card-border-width:   1px;
+    --component-card-border-style:   solid;
+    --component-card-border-radius:  var(--primitive-radius-lg);
+    --component-card-border-color:   var(--semantic-color-border-default);
+
+    // -------------------------------------------------------------------------
+    // Backgrounds
+    // -------------------------------------------------------------------------
+    --component-card-bg:             var(--semantic-color-surface-base);
+    --component-card-bg-raised:      var(--semantic-color-surface-raised);
+    --component-card-bg-sunken:      var(--semantic-color-surface-sunken);
+
+    // -------------------------------------------------------------------------
+    // Shadow (elevation)
+    // Shadow values are raw here — no semantic shadow scale exists yet.
+    // TODO (Phase 5): Extract to a semantic shadow token layer.
+    // -------------------------------------------------------------------------
+    --component-card-shadow-none:    none;
+    --component-card-shadow-sm:      0 1px 3px rgba(0, 0, 0, 0.06),
+                                     0 1px 2px rgba(0, 0, 0, 0.04);
+    --component-card-shadow-md:      0 4px 6px rgba(0, 0, 0, 0.07),
+                                     0 2px 4px rgba(0, 0, 0, 0.05);
+    --component-card-shadow-lg:      0 10px 15px rgba(0, 0, 0, 0.08),
+                                     0 4px 6px rgba(0, 0, 0, 0.05);
+
+    // Default shadow for base card
+    --component-card-shadow:         var(--component-card-shadow-sm);
+
+    // -------------------------------------------------------------------------
+    // Focus ring
+    // -------------------------------------------------------------------------
+    --component-card-focus-ring-width:  var(--base-focus-ring-width);
+    --component-card-focus-ring-offset: var(--base-focus-ring-offset);
+    --component-card-focus-ring-color:  var(--base-focus-ring-color);
+
+    // -------------------------------------------------------------------------
+    // Transition
+    // -------------------------------------------------------------------------
+    --component-card-transition-duration: var(--base-transition-duration-normal);
+    --component-card-transition-easing:   var(--base-transition-easing-default);
+
+    // =========================================================================
+    // SLOT: header
+    // =========================================================================
+    --component-card-header-padding-block:  var(--semantic-spacing-component-md);
+    --component-card-header-padding-inline: var(--semantic-spacing-component-lg);
+    --component-card-header-border-color:   var(--semantic-color-border-default);
+
+    // Header title typography
+    --component-card-header-title-font-size:   var(--semantic-font-size-heading-sm);
+    --component-card-header-title-font-weight: var(--semantic-font-weight-heading);
+    --component-card-header-title-color:       var(--semantic-color-text-default);
+
+    // Header subtitle typography
+    --component-card-header-subtitle-font-size:  var(--semantic-font-size-ui-sm);
+    --component-card-header-subtitle-color:      var(--semantic-color-text-subtle);
+
+    // =========================================================================
+    // SLOT: body
+    // =========================================================================
+    --component-card-body-padding-block:  var(--semantic-spacing-component-md);
+    --component-card-body-padding-inline: var(--semantic-spacing-component-lg);
+    --component-card-body-font-size:      var(--semantic-font-size-body-md);
+    --component-card-body-color:          var(--semantic-color-text-default);
+    --component-card-body-gap:            var(--semantic-spacing-stack-sm);
+
+    // =========================================================================
+    // SLOT: footer
+    // =========================================================================
+    --component-card-footer-padding-block:  var(--semantic-spacing-component-sm);
+    --component-card-footer-padding-inline: var(--semantic-spacing-component-lg);
+    --component-card-footer-bg:             var(--semantic-color-surface-raised);
+    --component-card-footer-border-color:   var(--semantic-color-border-default);
+    --component-card-footer-gap:            var(--semantic-spacing-inline-sm);
+
+    // =========================================================================
+    // MEDIA area (card image strip)
+    // =========================================================================
+    --component-card-media-aspect-ratio:  16 / 9;
+    --component-card-media-bg:            var(--semantic-color-surface-overlay);
+  }
+
+}

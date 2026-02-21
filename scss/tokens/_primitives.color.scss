@@ -1,0 +1,91 @@
+// =============================================================================
+// LAYER: tokens
+// FILE:  tokens/_primitives.color.scss
+//
+// PURPOSE:
+//   Raw color palette — no semantics, no intent.
+//   These are the only values allowed to hold literal hex/rgb values.
+//   Semantic tokens MUST reference these; components MUST NOT reference these.
+//
+// ALLOWED REFERENCES: none (raw values only)
+// FORBIDDEN:          semantic tokens, component tokens, utility classes
+// =============================================================================
+
+@layer tokens {
+
+  :root {
+    // -------------------------------------------------------------------------
+    // Neutral scale
+    // Naming: --primitive-color-{palette}-{step}
+    // -------------------------------------------------------------------------
+    --primitive-color-neutral-0:   #ffffff;
+    --primitive-color-neutral-50:  #f8f9fa;
+    --primitive-color-neutral-100: #f1f3f5;
+    --primitive-color-neutral-200: #e9ecef;
+    --primitive-color-neutral-300: #dee2e6;
+    --primitive-color-neutral-400: #ced4da;
+    --primitive-color-neutral-500: #adb5bd;
+    --primitive-color-neutral-600: #868e96;
+    --primitive-color-neutral-700: #495057;
+    --primitive-color-neutral-800: #343a40;
+    --primitive-color-neutral-900: #212529;
+    --primitive-color-neutral-1000: #000000;
+
+    // -------------------------------------------------------------------------
+    // Brand / Blue scale
+    // -------------------------------------------------------------------------
+    --primitive-color-blue-50:  #e7f5ff;
+    --primitive-color-blue-100: #d0ebff;
+    --primitive-color-blue-200: #a5d8ff;
+    --primitive-color-blue-300: #74c0fc;
+    --primitive-color-blue-400: #4dabf7;
+    --primitive-color-blue-500: #339af0;
+    --primitive-color-blue-600: #228be6;
+    --primitive-color-blue-700: #1c7ed6;
+    --primitive-color-blue-800: #1971c2;
+    --primitive-color-blue-900: #1864ab;
+
+    // -------------------------------------------------------------------------
+    // Success / Green scale
+    // -------------------------------------------------------------------------
+    --primitive-color-green-50:  #ebfbee;
+    --primitive-color-green-100: #d3f9d8;
+    --primitive-color-green-200: #b2f2bb;
+    --primitive-color-green-300: #8ce99a;
+    --primitive-color-green-400: #69db7c;
+    --primitive-color-green-500: #51cf66;
+    --primitive-color-green-600: #40c057;
+    --primitive-color-green-700: #37b24d;
+    --primitive-color-green-800: #2f9e44;
+    --primitive-color-green-900: #2b8a3e;
+
+    // -------------------------------------------------------------------------
+    // Warning / Yellow scale
+    // -------------------------------------------------------------------------
+    --primitive-color-yellow-50:  #fff9db;
+    --primitive-color-yellow-100: #fff3bf;
+    --primitive-color-yellow-200: #ffec99;
+    --primitive-color-yellow-300: #ffe066;
+    --primitive-color-yellow-400: #ffd43b;
+    --primitive-color-yellow-500: #fcc419;
+    --primitive-color-yellow-600: #fab005;
+    --primitive-color-yellow-700: #f59f00;
+    --primitive-color-yellow-800: #f08c00;
+    --primitive-color-yellow-900: #e67700;
+
+    // -------------------------------------------------------------------------
+    // Danger / Red scale
+    // -------------------------------------------------------------------------
+    --primitive-color-red-50:  #fff5f5;
+    --primitive-color-red-100: #ffe3e3;
+    --primitive-color-red-200: #ffc9c9;
+    --primitive-color-red-300: #ffa8a8;
+    --primitive-color-red-400: #ff8787;
+    --primitive-color-red-500: #ff6b6b;
+    --primitive-color-red-600: #fa5252;
+    --primitive-color-red-700: #f03e3e;
+    --primitive-color-red-800: #e03131;
+    --primitive-color-red-900: #c92a2a;
+  }
+
+}

@@ -1,0 +1,19 @@
+// =============================================================================
+// LAYER: components / button
+// FILE:  components/button/_index.scss
+//
+// PURPOSE:
+//   Barrel export for the Button component.
+//   Variables MUST load before styles — styles reference --component-button-*
+//   variables which are declared in the variables file.
+//
+// IMPORT ORDER:
+//   1. _button.variables.scss — declares --component-button-* custom props
+//   2. _button.scss           — structural styles consuming those props
+// =============================================================================
+
+// 1. Component CSS custom properties (public theming API)
+@use 'button.variables';
+
+// 2. Structural styles (uses variables defined above)
+@use 'button';

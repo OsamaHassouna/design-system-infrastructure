@@ -1,0 +1,31 @@
+// =============================================================================
+// LAYER: tokens
+// FILE:  tokens/_primitives.radius.scss
+//
+// PURPOSE:
+//   Raw border-radius scale. Semantic tokens select from these values.
+//   Components MUST NOT use these directly.
+//
+// ALLOWED REFERENCES: none (raw values only)
+// FORBIDDEN:          semantic tokens, component tokens, utility classes
+// =============================================================================
+
+@layer tokens {
+
+  :root {
+    // -------------------------------------------------------------------------
+    // Border radius scale
+    // Naming: --primitive-radius-{name}
+    // -------------------------------------------------------------------------
+    --primitive-radius-none:    0rem;       //  0px — sharp corners
+    --primitive-radius-xs:      0.125rem;   //  2px
+    --primitive-radius-sm:      0.25rem;    //  4px
+    --primitive-radius-md:      0.375rem;   //  6px
+    --primitive-radius-lg:      0.5rem;     //  8px
+    --primitive-radius-xl:      0.75rem;    // 12px
+    --primitive-radius-2xl:     1rem;       // 16px
+    --primitive-radius-3xl:     1.5rem;     // 24px
+    --primitive-radius-full:    9999px;     // pill / circle
+  }
+
+}

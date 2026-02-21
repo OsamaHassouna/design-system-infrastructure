@@ -1,0 +1,23 @@
+// =============================================================================
+// LAYER: adapters / angular
+// FILE:  adapters/angular/_index.scss
+//
+// PURPOSE:
+//   Barrel entry point for the Angular framework adapter.
+//
+// CONTENTS:
+//   _angular.adapter.scss  — :host / CDK / Material token bridge
+//
+// USAGE:
+//   Consumed by adapters/_index.scss for the monolithic build.
+//   For Angular-only builds, import this file directly:
+//     @use 'scss/adapters/angular';
+//
+// ADAPTER CONTRACT SUMMARY:
+//   • Only --component-* variables are referenced (never --semantic-* / --primitive-*).
+//   • Only Angular-native selectors (:host, :host-context, .cdk-*) are targeted.
+//   • Removing this entire directory leaves the core DS unaffected.
+//   • Theme switching works automatically — no adapter changes required.
+// =============================================================================
+
+@use 'angular.adapter';

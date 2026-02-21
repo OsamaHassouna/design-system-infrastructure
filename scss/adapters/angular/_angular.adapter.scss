@@ -1,0 +1,174 @@
+// =============================================================================
+// LAYER: adapters
+// FILE:  adapters/angular/_angular.adapter.scss
+//
+// PURPOSE:
+//   Angular-specific adapter — maps Angular component selector patterns onto
+//   Design System component variables. This file bridges the gap between
+//   Angular's component encapsulation model and the DS token system.
+//
+// ─── ADAPTER CONTRACT ────────────────────────────────────────────────────────
+//
+//   RULE 1 — TOKEN REFERENCE BOUNDARY
+//     This file MUST reference only --component-* variables.
+//     --semantic-*, --primitive-*, and raw values are FORBIDDEN.
+//
+//   RULE 2 — NO TOKEN REDEFINITION
+//     This adapter MUST NOT redefine DS token values. It is a read-only
+//     consumer of the --component-* public API.
+//
+//   RULE 3 — VENDOR SCOPE ONLY
+//     Selectors must target Angular-native patterns (:host, :host-context,
+//     [_nghost], ng-* classes). DS classes (.ds-*) are managed by the
+//     components layer and MUST NOT appear here.
+//
+//   RULE 4 — FULL REMOVABILITY
+//     Removing this file must leave the core DS fully functional.
+//
+//   RULE 5 — NO CROSS-ADAPTER REFERENCES
+//     MUST NOT import from or reference adapters/primeng/ or any other adapter.
+//
+// ALLOWED REFERENCES: --component-* variables only
+// FORBIDDEN:          --primitive-*, --semantic-*, raw values,
+//                     DS utility classes, cross-adapter references
+//
+// ─── WHAT THIS FILE COVERS ───────────────────────────────────────────────────
+//   1. :host selector mappings for Angular ViewEncapsulation.Emulated
+//   2. :host-context theme propagation helpers
+//   3. Angular CDK overlay / portal integration
+//   4. Angular Material token bridge (optional co-existence)
+//   5. Angular animation hooks
+//
+// ─── TWO-PASS PATTERN (mirrors primeng adapter) ──────────────────────────────
+//   Pass 1 — Angular/Material token override (if co-existing with Angular Material)
+//     Override --mat-* / --mdc-* tokens in :root to consume DS values.
+//   Pass 2 — Structural host-binding overrides
+//     Target :host and [_nghost] selectors for encapsulated component styles.
+// =============================================================================
+
+@layer adapters {
+
+  // ===========================================================================
+  // PASS 1 — Angular Material token bridge (optional — only when co-existing)
+  //
+  // If Angular Material is imported alongside this DS, override its M3
+  // CSS variables here so Material components consume DS values.
+  // Uncomment blocks as needed; they are isolated and safe to enable
+  // incrementally without side-effects on other layers.
+  //
+  // Reference: https://m3.material.io/foundations/design-tokens/overview
+  //            https://material.angular.io/guide/theming
+  // ===========================================================================
+
+  // :root {
+  //   // ── Material Button → DS Button token bridge ─────────────────────────
+  //   --mdc-filled-button-container-color:       var(--component-button-primary-bg);
+  //   --mdc-filled-button-label-text-color:      var(--component-button-primary-color);
+  //   --mdc-filled-button-container-shape:       var(--component-button-border-radius);
+  //   --mdc-outlined-button-label-text-color:    var(--component-button-secondary-color);
+  //   --mdc-outlined-button-outline-color:       var(--component-button-secondary-border-color);
+  //
+  //   // ── Material Card → DS Card token bridge ─────────────────────────────
+  //   // --mdc-elevated-card-container-color:    var(--component-card-bg);
+  //   // --mdc-elevated-card-container-shape:    var(--component-card-border-radius);
+  // }
+
+  // ===========================================================================
+  // PASS 2 — Angular host selector mappings
+  //
+  // Targets :host when an Angular component uses ViewEncapsulation.Emulated
+  // (the default) and exposes the DS button API via host-class binding.
+  //
+  // Component-side usage:
+  //   @Component({
+  //     host: { class: 'ds-btn ds-btn--primary ds-btn--md' }
+  //   })
+  //   export class MyButtonComponent { }
+  //
+  // When ViewEncapsulation.Emulated is active, Angular generates an attribute
+  // selector like [_nghost-abc-123]. The :host selector below targets that
+  // generated attribute without coupling this adapter to a specific hash.
+  // ===========================================================================
+
+  // ---------------------------------------------------------------------------
+  // Button host mapping
+  //
+  // When an Angular component wraps a DS button, forward the display context
+  // so the :host element renders inline-flex and doesn't break layout.
+  //
+  // DS interface: --component-button-*  (same variables as .ds-btn)
+  // ---------------------------------------------------------------------------
+  :host(.ds-btn) {
+    // Restore inline-flex display — Angular host defaults to inline which
+    // would collapse the flex layout of the inner button.
+    display:        inline-flex;
+    align-items:    center;
+    vertical-align: middle;
+  }
+
+  // ---------------------------------------------------------------------------
+  // CDK Overlay — theme propagation
+  //
+  // The Angular CDK portal appends overlay containers to <body>, placing them
+  // outside the element that carries [data-theme]. CSS custom properties are
+  // inherited from the closest ancestor that declared them. Since overlays are
+  // direct children of <body>, they inherit from :root which always holds the
+  // current theme's primitive overrides — no explicit forwarding needed.
+  //
+  // Exception: when [data-theme] is scoped to a sub-tree (not :root / body),
+  // uncomment the block below to propagate the active theme.
+  // ---------------------------------------------------------------------------
+
+  // .cdk-overlay-container {
+  //   // Propagate the active theme from the application root to CDK overlays.
+  //   // Replace '#app-root' with the actual root selector used in the project.
+  //   @each $theme in (light, dark) {
+  //     #app-root[data-theme='#{$theme}'] ~ & {
+  //       --applied-theme: #{$theme}; // marker for debugging
+  //     }
+  //   }
+  // }
+
+  // ---------------------------------------------------------------------------
+  // ShadowDom encapsulation — theme forwarding
+  //
+  // Components using ViewEncapsulation.ShadowDom create a shadow root that
+  // does NOT inherit CSS custom properties from outside by default.
+  // The :host-context selector reads the active [data-theme] from outside the
+  // shadow boundary and re-exposes the key surface token so content inside
+  // the shadow root can consume it.
+  //
+  // When a component adds its own theme-sensitive tokens, add them here using
+  // the same pattern — reference --component-* variables, not raw values.
+  // ---------------------------------------------------------------------------
+
+  // :host-context([data-theme='dark']) {
+  //   // DS primitives are already overridden at [data-theme='dark'] in the
+  //   // themes layer. For emulated/none encapsulation this block is unnecessary.
+  //   // For ShadowDom — forward only what the shadow root needs:
+  //   // color-scheme: dark;
+  // }
+
+  // ---------------------------------------------------------------------------
+  // Angular-specific structural helpers
+  // ---------------------------------------------------------------------------
+
+  // Prevent layout flash before Angular hydration (SSR / partial hydration).
+  // Components that are not yet hydrated are hidden; once Angular picks them
+  // up the class is removed and the content fades in via transition.
+  .ng-pre-hydration {
+    visibility: hidden;
+  }
+
+  // Angular animation enter/leave hooks — aligned with DS motion tokens.
+  // These are structural placeholders; keyframe content lives in base/_root.scss
+  // and should be referenced via --base-transition-* variables once defined.
+  //
+  // .ng-enter  { transition: opacity var(--component-button-transition-duration)
+  //                                   var(--component-button-transition-easing); }
+  // .ng-enter-active  { opacity: 1; }
+  // .ng-leave         { opacity: 1; }
+  // .ng-leave-active  { opacity: 0; }
+
+}
+

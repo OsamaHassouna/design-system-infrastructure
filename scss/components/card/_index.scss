@@ -1,0 +1,14 @@
+// =============================================================================
+// LAYER: components / card
+// FILE:  components/card/_index.scss
+//
+// IMPORT ORDER:
+//   1. _card.variables.scss — declares --component-card-* custom props
+//   2. _card.scss           — structural styles consuming those props
+// =============================================================================
+
+// 1. Component CSS custom properties (public theming API)
+@use 'card.variables';
+
+// 2. Structural styles (uses variables defined above)
+@use 'card';

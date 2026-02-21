@@ -1,0 +1,76 @@
+// =============================================================================
+// LAYER: tokens
+// FILE:  tokens/_semantic.typography.scss
+//
+// PURPOSE:
+//   Semantic typography tokens — map text-role intent onto primitive type scale.
+//   Components and utilities MUST reference these; never reference primitives.
+//
+// ALLOWED REFERENCES: primitive typography tokens only
+// FORBIDDEN:          raw values, component tokens, utility classes
+// =============================================================================
+
+@layer tokens {
+
+  :root {
+    // -------------------------------------------------------------------------
+    // Font families by role
+    // -------------------------------------------------------------------------
+    --semantic-font-family-body:    var(--primitive-font-family-sans);
+    --semantic-font-family-heading: var(--primitive-font-family-sans);
+    --semantic-font-family-code:    var(--primitive-font-family-mono);
+    --semantic-font-family-ui:      var(--primitive-font-family-sans);
+
+    // -------------------------------------------------------------------------
+    // Body text sizes
+    // -------------------------------------------------------------------------
+    --semantic-font-size-body-sm:  var(--primitive-font-size-sm);   // 14px
+    --semantic-font-size-body-md:  var(--primitive-font-size-md);   // 16px (base)
+    --semantic-font-size-body-lg:  var(--primitive-font-size-lg);   // 18px
+
+    // -------------------------------------------------------------------------
+    // Heading sizes
+    // -------------------------------------------------------------------------
+    --semantic-font-size-heading-xs:  var(--primitive-font-size-lg);    // 18px
+    --semantic-font-size-heading-sm:  var(--primitive-font-size-xl);    // 20px
+    --semantic-font-size-heading-md:  var(--primitive-font-size-2xl);   // 24px
+    --semantic-font-size-heading-lg:  var(--primitive-font-size-3xl);   // 30px
+    --semantic-font-size-heading-xl:  var(--primitive-font-size-4xl);   // 36px
+    --semantic-font-size-heading-2xl: var(--primitive-font-size-5xl);   // 48px
+
+    // -------------------------------------------------------------------------
+    // UI element sizes (labels, captions, badges, form elements)
+    // -------------------------------------------------------------------------
+    --semantic-font-size-ui-xs:  var(--primitive-font-size-2xs);   // 10px
+    --semantic-font-size-ui-sm:  var(--primitive-font-size-xs);    // 12px
+    --semantic-font-size-ui-md:  var(--primitive-font-size-sm);    // 14px
+    --semantic-font-size-ui-lg:  var(--primitive-font-size-md);    // 16px
+
+    // -------------------------------------------------------------------------
+    // Font weights by role
+    // -------------------------------------------------------------------------
+    --semantic-font-weight-body:      var(--primitive-font-weight-regular);  // 400
+    --semantic-font-weight-emphasis:  var(--primitive-font-weight-medium);   // 500
+    --semantic-font-weight-strong:    var(--primitive-font-weight-semibold); // 600
+    --semantic-font-weight-heading:   var(--primitive-font-weight-bold);     // 700
+    --semantic-font-weight-ui:        var(--primitive-font-weight-medium);   // 500
+    --semantic-font-weight-label:     var(--primitive-font-weight-semibold); // 600
+
+    // -------------------------------------------------------------------------
+    // Line heights by role
+    // -------------------------------------------------------------------------
+    --semantic-line-height-body:    var(--primitive-line-height-normal);   // 1.5
+    --semantic-line-height-heading: var(--primitive-line-height-tight);    // 1.25
+    --semantic-line-height-ui:      var(--primitive-line-height-snug);     // 1.375
+    --semantic-line-height-code:    var(--primitive-line-height-relaxed);  // 1.625
+
+    // -------------------------------------------------------------------------
+    // Letter spacing by role
+    // -------------------------------------------------------------------------
+    --semantic-letter-spacing-body:    var(--primitive-letter-spacing-normal);  //  0
+    --semantic-letter-spacing-heading: var(--primitive-letter-spacing-tight);   // -0.025em
+    --semantic-letter-spacing-ui:      var(--primitive-letter-spacing-normal);  //  0
+    --semantic-letter-spacing-caps:    var(--primitive-letter-spacing-wider);   // +0.05em
+  }
+
+}

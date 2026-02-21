@@ -1,0 +1,41 @@
+// =============================================================================
+// LAYER: tokens
+// FILE:  tokens/_primitives.spacing.scss
+//
+// PURPOSE:
+//   Raw spacing scale — unitless-step-based, rem-anchored at 4px base.
+//   All values are absolute. Semantic tokens map intent onto these steps.
+//
+// ALLOWED REFERENCES: none (raw values only)
+// FORBIDDEN:          semantic tokens, component tokens, utility classes
+// =============================================================================
+
+@layer tokens {
+
+  :root {
+    // -------------------------------------------------------------------------
+    // Spacing scale — base unit: 4px (0.25rem)
+    // Naming: --primitive-spacing-{step}
+    // step = multiplier of base unit
+    // -------------------------------------------------------------------------
+    --primitive-spacing-0:   0rem;        //   0px
+    --primitive-spacing-1:   0.25rem;     //   4px
+    --primitive-spacing-2:   0.5rem;      //   8px
+    --primitive-spacing-3:   0.75rem;     //  12px
+    --primitive-spacing-4:   1rem;        //  16px
+    --primitive-spacing-5:   1.25rem;     //  20px
+    --primitive-spacing-6:   1.5rem;      //  24px
+    --primitive-spacing-7:   1.75rem;     //  28px
+    --primitive-spacing-8:   2rem;        //  32px
+    --primitive-spacing-10:  2.5rem;      //  40px
+    --primitive-spacing-12:  3rem;        //  48px
+    --primitive-spacing-16:  4rem;        //  64px
+    --primitive-spacing-20:  5rem;        //  80px
+    --primitive-spacing-24:  6rem;        //  96px
+    --primitive-spacing-32:  8rem;        // 128px
+    --primitive-spacing-40:  10rem;       // 160px
+    --primitive-spacing-48:  12rem;       // 192px
+    --primitive-spacing-64:  16rem;       // 256px
+  }
+
+}

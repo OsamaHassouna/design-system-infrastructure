@@ -1,0 +1,228 @@
+// =============================================================================
+// LAYER: components
+// FILE:  components/badge/_badge.scss
+//
+// PURPOSE:
+//   Badge component structural styles — BEM methodology.
+//   All visual values flow exclusively through --component-badge-* variables
+//   declared in _badge.variables.scss. No raw values, no semantic or primitive
+//   token references permitted here.
+//
+// SEPARATION OF CONCERNS:
+//   _badge.variables.scss  ← change for token remapping or theming
+//   _badge.scss            ← change for structural or behavioural rules
+//
+// ALLOWED REFERENCES: --component-badge-* variables only
+// FORBIDDEN:          --primitive-*, --semantic-*, raw values,
+//                     utility class names, other component variables,
+//                     vendor selectors (.p-badge, [_nghost], etc.)
+//
+// -----------------------------------------------------------------------------
+// BEM API
+// -----------------------------------------------------------------------------
+//
+//   BLOCK:    .ds-badge
+//
+//   VARIANTS (mutually exclusive, exactly one required):
+//     .ds-badge--success     Green status (positive)
+//     .ds-badge--warning     Yellow/amber status (caution)
+//     .ds-badge--danger      Red status (error / destructive)
+//     .ds-badge--info        Blue status (informational)
+//     .ds-badge--neutral     Grey status (passive / default)
+//
+//   STYLE MODIFIERS (additive):
+//     .ds-badge--subtle      Low-contrast tinted fill + coloured border
+//     .ds-badge--dot         Icon-only — no text, renders as a circle
+//
+//   SIZES (mutually exclusive, default = md):
+//     .ds-badge--sm          20px min-height
+//     .ds-badge--md          24px min-height
+//
+//   ELEMENTS:
+//     .ds-badge__dot         Presentational dot (used inside .ds-badge--dot)
+//     .ds-badge__label       Text label slot
+//
+// -----------------------------------------------------------------------------
+// USAGE EXAMPLES
+// -----------------------------------------------------------------------------
+//
+//   Filled success badge:
+//     <span class="ds-badge ds-badge--success ds-badge--md">
+//       <span class="ds-badge__label">Active</span>
+//     </span>
+//
+//   Subtle danger badge:
+//     <span class="ds-badge ds-badge--danger ds-badge--subtle ds-badge--sm">
+//       <span class="ds-badge__label">Error</span>
+//     </span>
+//
+//   Dot-only status indicator:
+//     <span class="ds-badge ds-badge--success ds-badge--dot"
+//           aria-label="Online"></span>
+//
+//   Badge next to text (inline):
+//     <span>Status <span class="ds-badge ds-badge--info ds-badge--subtle">
+//       <span class="ds-badge__label">New</span>
+//     </span></span>
+//
+// =============================================================================
+
+@layer components {
+
+  // ===========================================================================
+  // BLOCK — shared base across all variants and sizes
+  // Defaults to md sizing; always pair with a variant modifier.
+  // ===========================================================================
+  .ds-badge {
+    // Layout
+    display:         inline-flex;
+    align-items:     center;
+    justify-content: center;
+    gap:             4px;  // fixed structural gap for dot + label combos
+
+    // Sizing defaults (md — overridden by size modifier classes)
+    padding-block:   var(--component-badge-md-padding-block);
+    padding-inline:  var(--component-badge-md-padding-inline);
+    min-height:      var(--component-badge-md-min-height);
+
+    // Typography defaults (md — overridden by size modifier classes)
+    font-size:     var(--component-badge-md-font-size);
+    font-weight:   var(--component-badge-font-weight);
+    line-height:   var(--component-badge-line-height);
+    letter-spacing: var(--component-badge-letter-spacing);
+    white-space:   nowrap;
+    text-transform: uppercase;
+
+    // Shape
+    border-width:  var(--component-badge-border-width);
+    border-style:  var(--component-badge-border-style);
+    border-radius: var(--component-badge-border-radius);
+
+    // Default to neutral appearance (no variant = still renders)
+    background:    var(--component-badge-neutral-bg);
+    color:         var(--component-badge-neutral-color);
+    border-color:  var(--component-badge-neutral-border);
+
+    // Vertical alignment in flow context
+    vertical-align: middle;
+
+    // ===========================================================================
+    // SIZE MODIFIERS
+    // ===========================================================================
+
+    &.ds-badge--sm {
+      padding-block:  var(--component-badge-sm-padding-block);
+      padding-inline: var(--component-badge-sm-padding-inline);
+      min-height:     var(--component-badge-sm-min-height);
+      font-size:      var(--component-badge-sm-font-size);
+    }
+
+    &.ds-badge--md {
+      padding-block:  var(--component-badge-md-padding-block);
+      padding-inline: var(--component-badge-md-padding-inline);
+      min-height:     var(--component-badge-md-min-height);
+      font-size:      var(--component-badge-md-font-size);
+    }
+
+    // ===========================================================================
+    // VARIANT MODIFIERS — filled (default style per variant)
+    // ===========================================================================
+
+    &.ds-badge--success {
+      background:   var(--component-badge-success-bg);
+      color:        var(--component-badge-success-color);
+      border-color: var(--component-badge-success-border);
+
+      &.ds-badge--subtle {
+        background:   var(--component-badge-success-subtle-bg);
+        color:        var(--component-badge-success-subtle-color);
+        border-color: var(--component-badge-success-subtle-border);
+      }
+    }
+
+    &.ds-badge--warning {
+      background:   var(--component-badge-warning-bg);
+      color:        var(--component-badge-warning-color);
+      border-color: var(--component-badge-warning-border);
+
+      &.ds-badge--subtle {
+        background:   var(--component-badge-warning-subtle-bg);
+        color:        var(--component-badge-warning-subtle-color);
+        border-color: var(--component-badge-warning-subtle-border);
+      }
+    }
+
+    &.ds-badge--danger {
+      background:   var(--component-badge-danger-bg);
+      color:        var(--component-badge-danger-color);
+      border-color: var(--component-badge-danger-border);
+
+      &.ds-badge--subtle {
+        background:   var(--component-badge-danger-subtle-bg);
+        color:        var(--component-badge-danger-subtle-color);
+        border-color: var(--component-badge-danger-subtle-border);
+      }
+    }
+
+    &.ds-badge--info {
+      background:   var(--component-badge-info-bg);
+      color:        var(--component-badge-info-color);
+      border-color: var(--component-badge-info-border);
+
+      &.ds-badge--subtle {
+        background:   var(--component-badge-info-subtle-bg);
+        color:        var(--component-badge-info-subtle-color);
+        border-color: var(--component-badge-info-subtle-border);
+      }
+    }
+
+    &.ds-badge--neutral {
+      background:   var(--component-badge-neutral-bg);
+      color:        var(--component-badge-neutral-color);
+      border-color: var(--component-badge-neutral-border);
+
+      &.ds-badge--subtle {
+        background:   var(--component-badge-neutral-subtle-bg);
+        color:        var(--component-badge-neutral-subtle-color);
+        border-color: var(--component-badge-neutral-subtle-border);
+      }
+    }
+
+    // ===========================================================================
+    // DOT MODIFIER — renders as a bare circle with no internal text
+    // ===========================================================================
+    &.ds-badge--dot {
+      padding:       0;
+      width:         var(--component-badge-md-dot-size);
+      height:        var(--component-badge-md-dot-size);
+      min-height:    unset;
+      border-radius: 50%;
+      overflow:      hidden;
+
+      // Hide any slotted text visually (screen readers still read aria-label)
+      .ds-badge__label {
+        position: absolute;
+        width:    1px;
+        height:   1px;
+        overflow: hidden;
+        clip:     rect(0, 0, 0, 0);
+        white-space: nowrap;
+      }
+
+      &.ds-badge--sm {
+        width:  var(--component-badge-sm-dot-size);
+        height: var(--component-badge-sm-dot-size);
+      }
+    }
+  }
+
+  // ===========================================================================
+  // ELEMENT — __label
+  // Semantic text node — no styling required beyond inheritance
+  // ===========================================================================
+  .ds-badge__label {
+    // Inherits all typography from .ds-badge
+    // No direct visual styles — allows future icon + label layouts
+  }
+
+}

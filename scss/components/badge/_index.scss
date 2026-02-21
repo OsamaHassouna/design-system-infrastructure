@@ -1,0 +1,14 @@
+// =============================================================================
+// LAYER: components
+// FILE:  components/badge/_index.scss
+//
+// PURPOSE:
+//   Badge component barrel. Enforces load order:
+//     1. variables (declares --component-badge-* custom properties)
+//     2. styles    (structural SCSS consuming those variables)
+//
+// FORBIDDEN: importing anything outside the badge/ directory
+// =============================================================================
+
+@use 'badge.variables';
+@use 'badge';

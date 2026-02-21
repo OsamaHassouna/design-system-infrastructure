@@ -1,0 +1,88 @@
+// =============================================================================
+// DESIGN SYSTEM — MONOLITHIC ENTRY POINT
+// FILE: main.scss
+//
+// PURPOSE:
+//   Single-file entry point for the complete Design System.
+//   Imports all layers in strict deterministic order.
+//   Compile this file to produce the full design system stylesheet.
+//
+// LAYER STACK (declared in base/_root.scss — loaded first):
+//   @layer tokens, base, utilities, components, themes, adapters;
+//
+//   Priority (lowest → highest cascade weight):
+//   ┌─────────────────────────────────────────────────────────────┐
+//   │  tokens → base → utilities → components → themes → adapters  │
+//   └─────────────────────────────────────────────────────────────┘
+//
+// IMPORT ORDER — MUST NOT be changed:
+//   1. tokens/     — Primitive + semantic CSS custom properties
+//   2. base/       — Layer declaration, reset, root baseline
+//   3. utilities/  — Atomic helper classes
+//   4. components/ — Structural component styles
+//   5. themes/     — Primitive token overrides per [data-theme]
+//   6. adapters/   — Framework-specific bridges
+//
+// BUILD VARIANTS:
+//   This file = full monolithic build (all adapters included).
+//   For framework-specific builds, create a slim entry point:
+//     main.angular.scss  → imports adapters/angular only
+//     main.primeng.scss  → imports adapters/angular + adapters/primeng
+//     main.headless.scss → no adapters (CSS-only / React / Vue builds)
+//   (Build variant files are created in Phase 6.)
+//
+// FORBIDDEN:
+//   - Defining any styles directly in this file
+//   - Importing layers out of order
+//   - Adding @layer blocks here (they belong in their respective layer files)
+//   - Importing the same file twice
+//
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// STEP 1 — TOKENS
+// Loads primitive values first, then semantic mappings.
+// @layer tokens is declared + populated here.
+// All downstream layers consume these via var().
+// -----------------------------------------------------------------------------
+@use 'tokens/index' as tokens;
+
+// -----------------------------------------------------------------------------
+// STEP 2 — BASE
+// First import declares the @layer stack order (base/_root.scss).
+// Then applies browser resets using semantic tokens.
+// CRITICAL: base MUST load before any other @layer rule is encountered.
+// -----------------------------------------------------------------------------
+@use 'base/index' as base;
+
+// -----------------------------------------------------------------------------
+// STEP 3 — UTILITIES
+// Atomic, single-purpose helper classes.
+// Reference semantic tokens. Never reference primitives directly.
+// -----------------------------------------------------------------------------
+@use 'utilities/index' as utilities;
+
+// -----------------------------------------------------------------------------
+// STEP 4 — COMPONENTS
+// Structured UI component styles.
+// Each component loads: variables file → structural file.
+// Reference only --component-{name}-* variables internally.
+// -----------------------------------------------------------------------------
+@use 'components/index' as components;
+
+// -----------------------------------------------------------------------------
+// STEP 5 — THEMES
+// Primitive token overrides per [data-theme] attribute.
+// These win over components in the cascade because themes layer > components.
+// Semantic and component tokens resolve automatically via var() chains.
+// -----------------------------------------------------------------------------
+@use 'themes/index' as themes;
+
+// -----------------------------------------------------------------------------
+// STEP 6 — ADAPTERS
+// Framework-specific bridges (Angular, PrimeNG, etc.).
+// Highest cascade priority — can override any layer.
+// Contains only --component-* variable overrides + framework selectors.
+// Remove or swap this import for framework-specific build variants.
+// -----------------------------------------------------------------------------
+@use 'adapters/index' as adapters;

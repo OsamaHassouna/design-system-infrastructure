@@ -1,0 +1,121 @@
+// =============================================================================
+// LAYER: utilities
+// FILE:  utilities/_typography.scss
+//
+// PURPOSE:
+//   Atomic typography utility classes — font-size, weight, line-height, etc.
+//   All values are sourced from semantic typography tokens only.
+//
+// ALLOWED REFERENCES: semantic typography tokens, semantic color tokens (text)
+// FORBIDDEN:          primitive tokens, component tokens, raw values,
+//                     layout or spacing styles
+//
+// NAMING CONVENTION:
+//   .u-text-{category}-{size}
+//   .u-font-{property}-{value}
+//   e.g. .u-text-body-md, .u-text-heading-lg, .u-font-weight-strong
+// =============================================================================
+
+@layer utilities {
+
+  // ---------------------------------------------------------------------------
+  // Font family
+  // ---------------------------------------------------------------------------
+  .u-font-family-body    { font-family: var(--semantic-font-family-body);    }
+  .u-font-family-heading { font-family: var(--semantic-font-family-heading); }
+  .u-font-family-code    { font-family: var(--semantic-font-family-code);    }
+  .u-font-family-ui      { font-family: var(--semantic-font-family-ui);      }
+
+  // ---------------------------------------------------------------------------
+  // Font size — body scale
+  // ---------------------------------------------------------------------------
+  .u-text-body-sm { font-size: var(--semantic-font-size-body-sm); }
+  .u-text-body-md { font-size: var(--semantic-font-size-body-md); }
+  .u-text-body-lg { font-size: var(--semantic-font-size-body-lg); }
+
+  // ---------------------------------------------------------------------------
+  // Font size — heading scale
+  // ---------------------------------------------------------------------------
+  .u-text-heading-xs  { font-size: var(--semantic-font-size-heading-xs);  }
+  .u-text-heading-sm  { font-size: var(--semantic-font-size-heading-sm);  }
+  .u-text-heading-md  { font-size: var(--semantic-font-size-heading-md);  }
+  .u-text-heading-lg  { font-size: var(--semantic-font-size-heading-lg);  }
+  .u-text-heading-xl  { font-size: var(--semantic-font-size-heading-xl);  }
+  .u-text-heading-2xl { font-size: var(--semantic-font-size-heading-2xl); }
+
+  // ---------------------------------------------------------------------------
+  // Font size — UI scale
+  // ---------------------------------------------------------------------------
+  .u-text-ui-xs { font-size: var(--semantic-font-size-ui-xs); }
+  .u-text-ui-sm { font-size: var(--semantic-font-size-ui-sm); }
+  .u-text-ui-md { font-size: var(--semantic-font-size-ui-md); }
+  .u-text-ui-lg { font-size: var(--semantic-font-size-ui-lg); }
+
+  // ---------------------------------------------------------------------------
+  // Font weight
+  // ---------------------------------------------------------------------------
+  .u-font-weight-body    { font-weight: var(--semantic-font-weight-body);     }
+  .u-font-weight-emphasis{ font-weight: var(--semantic-font-weight-emphasis); }
+  .u-font-weight-strong  { font-weight: var(--semantic-font-weight-strong);   }
+  .u-font-weight-heading { font-weight: var(--semantic-font-weight-heading);  }
+  .u-font-weight-ui      { font-weight: var(--semantic-font-weight-ui);       }
+  .u-font-weight-label   { font-weight: var(--semantic-font-weight-label);    }
+
+  // ---------------------------------------------------------------------------
+  // Line height
+  // ---------------------------------------------------------------------------
+  .u-leading-body    { line-height: var(--semantic-line-height-body);    }
+  .u-leading-heading { line-height: var(--semantic-line-height-heading); }
+  .u-leading-ui      { line-height: var(--semantic-line-height-ui);      }
+  .u-leading-code    { line-height: var(--semantic-line-height-code);    }
+
+  // ---------------------------------------------------------------------------
+  // Letter spacing
+  // ---------------------------------------------------------------------------
+  .u-tracking-body    { letter-spacing: var(--semantic-letter-spacing-body);    }
+  .u-tracking-heading { letter-spacing: var(--semantic-letter-spacing-heading); }
+  .u-tracking-ui      { letter-spacing: var(--semantic-letter-spacing-ui);      }
+  .u-tracking-caps    { letter-spacing: var(--semantic-letter-spacing-caps);    }
+
+  // ---------------------------------------------------------------------------
+  // Text color
+  // ---------------------------------------------------------------------------
+  .u-text-color-default { color: var(--semantic-color-text-default);  }
+  .u-text-color-subtle  { color: var(--semantic-color-text-subtle);   }
+  .u-text-color-disabled{ color: var(--semantic-color-text-disabled); }
+  .u-text-color-inverse { color: var(--semantic-color-text-inverse);  }
+  .u-text-color-brand   { color: var(--semantic-color-text-brand);    }
+
+  // ---------------------------------------------------------------------------
+  // Text alignment
+  // ---------------------------------------------------------------------------
+  .u-text-left   { text-align: left;   }
+  .u-text-center { text-align: center; }
+  .u-text-right  { text-align: right;  }
+
+  // ---------------------------------------------------------------------------
+  // Text transform
+  // ---------------------------------------------------------------------------
+  .u-text-uppercase { text-transform: uppercase; letter-spacing: var(--semantic-letter-spacing-caps); }
+  .u-text-lowercase { text-transform: lowercase; }
+  .u-text-capitalize{ text-transform: capitalize; }
+
+  // ---------------------------------------------------------------------------
+  // Text decoration
+  // ---------------------------------------------------------------------------
+  .u-text-underline    { text-decoration: underline; }
+  .u-text-no-underline { text-decoration: none; }
+
+  // ---------------------------------------------------------------------------
+  // Text overflow
+  // ---------------------------------------------------------------------------
+  .u-text-truncate {
+    overflow:      hidden;
+    text-overflow: ellipsis;
+    white-space:   nowrap;
+  }
+
+  .u-text-wrap-none { white-space: nowrap; }
+  .u-text-wrap-auto { white-space: normal; }
+
+}
