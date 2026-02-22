@@ -18,7 +18,9 @@
 
     "build": "npm run clean && npm run build:css && npm run build:css:min && npm run build:postcss",
 
-    "dev": "npm run watch:css"
+    "dev": "npm run watch:css",
+
+    "figma-sync": "node scripts/figma-sync-dry-run.js"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
