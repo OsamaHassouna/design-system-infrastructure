@@ -20,7 +20,9 @@
 
     "dev": "npm run watch:css",
 
-    "figma-sync": "node scripts/figma-sync-dry-run.js"
+    "figma-sync": "node scripts/figma-sync-dry-run.js",
+
+    "figma-sync-apply": "node scripts/figma-sync-apply.js"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
