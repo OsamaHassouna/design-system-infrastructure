@@ -87,8 +87,9 @@
     // Badge flow demo (renders on page load)
     renderBadgeFlowDemo();
 
-    // Initial render
-    navigateTo('button');
+    // Initial render — navigate to first registered component (or 'button' as fallback)
+    const firstComponentId = (window.DS_REGISTRY && Object.keys(window.DS_REGISTRY.components || {})[0]) || 'button';
+    navigateTo(firstComponentId);
   }
 
   /* ────────────────────────────────────────────────────────────────────────
@@ -613,11 +614,17 @@
       .replace(/"/g, '&quot;');
   }
 
-  /* ── Start ─────────────────────────────────────────────────────────────── */
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  /* ────────────────────────────────────────────────────────────────────────
+     PUBLIC API
+     Phase 9: playground.js no longer auto-initialises.
+     init() and renderBadgeFlowDemo() are called by the registry init sequence
+     in preview/index.html AFTER RegistryEngine has built all component sections
+     and nav items.  Order: RegistryEngine.init() → buildPreviewNav() →
+     buildPreviewSections() → PlaygroundEngine.init() → renderBadgeFlowDemo().
+  ──────────────────────────────────────────────────────────────────────── */
+  window.PlaygroundEngine = {
+    init,
+    renderBadgeFlowDemo,
+  };
 
 })();

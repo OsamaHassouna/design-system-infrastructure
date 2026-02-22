@@ -1,0 +1,142 @@
+{
+  "$schema": "https://ds.example.com/schemas/adapter-registry.v1.json",
+  "$version": "1.0.0",
+  "$description": "Registry of all framework adapters for the Design System. Each adapter maps DS component tokens onto framework-specific selectors inside @layer adapters. Adapters are removable without affecting the DS core.",
+
+  "adapters": [
+
+    {
+      "id": "primeng",
+      "name": "PrimeNG",
+      "description": "Adapter for PrimeNG component library. Maps DS component tokens to PrimeNG's CSS variable overrides and selector patterns. Supports the full PrimeNG v17\u2013v20 line.",
+      "maintainerNote": "PrimeNG v17 is the baseline. v18 adds minor selector changes. v20 introduces the new PrimeNG design token system which requires a 2-pass mapping.",
+
+      "versions": [
+        {
+          "tag": "v17",
+          "semver": "17.x",
+          "status": "stable",
+          "adapterFile": "scss/adapters/primeng/_primeng.adapter.scss",
+          "supportedComponents": ["button", "badge", "card"],
+          "notes": "2-pass contract: DS tokens map to intermediate CSS vars which PrimeNG reads at :root. No direct selector overrides needed for the supported component set.",
+          "knownLimitations": [
+            "PrimeNG icon-only buttons require .p-button-icon-only class in addition to DS modifier.",
+            "Loading spinner from DS replaces PrimeNG's spinner icon — adapter must suppress PrimeNG spinner."
+          ]
+        },
+        {
+          "tag": "v18",
+          "semver": "18.x",
+          "status": "stable",
+          "adapterFile": "scss/adapters/primeng/_primeng-v18.adapter.scss",
+          "supportedComponents": ["button", "badge", "card"],
+          "notes": "Inherits from v17. Adds .p-button-sm and .p-button-lg selector overrides to match new PrimeNG size class names.",
+          "knownLimitations": [
+            "Badge dot variant requires extra .p-badge-dot class not present in v17 adapter."
+          ]
+        },
+        {
+          "tag": "v20",
+          "semver": "20.x",
+          "status": "beta",
+          "adapterFile": "scss/adapters/primeng/_primeng-v20.adapter.scss",
+          "supportedComponents": ["button"],
+          "notes": "PrimeNG v20 introduced its own design token system. The DS adapter maps --component-button-* tokens into PrimeNG v20 token slots via a 3-pass bridge. Badge and Card adapters pending.",
+          "knownLimitations": [
+            "PrimeNG v20 badge not yet mapped — use DS badge directly.",
+            "Some PrimeNG v20 animation tokens have no DS equivalent and must be suppressed.",
+            "Experimental: 3-pass bridge adds one CSS variable lookup. Measure before shipping."
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "angular",
+      "name": "Angular",
+      "description": "Skeleton adapter for Angular applications using DS components directly (not via PrimeNG overlay). Provides shadow DOM piercing selectors and :host scoping for DS component tokens.",
+      "maintainerNote": "Angular adapter does not wrap a third-party component library. It provides :host and ::ng-deep selectors for consuming DS components inside Angular component encapsulation.",
+
+      "versions": [
+        {
+          "tag": "v17",
+          "semver": "17.x",
+          "status": "beta",
+          "adapterFile": "scss/adapters/angular/_angular.adapter.scss",
+          "supportedComponents": ["button"],
+          "notes": "Skeleton implementation. Provides :host scoped CSS variable forwarding for --component-button-* tokens. No viewEncapsulation.None required when using this adapter.",
+          "knownLimitations": [
+            "Only button component covered in this phase.",
+            "::ng-deep usage is deprecated in Angular — adapter uses CSS custom property forwarding instead, which is safe.",
+            "Badge and Card adapters not yet written."
+          ]
+        },
+        {
+          "tag": "v18",
+          "semver": "18.x",
+          "status": "planned",
+          "adapterFile": null,
+          "supportedComponents": [],
+          "notes": "Planned for Phase 10. Angular v18 adds zoneless change detection which does not affect the adapter pattern.",
+          "knownLimitations": []
+        }
+      ]
+    },
+
+    {
+      "id": "react",
+      "name": "React",
+      "description": "Planned adapter for React applications. Will provide CSS module integration and CSS-in-JS bridge patterns for consuming DS component tokens.",
+      "maintainerNote": "React adapter is planned for a future phase. The DS token system is framework-agnostic — React components can consume DS tokens directly via className and CSS custom properties today without an adapter.",
+
+      "versions": [
+        {
+          "tag": "v18",
+          "semver": "18.x",
+          "status": "planned",
+          "adapterFile": null,
+          "supportedComponents": [],
+          "notes": "Planned. React applications can use DS classes and tokens directly today. Adapter will add CSS Modules integration.",
+          "knownLimitations": []
+        }
+      ]
+    },
+
+    {
+      "id": "vue",
+      "name": "Vue",
+      "description": "Planned adapter for Vue 3 applications using scoped styles.",
+      "maintainerNote": "Vue's scoped styles use [data-v-*] attribute selectors. The adapter will bridge DS component tokens through Vue's scoping mechanism.",
+
+      "versions": [
+        {
+          "tag": "v3",
+          "semver": "3.x",
+          "status": "planned",
+          "adapterFile": null,
+          "supportedComponents": [],
+          "notes": "Planned. Vue's :deep() pseudo-element will be used for component token forwarding.",
+          "knownLimitations": []
+        }
+      ]
+    }
+
+  ],
+
+  "$adapterRules": {
+    "mustWrap": "@layer adapters",
+    "forbidden": [
+      "Redefine DS tokens (--primitive-*, --semantic-*, --component-*)",
+      "Use DS class selectors (.ds-btn, .ds-badge) inside adapter files",
+      "Reference semantic or primitive tokens directly — component tokens only",
+      "Add structural layout rules — adapters style, never restructure"
+    ],
+    "allowed": [
+      "Map --component-{name}-* tokens to vendor CSS variables",
+      "Override vendor component selectors with DS token values",
+      "Suppress vendor-specific visual artefacts (default PrimeNG shadows, etc.)",
+      "Add vendor-required attributes or ARIA patterns as data attributes"
+    ],
+    "removability": "Removing an adapter file must not break any DS component. All DS component rendering is driven exclusively by the DS class system and component tokens."
+  }
+}

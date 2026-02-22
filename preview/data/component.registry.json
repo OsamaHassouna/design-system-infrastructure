@@ -1,0 +1,348 @@
+{
+  "$schema": "https://ds.example.com/schemas/component-registry.v1.json",
+  "$version": "1.0.0",
+  "$description": "Authoritative registry of all Design System components. Adding a new component requires an entry here — no HTML edits are required in preview or docs.",
+  "components": {
+
+    "button": {
+      "id": "button",
+      "name": "Button",
+      "description": "Interactive element for triggering actions. Reference implementation of the full token-only architecture contract. Five variants covering the full intent spectrum; three sizes; complete interactive and programmatic state coverage.",
+      "version": "1.2.0",
+      "addedInPhase": 1,
+      "category": "interactive",
+      "layer": "components",
+      "bemBlock": "ds-btn",
+      "htmlElement": "button",
+      "scssPath": "scss/components/button/_button.scss",
+      "variablesPath": "scss/components/button/_button.variables.scss",
+      "tokenPrefix": "--component-button",
+      "tokenRegistryKey": "button",
+      "supportedAdapters": ["primeng", "angular"],
+
+      "flags": {
+        "hasLoading":     true,
+        "hasIconOnly":    true,
+        "hasDot":         false,
+        "hasSubtle":      false,
+        "hasInteractive": false,
+        "hasHorizontal":  false,
+        "hasAnchorVariant": true
+      },
+
+      "variants": [
+        { "id": "primary",   "label": "Primary",   "description": "Brand-filled · Highest weight",   "default": true },
+        { "id": "secondary", "label": "Secondary", "description": "Outlined · Medium weight" },
+        { "id": "tertiary",  "label": "Tertiary",  "description": "Tonal · Low weight" },
+        { "id": "ghost",     "label": "Ghost",     "description": "Transparent · Lowest weight" },
+        { "id": "danger",    "label": "Danger",    "description": "Destructive · Red-filled" }
+      ],
+
+      "sizes": [
+        { "id": "sm", "label": "Small",  "description": "32px min-height",           "height": "32px" },
+        { "id": "md", "label": "Medium", "description": "40px min-height · Default", "height": "40px", "default": true },
+        { "id": "lg", "label": "Large",  "description": "48px min-height",           "height": "48px" }
+      ],
+
+      "states": [
+        { "id": "default",  "label": "Default",  "description": "No interaction",                                "type": "normal" },
+        { "id": "hover",    "label": "Hover",    "description": ":hover pseudo-class",                           "type": "pseudo",   "docClass": "doc-force-hover" },
+        { "id": "focus",    "label": "Focus",    "description": ":focus-visible pseudo-class",                   "type": "pseudo",   "docClass": "doc-force-focus" },
+        { "id": "active",   "label": "Active",   "description": ":active pseudo-class",                         "type": "pseudo",   "docClass": "doc-force-active" },
+        { "id": "disabled", "label": "Disabled", "description": ":disabled / .ds-btn--disabled",                "type": "modifier", "modifier": "disabled",        "htmlAttr": { "disabled": true } },
+        { "id": "loading",  "label": "Loading",  "description": ".ds-btn--loading + aria-busy",                 "type": "modifier", "modifier": "loading",         "htmlAttr": { "aria-busy": "true", "aria-label": "Loading\u2026" }, "requiresFlag": "hasLoading" },
+        { "id": "full-width", "label": "Full width", "description": ".ds-btn--full-width layout modifier",      "type": "modifier", "modifier": "full-width",      "previewStyle": "width:160px" }
+      ],
+
+      "matrixStates": ["default", "disabled", "loading"],
+
+      "slots": [
+        { "id": "label",   "bemElement": "label",   "element": "span",  "required": true,  "defaultText": "Button" },
+        { "id": "icon",    "bemElement": "icon",    "element": "svg",   "required": false, "iconKey": "plus" },
+        { "id": "spinner", "bemElement": "spinner", "element": "span",  "required": false, "ariaHidden": true }
+      ],
+
+      "renderHint": {
+        "baseHtmlAttrs": { "type": "button" },
+        "variantLabelFn": "capitalize",
+        "loadingLabelSuffix": "\u2026",
+        "iconDemoVariants": ["primary", "secondary"],
+        "iconOnlyVariant": "ghost",
+        "snippetExamples": [
+          {
+            "label": "Text button (primary, medium)",
+            "state": "default", "variant": "primary", "size": "md"
+          },
+          {
+            "label": "Icon + label (secondary, small)",
+            "state": "default", "variant": "secondary", "size": "sm", "withIcon": true
+          },
+          {
+            "label": "Loading state",
+            "state": "loading", "variant": "primary", "size": "md"
+          }
+        ]
+      },
+
+      "tokenFlow": {
+        "colorGroups": [
+          {
+            "title": "Color tokens \u2014 Primary variant",
+            "rows": [
+              { "role": "Background",   "component": "--component-button-primary-bg",          "semantic": "--semantic-color-brand-default",          "primitive": "--primitive-color-blue-600",    "rawValue": "#228be6" },
+              { "role": "Bg hover",     "component": "--component-button-primary-bg-hover",     "semantic": "--semantic-color-brand-hover",            "primitive": "--primitive-color-blue-700",    "rawValue": "#1c7ed6" },
+              { "role": "Bg active",    "component": "--component-button-primary-bg-active",    "semantic": "--semantic-color-brand-active",           "primitive": "--primitive-color-blue-800",    "rawValue": "#1971c2" },
+              { "role": "Bg disabled",  "component": "--component-button-primary-bg-disabled",  "semantic": "--semantic-color-interactive-disabled",   "primitive": "--primitive-color-neutral-300", "rawValue": "#dee2e6" },
+              { "role": "Label color",  "component": "--component-button-primary-color",        "semantic": "--semantic-color-brand-contrast",         "primitive": "--primitive-color-neutral-0",   "rawValue": "#ffffff" }
+            ]
+          },
+          {
+            "title": "Color tokens \u2014 Danger variant",
+            "rows": [
+              { "role": "Background",  "component": "--component-button-danger-bg",         "semantic": "--semantic-color-feedback-danger-default",   "primitive": "--primitive-color-red-600",   "rawValue": "#fa5252" },
+              { "role": "Bg hover",    "component": "--component-button-danger-bg-hover",   "semantic": "--semantic-color-feedback-danger-hover",     "primitive": "--primitive-color-red-700",   "rawValue": "#f03e3e" },
+              { "role": "Bg active",   "component": "--component-button-danger-bg-active",  "semantic": "--semantic-color-feedback-danger-active",    "primitive": "--primitive-color-red-800",   "rawValue": "#e03131" },
+              { "role": "Label color", "component": "--component-button-danger-color",      "semantic": "--semantic-color-feedback-danger-contrast",  "primitive": "--primitive-color-neutral-0", "rawValue": "#ffffff" }
+            ]
+          }
+        ],
+        "sizingGroup": {
+          "title": "Sizing & typography tokens",
+          "rows": [
+            { "role": "sm / padding-block",  "component": "--component-button-sm-padding-block",  "semantic": "--semantic-spacing-component-xs", "resolved": "8px" },
+            { "role": "sm / padding-inline", "component": "--component-button-sm-padding-inline", "semantic": "--semantic-spacing-component-sm", "resolved": "12px" },
+            { "role": "sm / font-size",      "component": "--component-button-sm-font-size",      "semantic": "--semantic-font-size-ui-sm",      "resolved": "12px" },
+            { "role": "md / padding-block",  "component": "--component-button-md-padding-block",  "semantic": "--semantic-spacing-component-sm", "resolved": "12px" },
+            { "role": "md / padding-inline", "component": "--component-button-md-padding-inline", "semantic": "--semantic-spacing-component-md", "resolved": "16px" },
+            { "role": "md / font-size",      "component": "--component-button-md-font-size",      "semantic": "--semantic-font-size-ui-md",      "resolved": "14px" },
+            { "role": "lg / padding-block",  "component": "--component-button-lg-padding-block",  "semantic": "--semantic-spacing-component-md", "resolved": "16px" },
+            { "role": "lg / padding-inline", "component": "--component-button-lg-padding-inline", "semantic": "--semantic-spacing-component-lg", "resolved": "24px" },
+            { "role": "lg / font-size",      "component": "--component-button-lg-font-size",      "semantic": "--semantic-font-size-ui-lg",      "resolved": "16px" }
+          ]
+        },
+        "structuralExceptions": [
+          "--component-button-border-radius \u2192 --primitive-radius-md (6px) — no semantic shape layer yet",
+          "--component-button-{size}-min-height \u2192 --primitive-spacing-{8|10|12} — no semantic shape layer yet"
+        ]
+      },
+
+      "architectureRules": {
+        "forbidden": [
+          "No raw values in component SCSS. All visual values must be var(--component-button-*).",
+          "No --semantic-* or --primitive-* inside _button.scss. These are allowed in _button.variables.scss only.",
+          "No component token overrides in theme files. Themes override semantic tokens only. The component variable file re-resolves automatically.",
+          "No adapter selectors (.p-button, [_nghost]) inside component files. Adapters live exclusively in scss/adapters/."
+        ],
+        "allowed": [
+          "Themes change appearance via [data-theme] semantic overrides only. Dark theme overrides --semantic-color-* tokens in _theme-dark.scss.",
+          "Adapters scope component token overrides to their wrapper selector. PrimeNG adapter overrides --component-button-* inside .p-button-wrapper or equivalent scope."
+        ]
+      }
+    },
+
+    "badge": {
+      "id": "badge",
+      "name": "Badge",
+      "description": "Inline status indicator pill. Used to communicate state, category, or count at a glance. Supports filled and subtle style modes, a dot-only status variant, and two sizes.",
+      "version": "1.0.0",
+      "addedInPhase": 7,
+      "isNew": true,
+      "category": "indicator",
+      "layer": "components",
+      "bemBlock": "ds-badge",
+      "htmlElement": "span",
+      "scssPath": "scss/components/badge/_badge.scss",
+      "variablesPath": "scss/components/badge/_badge.variables.scss",
+      "tokenPrefix": "--component-badge",
+      "tokenRegistryKey": "badge",
+      "supportedAdapters": ["primeng"],
+
+      "flags": {
+        "hasLoading":     false,
+        "hasIconOnly":    false,
+        "hasDot":         true,
+        "hasSubtle":      true,
+        "hasInteractive": false,
+        "hasHorizontal":  false
+      },
+
+      "variants": [
+        { "id": "success", "label": "Success", "description": "Positive / operational",  "default": true },
+        { "id": "warning", "label": "Warning", "description": "Degraded / attention needed" },
+        { "id": "danger",  "label": "Danger",  "description": "Error / critical" },
+        { "id": "info",    "label": "Info",    "description": "Informational / brand" },
+        { "id": "neutral", "label": "Neutral", "description": "Default / no semantic meaning" }
+      ],
+
+      "sizes": [
+        { "id": "sm", "label": "Small",  "description": "20px height", "height": "20px" },
+        { "id": "md", "label": "Medium", "description": "24px height", "height": "24px", "default": true }
+      ],
+
+      "states": [],
+
+      "matrixStates": [],
+
+      "extraDimensions": [
+        {
+          "id": "style",
+          "label": "Style",
+          "values": [
+            { "id": "filled", "label": "Filled", "modifier": null,     "default": true },
+            { "id": "subtle", "label": "Subtle", "modifier": "subtle" }
+          ]
+        }
+      ],
+
+      "slots": [
+        { "id": "label", "bemElement": "label", "element": "span", "required": false, "defaultText": "Label" }
+      ],
+
+      "renderHint": {
+        "dotAriaLabel": "Status dot",
+        "styleExtraDimension": "style",
+        "snippetExamples": [
+          { "label": "Filled badge",          "variant": "success", "size": "md", "style": "filled" },
+          { "label": "Subtle badge",          "variant": "danger",  "size": "sm", "style": "subtle" },
+          { "label": "Dot status indicator",  "variant": "success", "dot": true }
+        ]
+      },
+
+      "tokenFlow": {
+        "colorGroups": [
+          {
+            "title": "Color tokens \u2014 Filled variants",
+            "rows": [
+              { "role": "Success bg",         "component": "--component-badge-success-bg",             "semantic": "--semantic-color-feedback-success-default", "primitive": "--primitive-color-green-600",    "rawValue": "#40c057" },
+              { "role": "Success color",      "component": "--component-badge-success-color",          "semantic": "--semantic-color-brand-contrast",           "primitive": "--primitive-color-neutral-0",    "rawValue": "#ffffff" },
+              { "role": "Warning bg",         "component": "--component-badge-warning-bg",             "semantic": "--semantic-color-feedback-warning-default", "primitive": "--primitive-color-yellow-500",   "rawValue": "#fab005" },
+              { "role": "Danger bg",          "component": "--component-badge-danger-bg",              "semantic": "--semantic-color-feedback-danger-default",  "primitive": "--primitive-color-red-600",      "rawValue": "#fa5252" },
+              { "role": "Info bg",            "component": "--component-badge-info-bg",                "semantic": "--semantic-color-interactive-default",      "primitive": "--primitive-color-blue-600",     "rawValue": "#228be6" },
+              { "role": "Neutral bg",         "component": "--component-badge-neutral-bg",             "semantic": "--semantic-color-surface-overlay",          "primitive": "--primitive-color-neutral-100",  "rawValue": "#f1f3f5" }
+            ]
+          },
+          {
+            "title": "Color tokens \u2014 Subtle variants",
+            "rows": [
+              { "role": "Success subtle bg",  "component": "--component-badge-success-subtle-bg",      "semantic": "--semantic-color-feedback-success-subtle",  "primitive": "--primitive-color-green-50",     "rawValue": "#ebfbee" },
+              { "role": "Success subtle fg",  "component": "--component-badge-success-subtle-color",   "semantic": "--semantic-color-feedback-success-text",    "primitive": "--primitive-color-green-800",    "rawValue": "#2f9e44" },
+              { "role": "Warning subtle bg",  "component": "--component-badge-warning-subtle-bg",      "semantic": "--semantic-color-feedback-warning-subtle",  "primitive": "--primitive-color-yellow-50",    "rawValue": "#fff9db" },
+              { "role": "Danger subtle bg",   "component": "--component-badge-danger-subtle-bg",       "semantic": "--semantic-color-feedback-danger-subtle",   "primitive": "--primitive-color-red-50",       "rawValue": "#fff5f5" },
+              { "role": "Danger subtle fg",   "component": "--component-badge-danger-subtle-color",    "semantic": "--semantic-color-feedback-danger-text",     "primitive": "--primitive-color-red-800",      "rawValue": "#e03131" },
+              { "role": "Info subtle bg",     "component": "--component-badge-info-subtle-bg",         "semantic": "--semantic-color-brand-subtle",             "primitive": "--primitive-color-blue-50",      "rawValue": "#e7f5ff" },
+              { "role": "Info subtle fg",     "component": "--component-badge-info-subtle-color",      "semantic": "--semantic-color-text-brand",               "primitive": "--primitive-color-blue-600",     "rawValue": "#228be6" }
+            ]
+          }
+        ],
+        "structuralExceptions": []
+      },
+
+      "architectureRules": {
+        "forbidden": [
+          "No raw values in component SCSS. All values must be var(--component-badge-*).",
+          "No --semantic-* or --primitive-* inside _badge.scss. These are allowed in _badge.variables.scss only.",
+          "Style modes (filled/subtle) must not use raw color values — all colors come from variant tokens."
+        ],
+        "allowed": [
+          "The dot modifier (--dot) suppresses label rendering — this is a structural modifier, not a state.",
+          "Subtle mode delegates to a parallel token set (--component-badge-{variant}-subtle-*) defined in the same variables file."
+        ]
+      }
+    },
+
+    "card": {
+      "id": "card",
+      "name": "Card",
+      "description": "Container primitive exposing named layout slots: media, header, body, footer. Supports elevation variants via data attributes, interactive focus state, and horizontal orientation.",
+      "version": "1.0.0",
+      "addedInPhase": 3,
+      "category": "container",
+      "layer": "components",
+      "bemBlock": "ds-card",
+      "htmlElement": "article",
+      "scssPath": "scss/components/card/_card.scss",
+      "variablesPath": "scss/components/card/_card.variables.scss",
+      "tokenPrefix": "--component-card",
+      "tokenRegistryKey": "card",
+      "supportedAdapters": ["primeng"],
+
+      "flags": {
+        "hasLoading":     false,
+        "hasIconOnly":    false,
+        "hasDot":         false,
+        "hasSubtle":      false,
+        "hasInteractive": true,
+        "hasHorizontal":  true
+      },
+
+      "variants": [
+        { "id": "default", "label": "Default", "description": "Subtle shadow, white bg",    "dataAttr": "data-variant", "default": true },
+        { "id": "raised",  "label": "Raised",  "description": "Elevated shadow",            "dataAttr": "data-variant" },
+        { "id": "flat",    "label": "Flat",    "description": "Border only, no shadow",     "dataAttr": "data-variant" },
+        { "id": "sunken",  "label": "Sunken",  "description": "Indented background",        "dataAttr": "data-variant" }
+      ],
+
+      "sizes": [],
+
+      "states": [
+        { "id": "default",     "label": "Default",     "description": "Static card",                                       "type": "normal" },
+        { "id": "interactive", "label": "Interactive",  "description": "data-interactive=\"true\" — hover + focus ring",   "type": "dataAttr", "dataAttr": "interactive", "dataValue": "true", "htmlAttr": { "tabindex": "0" }, "requiresFlag": "hasInteractive" }
+      ],
+
+      "matrixStates": [],
+
+      "slots": [
+        { "id": "media",    "bemElement": "media",    "element": "div",    "required": false },
+        { "id": "header",   "bemElement": "header",   "element": "header", "required": false },
+        { "id": "title",    "bemElement": "title",    "element": "span",   "required": false, "parentSlot": "header" },
+        { "id": "subtitle", "bemElement": "subtitle", "element": "span",   "required": false, "parentSlot": "header" },
+        { "id": "body",     "bemElement": "body",     "element": "div",    "required": true  },
+        { "id": "footer",   "bemElement": "footer",   "element": "footer", "required": false }
+      ],
+
+      "renderHint": {
+        "variantMethod": "dataAttr",
+        "variantDataAttr": "data-variant",
+        "demoTitle": "Card title",
+        "demoSubtitle": "Subtitle text",
+        "demoBody": "Container with named slots for layout composition.",
+        "snippetExamples": [
+          { "label": "Card with all slots", "variant": "raised", "interactive": true }
+        ]
+      },
+
+      "tokenFlow": {
+        "colorGroups": [
+          {
+            "title": "Color tokens \u2014 Surface",
+            "rows": [
+              { "role": "Background",       "component": "--component-card-bg",           "semantic": "--semantic-color-surface-base",    "primitive": "--primitive-color-neutral-0",   "rawValue": "#ffffff" },
+              { "role": "Raised bg",        "component": "--component-card-bg-raised",    "semantic": "--semantic-color-surface-raised",  "primitive": "--primitive-color-neutral-50",  "rawValue": "#f8f9fa" },
+              { "role": "Sunken bg",        "component": "--component-card-bg-sunken",    "semantic": "--semantic-color-surface-sunken",  "primitive": "--primitive-color-neutral-200", "rawValue": "#e9ecef" },
+              { "role": "Border",           "component": "--component-card-border-color", "semantic": "--semantic-color-border-default",  "primitive": "--primitive-color-neutral-300", "rawValue": "#dee2e6" },
+              { "role": "Footer bg",        "component": "--component-card-footer-bg",    "semantic": "--semantic-color-surface-raised",  "primitive": "--primitive-color-neutral-50",  "rawValue": "#f8f9fa" },
+              { "role": "Title color",      "component": "--component-card-header-title-color",    "semantic": "--semantic-color-text-default",    "primitive": "--primitive-color-neutral-900", "rawValue": "#212529" },
+              { "role": "Subtitle color",   "component": "--component-card-header-subtitle-color", "semantic": "--semantic-color-text-subtle",     "primitive": "--primitive-color-neutral-600", "rawValue": "#868e96" }
+            ]
+          }
+        ],
+        "structuralExceptions": [
+          "--component-card-border-radius \u2192 --primitive-radius-lg — no semantic shape layer yet"
+        ]
+      },
+
+      "architectureRules": {
+        "forbidden": [
+          "No raw values in component SCSS.",
+          "No --semantic-* or --primitive-* inside _card.scss.",
+          "Orientation (horizontal) is a data-attribute modifier. It must not create duplicate token sets."
+        ],
+        "allowed": [
+          "The variant system uses data-variant attribute (not BEM modifier class) because variants affect shadow level, not token sets.",
+          "data-interactive adds pointer cursor and focus ring without additional token overrides."
+        ]
+      }
+    }
+
+  }
+}

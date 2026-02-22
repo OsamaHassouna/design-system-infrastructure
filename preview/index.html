@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DS Preview & Playground — Phase 7</title>
+  <title>DS Preview &amp; Playground — Phase 9</title>
   <link rel="stylesheet" href="css/ds-preview.css">
   <link rel="stylesheet" href="css/playground.css">
   <!--
@@ -11,6 +11,14 @@
       ds-preview.css  →  compiled design system CSS (tokens + base + components + themes)
                          Uses @layer tokens, base, utilities, components, themes, adapters
       playground.css  →  preview shell chrome only (not part of the DS layer stack)
+
+    PHASE 9 NOTE:
+      All component sections are generated at runtime by registry-engine.js
+      reading component.registry.json.  No hardcoded component markup exists
+      in this file.  Adding a new component requires:
+        1. Create component SCSS files
+        2. Add entry to preview/data/component.registry.json
+      No HTML edits required.
   -->
 </head>
 <body>
@@ -26,7 +34,7 @@
       <div class="pg-topbar__logo-mark" aria-hidden="true">DS</div>
       <div>
         <div class="pg-topbar__title">Design System</div>
-        <div class="pg-topbar__subtitle">Preview &amp; Playground — Phase 7</div>
+        <div class="pg-topbar__subtitle">Preview &amp; Playground — Phase 9</div>
       </div>
     </div>
 
@@ -56,25 +64,12 @@
   <nav class="pg-sidebar" aria-label="Component navigation">
     <div>
       <span class="pg-sidebar__section-label">Components</span>
-      <ul class="pg-nav" role="list">
-        <li>
-          <button class="pg-nav__item" type="button" data-nav="button" aria-current="false">
-            🔘 Button
-            <span class="pg-nav__badge">v1.2</span>
-          </button>
-        </li>
-        <li>
-          <button class="pg-nav__item" type="button" data-nav="card" aria-current="false">
-            🃏 Card
-            <span class="pg-nav__badge">v1.0</span>
-          </button>
-        </li>
-        <li>
-          <button class="pg-nav__item" type="button" data-nav="badge" aria-current="false">
-            🏷️ Badge
-            <span class="pg-nav__badge pg-nav__badge--new">NEW</span>
-          </button>
-        </li>
+      <!--
+        REGISTRY-DRIVEN: nav items are injected by RegistryEngine.buildPreviewNav().
+        No manual edits required when adding or removing components.
+      -->
+      <ul class="pg-nav" role="list" id="pg-nav-list">
+        <li aria-hidden="true" style="padding:0.375rem 0.625rem;font-size:0.75rem;color:var(--semantic-color-text-disabled);">Loading…</li>
       </ul>
     </div>
 
@@ -103,607 +98,21 @@
   </nav>
 
   <!-- ── Main canvas ──────────────────────────────────────────────────── -->
+  <!--
+    REGISTRY-DRIVEN MAIN CANVAS
+    All pg-component-section elements are injected here by:
+      RegistryEngine.buildPreviewSections(document.getElementById('pg-main'))
+    This element starts empty. The loading scaffold is removed after init.
+  -->
   <main class="pg-main" id="pg-main" role="main">
-
-    <!-- ================================================================
-         BUTTON SECTION
-         ================================================================ -->
-    <section class="pg-component-section" data-component="button" aria-labelledby="btn-section-title">
-
-      <div class="pg-section-header">
-        <h1 class="pg-section-header__title" id="btn-section-title">Button</h1>
-        <div class="pg-section-header__meta">
-          <span class="pg-section-header__sem-ver">v1.2.0</span>
-          <span>5 variants · 3 sizes · loading · icon · disabled</span>
-        </div>
-      </div>
-
-      <!-- Variants × md size -->
-      <p class="pg-heading">Variants — md size</p>
-      <div class="pg-variant-grid">
-        <div class="pg-preview-item">
-          <button class="ds-btn ds-btn--primary ds-btn--md" type="button">
-            <span class="ds-btn__label">Primary</span>
-          </button>
-          <span class="pg-state-label">primary</span>
-        </div>
-        <div class="pg-preview-item">
-          <button class="ds-btn ds-btn--secondary ds-btn--md" type="button">
-            <span class="ds-btn__label">Secondary</span>
-          </button>
-          <span class="pg-state-label">secondary</span>
-        </div>
-        <div class="pg-preview-item">
-          <button class="ds-btn ds-btn--tertiary ds-btn--md" type="button">
-            <span class="ds-btn__label">Tertiary</span>
-          </button>
-          <span class="pg-state-label">tertiary</span>
-        </div>
-        <div class="pg-preview-item">
-          <button class="ds-btn ds-btn--ghost ds-btn--md" type="button">
-            <span class="ds-btn__label">Ghost</span>
-          </button>
-          <span class="pg-state-label">ghost</span>
-        </div>
-        <div class="pg-preview-item">
-          <button class="ds-btn ds-btn--danger ds-btn--md" type="button">
-            <span class="ds-btn__label">Danger</span>
-          </button>
-          <span class="pg-state-label">danger</span>
-        </div>
-      </div>
-
-      <!-- Sizes — primary variant -->
-      <p class="pg-heading">Sizes — primary variant</p>
-      <div class="pg-variant-grid pg-variant-grid--sizes">
-        <div class="pg-preview-item">
-          <button class="ds-btn ds-btn--primary ds-btn--sm" type="button">
-            <span class="ds-btn__label">Small</span>
-          </button>
-          <span class="pg-state-label">sm · 32px</span>
-        </div>
-        <div class="pg-preview-item">
-          <button class="ds-btn ds-btn--primary ds-btn--md" type="button">
-            <span class="ds-btn__label">Medium</span>
-          </button>
-          <span class="pg-state-label">md · 40px</span>
-        </div>
-        <div class="pg-preview-item">
-          <button class="ds-btn ds-btn--primary ds-btn--lg" type="button">
-            <span class="ds-btn__label">Large</span>
-          </button>
-          <span class="pg-state-label">lg · 48px</span>
-        </div>
-      </div>
-
-      <!-- Icon + label -->
-      <p class="pg-heading">With icon</p>
-      <div class="pg-variant-grid">
-        <div class="pg-preview-item">
-          <button class="ds-btn ds-btn--primary ds-btn--md" type="button">
-            <svg class="ds-btn__icon" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm.75 4.5a.75.75 0 0 0-1.5 0v3.25H4a.75.75 0 0 0 0 1.5h3.25V13.5a.75.75 0 0 0 1.5 0V10.25H12a.75.75 0 0 0 0-1.5H8.75V5.5z"/>
-            </svg>
-            <span class="ds-btn__label">Add item</span>
-          </button>
-          <span class="pg-state-label">icon + label</span>
-        </div>
-        <div class="pg-preview-item">
-          <button class="ds-btn ds-btn--secondary ds-btn--md" type="button">
-            <svg class="ds-btn__icon" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M11.5 2a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 11.5 14h-7A1.5 1.5 0 0 1 3 12.5v-9A1.5 1.5 0 0 1 4.5 2h7zM4.5 1A2.5 2.5 0 0 0 2 3.5v9A2.5 2.5 0 0 0 4.5 15h7a2.5 2.5 0 0 0 2.5-2.5v-9A2.5 2.5 0 0 0 11.5 1h-7z"/>
-            </svg>
-            <span class="ds-btn__label">Save draft</span>
-          </button>
-          <span class="pg-state-label">icon + label (secondary)</span>
-        </div>
-        <div class="pg-preview-item">
-          <button class="ds-btn ds-btn--ghost ds-btn--icon-only ds-btn--md" type="button" aria-label="Close panel">
-            <svg class="ds-btn__icon" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06z"/>
-            </svg>
-          </button>
-          <span class="pg-state-label">icon-only (ghost)</span>
-        </div>
-      </div>
-
-      <!-- States -->
-      <p class="pg-heading">States — primary variant</p>
-      <div class="pg-variant-grid">
-        <div class="pg-preview-item">
-          <button class="ds-btn ds-btn--primary ds-btn--md" type="button">
-            <span class="ds-btn__label">Default</span>
-          </button>
-          <span class="pg-state-label">default</span>
-        </div>
-        <div class="pg-preview-item">
-          <button class="ds-btn ds-btn--primary ds-btn--md ds-btn--disabled" type="button" aria-disabled="true" tabindex="-1">
-            <span class="ds-btn__label">Disabled</span>
-          </button>
-          <span class="pg-state-label">disabled</span>
-        </div>
-        <div class="pg-preview-item">
-          <button class="ds-btn ds-btn--primary ds-btn--md ds-btn--loading" type="button" aria-busy="true" aria-label="Saving…">
-            <span class="ds-btn__spinner" aria-hidden="true"></span>
-            <span class="ds-btn__label">Loading...</span>
-          </button>
-          <span class="pg-state-label">loading</span>
-        </div>
-        <div class="pg-preview-item">
-          <button class="ds-btn ds-btn--primary ds-btn--md ds-btn--full-width" type="button" style="width:160px">
-            <span class="ds-btn__label">Full width</span>
-          </button>
-          <span class="pg-state-label">full-width</span>
-        </div>
-      </div>
-
-      <!-- Link styled as button -->
-      <p class="pg-heading">Anchor element with button styles</p>
-      <div class="pg-variant-grid">
-        <div class="pg-preview-item">
-          <a href="#" class="ds-btn ds-btn--primary ds-btn--md" role="button">
-            <span class="ds-btn__label">Link as Button</span>
-          </a>
-          <span class="pg-state-label">&lt;a&gt; element</span>
-        </div>
-        <div class="pg-preview-item">
-          <a href="#" class="ds-btn ds-btn--secondary ds-btn--md ds-btn--disabled" role="button" aria-disabled="true" tabindex="-1">
-            <span class="ds-btn__label">Disabled link</span>
-          </a>
-          <span class="pg-state-label">&lt;a&gt; disabled</span>
-        </div>
-      </div>
-
-      <!-- Danger variant states -->
-      <p class="pg-heading">Danger variant — all states</p>
-      <div class="pg-variant-grid">
-        <div class="pg-preview-item">
-          <button class="ds-btn ds-btn--danger ds-btn--sm" type="button">
-            <span class="ds-btn__label">Delete</span>
-          </button>
-          <span class="pg-state-label">sm</span>
-        </div>
-        <div class="pg-preview-item">
-          <button class="ds-btn ds-btn--danger ds-btn--md" type="button">
-            <span class="ds-btn__label">Delete</span>
-          </button>
-          <span class="pg-state-label">md</span>
-        </div>
-        <div class="pg-preview-item">
-          <button class="ds-btn ds-btn--danger ds-btn--lg" type="button">
-            <span class="ds-btn__label">Delete</span>
-          </button>
-          <span class="pg-state-label">lg</span>
-        </div>
-        <div class="pg-preview-item">
-          <button class="ds-btn ds-btn--danger ds-btn--md ds-btn--disabled" type="button" aria-disabled="true">
-            <span class="ds-btn__label">Disabled</span>
-          </button>
-          <span class="pg-state-label">disabled</span>
-        </div>
-      </div>
-
-      <!-- Code snippet -->
-      <p class="pg-heading">HTML snippet</p>
-      <div class="pg-code" style="margin-top:0">
-        <pre id="btn-snippet">&lt;!-- Text button (primary, medium) --&gt;
-&lt;button class="ds-btn ds-btn--primary ds-btn--md" type="button"&gt;
-  &lt;span class="ds-btn__label"&gt;Save&lt;/span&gt;
-&lt;/button&gt;
-
-&lt;!-- Icon + label (secondary, small) --&gt;
-&lt;button class="ds-btn ds-btn--secondary ds-btn--sm" type="button"&gt;
-  &lt;svg class="ds-btn__icon" aria-hidden="true"&gt;…&lt;/svg&gt;
-  &lt;span class="ds-btn__label"&gt;Export&lt;/span&gt;
-&lt;/button&gt;
-
-&lt;!-- Loading state --&gt;
-&lt;button class="ds-btn ds-btn--primary ds-btn--md ds-btn--loading"
-        type="button" aria-busy="true" aria-label="Saving…"&gt;
-  &lt;span class="ds-btn__spinner" aria-hidden="true"&gt;&lt;/span&gt;
-  &lt;span class="ds-btn__label"&gt;Saving&lt;/span&gt;
-&lt;/button&gt;
-
-&lt;!-- All values come from component tokens — no raw values --&gt;
-&lt;!-- Token chain: --primitive-color-blue-600
-              → --semantic-color-brand-default
-              → --component-button-primary-bg --&gt;</pre>
-        <button class="pg-code__copy" type="button" data-copy-target="btn-snippet">⎘ Copy</button>
-      </div>
-
-    </section><!-- /button -->
-
-
-    <!-- ================================================================
-         CARD SECTION
-         ================================================================ -->
-    <section class="pg-component-section" data-component="card" aria-labelledby="card-section-title">
-
-      <div class="pg-section-header">
-        <h1 class="pg-section-header__title" id="card-section-title">Card</h1>
-        <div class="pg-section-header__meta">
-          <span class="pg-section-header__sem-ver">v1.0.0</span>
-          <span>4 variants · media/header/body/footer slots · interactive · horizontal</span>
-        </div>
-      </div>
-
-      <!-- Variants -->
-      <p class="pg-heading">Variants</p>
-      <div class="pg-variant-grid" style="align-items:flex-start;">
-        <div class="pg-preview-item" style="width:240px">
-          <article class="ds-card" data-variant="default" style="width:100%">
-            <header class="ds-card__header">
-              <span class="ds-card__title">Default card</span>
-              <span class="ds-card__subtitle">Subtle shadow, white bg</span>
-            </header>
-            <div class="ds-card__body">
-              Standard container with sm shadow.
-            </div>
-          </article>
-          <span class="pg-state-label">default</span>
-        </div>
-        <div class="pg-preview-item" style="width:240px">
-          <article class="ds-card" data-variant="raised" style="width:100%">
-            <header class="ds-card__header">
-              <span class="ds-card__title">Raised card</span>
-              <span class="ds-card__subtitle">Elevated shadow</span>
-            </header>
-            <div class="ds-card__body">
-              Raised surface with md shadow.
-            </div>
-          </article>
-          <span class="pg-state-label">raised</span>
-        </div>
-        <div class="pg-preview-item" style="width:240px">
-          <article class="ds-card" data-variant="flat" style="width:100%">
-            <header class="ds-card__header">
-              <span class="ds-card__title">Flat card</span>
-              <span class="ds-card__subtitle">Border only, no shadow</span>
-            </header>
-            <div class="ds-card__body">
-              Flat style — border without elevation.
-            </div>
-          </article>
-          <span class="pg-state-label">flat</span>
-        </div>
-        <div class="pg-preview-item" style="width:240px">
-          <article class="ds-card" data-variant="sunken" style="width:100%">
-            <header class="ds-card__header">
-              <span class="ds-card__title">Sunken card</span>
-              <span class="ds-card__subtitle">Indented background</span>
-            </header>
-            <div class="ds-card__body">
-              Sunken — lighter bg to indicate depth.
-            </div>
-          </article>
-          <span class="pg-state-label">sunken</span>
-        </div>
-      </div>
-
-      <!-- Full card with all slots -->
-      <p class="pg-heading">Full card — all slots + interactive</p>
-      <div class="pg-variant-grid" style="align-items:flex-start;">
-        <div style="width:280px">
-          <article class="ds-card" data-variant="raised" data-interactive="true" tabindex="0" style="width:100%">
-            <div class="ds-card__media" style="background:var(--semantic-color-brand-tonal-bg);display:flex;align-items:center;justify-content:center;">
-              <span style="font-size:2.5rem;line-height:1">🎨</span>
-            </div>
-            <header class="ds-card__header">
-              <span class="ds-card__title">Design System v2</span>
-              <span class="ds-card__subtitle">Released February 2026</span>
-            </header>
-            <div class="ds-card__body">
-              A fully token-driven component library built for framework-agnostic usage.
-              Supports light, dark, and custom themes with zero adapter changes.
-            </div>
-            <footer class="ds-card__footer" data-align="space-between">
-              <button class="ds-btn ds-btn--ghost ds-btn--sm" type="button">
-                <span class="ds-btn__label">Dismiss</span>
-              </button>
-              <button class="ds-btn ds-btn--primary ds-btn--sm" type="button">
-                <span class="ds-btn__label">Learn more</span>
-              </button>
-            </footer>
-          </article>
-          <span class="pg-state-label" style="text-align:left">all slots · interactive (hover me)</span>
-        </div>
-      </div>
-
-      <!-- Horizontal -->
-      <p class="pg-heading">Horizontal orientation</p>
-      <div style="max-width:480px">
-        <article class="ds-card" data-variant="flat" data-orientation="horizontal">
-          <div class="ds-card__media" style="background:var(--semantic-color-feedback-success-subtle);display:flex;align-items:center;justify-content:center;min-height:80px;">
-            <span style="font-size:1.75rem">✅</span>
-          </div>
-          <div class="ds-card__body">
-            <span style="font-weight:600;font-size:var(--semantic-font-size-body-md);color:var(--semantic-color-text-default);">Theme contract validated</span>
-            <span style="font-size:var(--semantic-font-size-ui-sm);color:var(--semantic-color-text-subtle);">All token layers resolved correctly across light and dark themes.</span>
-          </div>
-        </article>
-      </div>
-
-      <!-- Code snippet -->
-      <p class="pg-heading">HTML snippet</p>
-      <div class="pg-code">
-        <pre id="card-snippet">&lt;!-- Card with all slots --&gt;
-&lt;article class="ds-card" data-variant="raised" data-interactive="true"&gt;
-  &lt;div class="ds-card__media"&gt;…&lt;/div&gt;
-  &lt;header class="ds-card__header"&gt;
-    &lt;span class="ds-card__title"&gt;Card title&lt;/span&gt;
-    &lt;span class="ds-card__subtitle"&gt;Subtitle&lt;/span&gt;
-  &lt;/header&gt;
-  &lt;div class="ds-card__body"&gt;Body content&lt;/div&gt;
-  &lt;footer class="ds-card__footer" data-align="space-between"&gt;
-    &lt;button class="ds-btn ds-btn--ghost ds-btn--sm"&gt;…&lt;/button&gt;
-    &lt;button class="ds-btn ds-btn--primary ds-btn--sm"&gt;…&lt;/button&gt;
-  &lt;/footer&gt;
-&lt;/article&gt;
-
-&lt;!-- Token chain example:
-     --primitive-color-neutral-300
-   → --semantic-color-border-default
-   → --component-card-border-color --&gt;</pre>
-        <button class="pg-code__copy" type="button" data-copy-target="card-snippet">⎘ Copy</button>
-      </div>
-
-    </section><!-- /card -->
-
-
-    <!-- ================================================================
-         BADGE SECTION  (Phase 7 — new component)
-         ================================================================ -->
-    <section class="pg-component-section" data-component="badge" aria-labelledby="badge-section-title">
-
-      <div class="pg-section-header">
-        <h1 class="pg-section-header__title" id="badge-section-title">
-          Badge
-          <span class="ds-badge ds-badge--info ds-badge--subtle ds-badge--sm" style="vertical-align:middle;margin-left:6px">
-            <span class="ds-badge__label">New · Phase 7</span>
-          </span>
-        </h1>
-        <div class="pg-section-header__meta">
-          <span class="pg-section-header__sem-ver">v1.0.0</span>
-          <span>5 variants · filled + subtle · 2 sizes · dot variant</span>
-        </div>
-      </div>
-
-      <!-- Filled variants -->
-      <p class="pg-heading">Filled variants — md size</p>
-      <div class="pg-variant-grid">
-        <div class="pg-preview-item">
-          <span class="ds-badge ds-badge--success ds-badge--md">
-            <span class="ds-badge__label">Success</span>
-          </span>
-          <span class="pg-state-label">success</span>
-        </div>
-        <div class="pg-preview-item">
-          <span class="ds-badge ds-badge--warning ds-badge--md">
-            <span class="ds-badge__label">Warning</span>
-          </span>
-          <span class="pg-state-label">warning</span>
-        </div>
-        <div class="pg-preview-item">
-          <span class="ds-badge ds-badge--danger ds-badge--md">
-            <span class="ds-badge__label">Danger</span>
-          </span>
-          <span class="pg-state-label">danger</span>
-        </div>
-        <div class="pg-preview-item">
-          <span class="ds-badge ds-badge--info ds-badge--md">
-            <span class="ds-badge__label">Info</span>
-          </span>
-          <span class="pg-state-label">info</span>
-        </div>
-        <div class="pg-preview-item">
-          <span class="ds-badge ds-badge--neutral ds-badge--md">
-            <span class="ds-badge__label">Neutral</span>
-          </span>
-          <span class="pg-state-label">neutral</span>
-        </div>
-      </div>
-
-      <!-- Subtle variants -->
-      <p class="pg-heading">Subtle variants — md size</p>
-      <div class="pg-variant-grid">
-        <div class="pg-preview-item">
-          <span class="ds-badge ds-badge--success ds-badge--subtle ds-badge--md">
-            <span class="ds-badge__label">Success</span>
-          </span>
-          <span class="pg-state-label">success · subtle</span>
-        </div>
-        <div class="pg-preview-item">
-          <span class="ds-badge ds-badge--warning ds-badge--subtle ds-badge--md">
-            <span class="ds-badge__label">Warning</span>
-          </span>
-          <span class="pg-state-label">warning · subtle</span>
-        </div>
-        <div class="pg-preview-item">
-          <span class="ds-badge ds-badge--danger ds-badge--subtle ds-badge--md">
-            <span class="ds-badge__label">Danger</span>
-          </span>
-          <span class="pg-state-label">danger · subtle</span>
-        </div>
-        <div class="pg-preview-item">
-          <span class="ds-badge ds-badge--info ds-badge--subtle ds-badge--md">
-            <span class="ds-badge__label">Info</span>
-          </span>
-          <span class="pg-state-label">info · subtle</span>
-        </div>
-        <div class="pg-preview-item">
-          <span class="ds-badge ds-badge--neutral ds-badge--subtle ds-badge--md">
-            <span class="ds-badge__label">Neutral</span>
-          </span>
-          <span class="pg-state-label">neutral · subtle</span>
-        </div>
-      </div>
-
-      <!-- Sizes -->
-      <p class="pg-heading">Sizes</p>
-      <div class="pg-variant-grid pg-variant-grid--sizes">
-        <div class="pg-preview-item">
-          <span class="ds-badge ds-badge--info ds-badge--sm">
-            <span class="ds-badge__label">Small</span>
-          </span>
-          <span class="pg-state-label">sm · 20px</span>
-        </div>
-        <div class="pg-preview-item">
-          <span class="ds-badge ds-badge--info ds-badge--md">
-            <span class="ds-badge__label">Medium</span>
-          </span>
-          <span class="pg-state-label">md · 24px</span>
-        </div>
-      </div>
-
-      <!-- Dot variant -->
-      <p class="pg-heading">Dot variant (status indicator)</p>
-      <div class="pg-variant-grid pg-variant-grid--sizes">
-        <div class="pg-preview-item">
-          <span class="ds-badge ds-badge--success ds-badge--dot ds-badge--md" aria-label="Online"></span>
-          <span class="pg-state-label">success dot</span>
-        </div>
-        <div class="pg-preview-item">
-          <span class="ds-badge ds-badge--warning ds-badge--dot ds-badge--md" aria-label="Away"></span>
-          <span class="pg-state-label">warning dot</span>
-        </div>
-        <div class="pg-preview-item">
-          <span class="ds-badge ds-badge--danger ds-badge--dot ds-badge--md" aria-label="Offline"></span>
-          <span class="pg-state-label">danger dot</span>
-        </div>
-        <div class="pg-preview-item">
-          <span class="ds-badge ds-badge--neutral ds-badge--dot ds-badge--md" aria-label="Unknown"></span>
-          <span class="pg-state-label">neutral dot</span>
-        </div>
-      </div>
-
-      <!-- Inline usage with other components -->
-      <p class="pg-heading">Inline usage with other components</p>
-      <div style="display:flex;flex-direction:column;gap:0.75rem;max-width:360px;">
-        <article class="ds-card" data-variant="flat" style="width:100%">
-          <div class="ds-card__body" style="flex-direction:row;justify-content:space-between;align-items:center;">
-            <span style="font-weight:600;font-size:var(--semantic-font-size-ui-md);">System health</span>
-            <span class="ds-badge ds-badge--success ds-badge--subtle ds-badge--sm">
-              <span class="ds-badge__dot" aria-hidden="true" style="width:6px;height:6px;background:var(--component-badge-success-bg);border-radius:50%;display:inline-block;"></span>
-              <span class="ds-badge__label">Operational</span>
-            </span>
-          </div>
-        </article>
-        <article class="ds-card" data-variant="flat" style="width:100%">
-          <div class="ds-card__body" style="flex-direction:row;justify-content:space-between;align-items:center;">
-            <span style="font-weight:600;font-size:var(--semantic-font-size-ui-md);">Deployments</span>
-            <span class="ds-badge ds-badge--warning ds-badge--subtle ds-badge--sm">
-              <span class="ds-badge__label">Degraded</span>
-            </span>
-          </div>
-        </article>
-        <article class="ds-card" data-variant="flat" style="width:100%">
-          <div class="ds-card__body" style="flex-direction:row;justify-content:space-between;align-items:center;">
-            <span style="font-weight:600;font-size:var(--semantic-font-size-ui-md);">Incidents</span>
-            <span class="ds-badge ds-badge--danger ds-badge--subtle ds-badge--sm">
-              <span class="ds-badge__label">1 Active</span>
-            </span>
-          </div>
-        </article>
-      </div>
-
-      <!-- Code snippet -->
-      <p class="pg-heading">HTML snippet</p>
-      <div class="pg-code">
-        <pre id="badge-snippet">&lt;!-- Filled badge --&gt;
-&lt;span class="ds-badge ds-badge--success ds-badge--md"&gt;
-  &lt;span class="ds-badge__label"&gt;Active&lt;/span&gt;
-&lt;/span&gt;
-
-&lt;!-- Subtle badge --&gt;
-&lt;span class="ds-badge ds-badge--danger ds-badge--subtle ds-badge--sm"&gt;
-  &lt;span class="ds-badge__label"&gt;Error&lt;/span&gt;
-&lt;/span&gt;
-
-&lt;!-- Dot-only status indicator --&gt;
-&lt;span class="ds-badge ds-badge--success ds-badge--dot"
-      aria-label="Online"&gt;&lt;/span&gt;
-
-&lt;!-- Token chain:
-     --primitive-color-green-600
-   → --semantic-color-feedback-success-default
-   → --component-badge-success-bg --&gt;</pre>
-        <button class="pg-code__copy" type="button" data-copy-target="badge-snippet">⎘ Copy</button>
-      </div>
-
-    </section><!-- /badge -->
-
-
-    <!-- ================================================================
-         BADGE FLOW — Component addition simulation
-         ================================================================ -->
-    <section class="pg-component-section" data-component="badge-flow" aria-labelledby="flow-section-title">
-
-      <div class="pg-section-header">
-        <h1 class="pg-section-header__title" id="flow-section-title">Badge addition simulation</h1>
-        <div class="pg-section-header__meta">
-          <span>tokens.json diff · theme merge · deprecated token handling · version bump</span>
-        </div>
-      </div>
-
-      <div id="pg-badge-flow-demo">
-        <!-- Rendered by playground.js renderBadgeFlowDemo() -->
-        <p style="color:var(--semantic-color-text-subtle);font-size:0.875rem;">Loading badge flow demo…</p>
-      </div>
-
-      <!-- Live "add new theme" playground -->
-      <p class="pg-heading" style="margin-top:2rem">Live theme override demo</p>
-      <p style="font-size:0.8125rem;color:var(--semantic-color-text-subtle);line-height:1.6;margin-bottom:1rem;">
-        Change <code>--component-badge-success-bg</code> below to see how a user theme override
-        flows through the entire component — the badge preview updates immediately because
-        <code>document.documentElement.style.setProperty()</code> re-resolves the entire
-        <code>var()</code> chain with zero rebuild required.
-      </p>
-      <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.25rem;">
-        <div style="display:flex;flex-direction:column;gap:0.375rem;">
-          <label style="font-size:0.6875rem;font-weight:600;font-family:var(--primitive-font-family-mono);">--component-badge-success-bg</label>
-          <div style="display:flex;gap:0.5rem;align-items:center;">
-            <input type="color" id="live-success-bg" value="#40c057"
-              style="width:32px;height:28px;padding:2px;border:1px solid var(--semantic-color-border-default);border-radius:4px;cursor:pointer;"
-              aria-label="Override success badge background">
-            <input type="text" id="live-success-bg-text" value="#40c057"
-              style="width:90px;padding:0.3rem 0.5rem;border:1px solid var(--semantic-color-border-default);border-radius:4px;font-family:var(--primitive-font-family-mono);font-size:0.75rem;background:var(--semantic-color-surface-base);color:var(--semantic-color-text-default);"
-              aria-label="Override success badge background text input">
-          </div>
-        </div>
-
-        <div style="display:flex;flex-direction:column;gap:0.5rem;">
-          <span style="font-size:0.6875rem;font-weight:600;color:var(--semantic-color-text-subtle);">Live preview:</span>
-          <div style="display:flex;gap:0.5rem;align-items:center;">
-            <span class="ds-badge ds-badge--success ds-badge--md">
-              <span class="ds-badge__label">Active</span>
-            </span>
-            <span class="ds-badge ds-badge--success ds-badge--subtle ds-badge--md">
-              <span class="ds-badge__label">Active</span>
-            </span>
-            <span class="ds-badge ds-badge--success ds-badge--dot ds-badge--md" aria-label="Online"></span>
-          </div>
-        </div>
-
-        <button id="live-reset-btn" type="button"
-          style="padding:0.375rem 0.75rem;border:1px solid var(--semantic-color-border-default);border-radius:var(--primitive-radius-md);background:none;color:var(--semantic-color-text-subtle);font-size:0.75rem;cursor:pointer;"
-          aria-label="Reset live demo">
-          ↺ Reset
-        </button>
-      </div>
-
-      <div class="pg-code">
-        <pre id="live-code-output">/* Live override — updates as you change the colour picker above */
-[data-theme="custom"] {
-  --component-badge-success-bg: #40c057; /* user override */
-}
-
-/* The subtle border + dot automatically inherit
-   from --component-badge-success-subtle-border
-   which still resolves via semantic → primitive chain */</pre>
-      </div>
-
-    </section><!-- /badge-flow -->
-
+    <!-- Loading scaffold — removed by init script after registry loads -->
+    <div id="pg-loading-scaffold" style="display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;gap:1rem;color:var(--semantic-color-text-subtle);">
+      <div style="font-size:2rem;" aria-hidden="true">⟳</div>
+      <p style="font-size:0.875rem;">Loading component registry…</p>
+    </div>
+    <!-- PLACEHOLDER: Do not add component sections here. Use component.registry.json -->
+    <section class="pg-component-section" data-component="__placeholder__" aria-hidden="true" style="display:none;"></section>
+    <!-- /END PLACEHOLDER: RegistryEngine.buildPreviewSections() injects here -->
   </main><!-- /pg-main -->
 
 
@@ -767,75 +176,149 @@
 
 <!-- ===================================================================
      SCRIPTS
+     Load order:
+       1. token-registry.js    — synchronous, defines window.DS_TOKENS
+       2. registry-engine.js   — synchronous, defines window.RegistryEngine (no data loaded yet)
+       3. playground.js        — synchronous, defines window.PlaygroundEngine (not yet init)
+       4. Init block           — async: loads JSON → builds DOM → starts playground
      =================================================================== -->
 <script src="js/token-registry.js"></script>
+<script src="js/registry-engine.js"></script>
 <script src="js/playground.js"></script>
 
-<!-- Inline: live override demo for badge-flow section -->
 <script>
-(function () {
+/* ============================================================
+   PHASE 9 — REGISTRY-DRIVEN INIT SEQUENCE
+   This is the single orchestration point.
+   All component markup is generated by the registry engine.
+   No component HTML may be added to this file.
+   ============================================================ */
+(async function () {
   'use strict';
+
+  // 1. Load both JSON registries (component.registry.json + adapter.registry.json)
+  await RegistryEngine.init();
+
+  // 2. Remove loading scaffold
+  const scaffold = document.getElementById('pg-loading-scaffold');
+  if (scaffold) scaffold.remove();
+
+  // 3. Build nav items from registry (replaces hardcoded list)
+  RegistryEngine.buildPreviewNav(document.getElementById('pg-nav-list'));
+
+  // 4. Build all component sections from registry (replaces hardcoded sections)
+  RegistryEngine.buildPreviewSections(document.getElementById('pg-main'));
+
+  // 5. Start the playground engine (token tables, right panel controls, navigation)
+  if (window.PlaygroundEngine) {
+    PlaygroundEngine.init();
+  }
+
+  // 6. Render badge-flow demo (Phase 7 historical demo — data from token-registry.js)
+  if (window.PlaygroundEngine && PlaygroundEngine.renderBadgeFlowDemo) {
+    PlaygroundEngine.renderBadgeFlowDemo();
+  }
+
+  // 7. Inject live badge override controls into badge-flow section
+  _initLiveBadgeOverride();
+
+})();
+
+/* ============================================================
+   LIVE BADGE OVERRIDE MINI-PLAYGROUND
+   Injects interactive colour override demo into the badge-flow
+   section after it is generated by the registry engine.
+   Architecture note: this contains no token logic — it is
+   a pure UI control that calls style.setProperty().
+   ============================================================ */
+function _initLiveBadgeOverride() {
+  const flowSection = document.querySelector('[data-component="badge-flow"]');
+  if (!flowSection) return;
 
   const ORIGINAL_SUCCESS_BG = '#40c057';
 
-  function initLiveDemo() {
-    const colorInput  = document.getElementById('live-success-bg');
-    const textInput   = document.getElementById('live-success-bg-text');
-    const resetBtn    = document.getElementById('live-reset-btn');
-    const codeOutput  = document.getElementById('live-code-output');
-
-    if (!colorInput || !textInput) return;
-
-    function applyOverride(val) {
-      document.documentElement.style.setProperty('--component-badge-success-bg', val);
-      if (codeOutput) {
-        codeOutput.textContent =
-`/* Live override — updates as you change the colour picker above */
+  const liveBlock = document.createElement('div');
+  liveBlock.innerHTML = `
+    <p class="pg-heading" style="margin-top:2rem">Live theme override demo</p>
+    <p style="font-size:0.8125rem;color:var(--semantic-color-text-subtle);line-height:1.6;margin-bottom:1rem;">
+      Change <code>--component-badge-success-bg</code> below to see how a user theme override
+      flows through the entire component \u2014 the badge preview updates immediately because
+      <code>document.documentElement.style.setProperty()</code> re-resolves the entire
+      <code>var()</code> chain with zero rebuild required.
+    </p>
+    <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.25rem;">
+      <div style="display:flex;flex-direction:column;gap:0.375rem;">
+        <label style="font-size:0.6875rem;font-weight:600;font-family:var(--primitive-font-family-mono);">--component-badge-success-bg</label>
+        <div style="display:flex;gap:0.5rem;align-items:center;">
+          <input type="color" id="live-success-bg" value="#40c057"
+            style="width:32px;height:28px;padding:2px;border:1px solid var(--semantic-color-border-default);border-radius:4px;cursor:pointer;"
+            aria-label="Override success badge background">
+          <input type="text" id="live-success-bg-text" value="#40c057"
+            style="width:90px;padding:0.3rem 0.5rem;border:1px solid var(--semantic-color-border-default);border-radius:4px;font-family:var(--primitive-font-family-mono);font-size:0.75rem;background:var(--semantic-color-surface-base);color:var(--semantic-color-text-default);"
+            aria-label="Override success badge background (text)">
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.5rem;">
+        <span style="font-size:0.6875rem;font-weight:600;color:var(--semantic-color-text-subtle);">Live preview:</span>
+        <div style="display:flex;gap:0.5rem;align-items:center;">
+          <span class="ds-badge ds-badge--success ds-badge--md"><span class="ds-badge__label">Active</span></span>
+          <span class="ds-badge ds-badge--success ds-badge--subtle ds-badge--md"><span class="ds-badge__label">Active</span></span>
+          <span class="ds-badge ds-badge--success ds-badge--dot ds-badge--md" aria-label="Online"></span>
+        </div>
+      </div>
+      <button id="live-reset-btn" type="button"
+        style="padding:0.375rem 0.75rem;border:1px solid var(--semantic-color-border-default);border-radius:var(--primitive-radius-md);background:none;color:var(--semantic-color-text-subtle);font-size:0.75rem;cursor:pointer;">
+        \u21ba Reset
+      </button>
+    </div>
+    <div class="pg-code">
+      <pre id="live-code-output">/* Live override \u2014 updates as you change the colour picker above */
 [data-theme="custom"] {
-  --component-badge-success-bg: ${val}; /* user override */
+  --component-badge-success-bg: #40c057; /* user override */
 }
 
 /* The subtle border + dot automatically inherit
    from --component-badge-success-subtle-border
-   which still resolves via semantic → primitive chain */`;
+   which still resolves via semantic \u2192 primitive chain */</pre>
+    </div>`;
+
+  flowSection.appendChild(liveBlock);
+
+  const colorInput = document.getElementById('live-success-bg');
+  const textInput  = document.getElementById('live-success-bg-text');
+  const resetBtn   = document.getElementById('live-reset-btn');
+  const codeOutput = document.getElementById('live-code-output');
+
+  if (!colorInput || !textInput) return;
+
+  function applyOverride(val) {
+    document.documentElement.style.setProperty('--component-badge-success-bg', val);
+    if (codeOutput) {
+      codeOutput.textContent = `/* Live override — updates as you change the colour picker above */\n[data-theme="custom"] {\n  --component-badge-success-bg: ${val}; /* user override */\n}\n\n/* The subtle border + dot automatically inherit\n   from --component-badge-success-subtle-border\n   which still resolves via semantic → primitive chain */`;
+    }
+  }
+
+  colorInput.addEventListener('input', e => { textInput.value = e.target.value; applyOverride(e.target.value); });
+  textInput.addEventListener('change', e => { colorInput.value = e.target.value; applyOverride(e.target.value); });
+
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      colorInput.value = ORIGINAL_SUCCESS_BG;
+      textInput.value  = ORIGINAL_SUCCESS_BG;
+      document.documentElement.style.removeProperty('--component-badge-success-bg');
+      if (codeOutput) {
+        codeOutput.textContent = `/* Property reset — browser resolves from @layer components */\n:root {\n  --component-badge-success-bg:\n    var(--semantic-color-feedback-success-default);\n  /* → var(--primitive-color-green-600) → #40c057 */\n}`;
       }
-    }
-
-    colorInput.addEventListener('input', (e) => {
-      const val = e.target.value;
-      textInput.value = val;
-      applyOverride(val);
     });
-
-    textInput.addEventListener('change', (e) => {
-      const val = e.target.value;
-      colorInput.value = val;
-      applyOverride(val);
-    });
-
-    if (resetBtn) {
-      resetBtn.addEventListener('click', () => {
-        colorInput.value = ORIGINAL_SUCCESS_BG;
-        textInput.value  = ORIGINAL_SUCCESS_BG;
-        document.documentElement.style.removeProperty('--component-badge-success-bg');
-        if (codeOutput) codeOutput.textContent =
-`/* Property reset — browser resolves from @layer components */
-:root {
-  --component-badge-success-bg:
-    var(--semantic-color-feedback-success-default);
-  /* → var(--primitive-color-green-600) → #40c057 */
-}`;
-      });
-    }
   }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initLiveDemo);
-  } else {
-    initLiveDemo();
-  }
-})();
+}
 </script>
+
+<!-- spin keyframe for loading indicator -->
+<style>
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #pg-loading-scaffold div:first-child { animation: spin 1.2s linear infinite; }
+</style>
 
 </body>
 </html>
