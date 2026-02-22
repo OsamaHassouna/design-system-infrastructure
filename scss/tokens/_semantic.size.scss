@@ -1,0 +1,37 @@
+// =============================================================================
+// LAYER: tokens
+// FILE:  tokens/_semantic.size.scss
+//
+// PURPOSE:
+//   Semantic control-height tokens — map named sizes onto primitive spacing steps.
+//   Used for min-height of interactive controls (buttons, badges, inputs).
+//   Components MUST reference these tokens, never primitive spacing directly
+//   when expressing control height intent.
+//
+//   Added in Phase 13 to resolve tier violations where components were
+//   referencing --primitive-spacing-* directly for min-height.
+//
+// ALLOWED REFERENCES: primitive spacing tokens only
+// FORBIDDEN:          raw rem/px values, component tokens, utility classes
+// =============================================================================
+
+@layer tokens {
+
+  :root {
+    // -------------------------------------------------------------------------
+    // Control heights — minimum height of interactive UI controls
+    //
+    //   xs   20px  small badges, status dots
+    //   sm   24px  medium badges, compact controls
+    //   md   32px  small buttons, small inputs
+    //   lg   40px  default buttons, default inputs  (standard touch target)
+    //   xl   48px  large buttons, prominent CTAs
+    // -------------------------------------------------------------------------
+    --semantic-size-control-xs: var(--primitive-spacing-5);    // 20px
+    --semantic-size-control-sm: var(--primitive-spacing-6);    // 24px
+    --semantic-size-control-md: var(--primitive-spacing-8);    // 32px
+    --semantic-size-control-lg: var(--primitive-spacing-10);   // 40px
+    --semantic-size-control-xl: var(--primitive-spacing-12);   // 48px
+  }
+
+}

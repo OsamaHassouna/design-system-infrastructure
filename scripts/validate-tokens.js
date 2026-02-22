@@ -162,6 +162,14 @@ function parseCSS(css) {
   // depth = braceDepth AFTER the @layer { opening brace was counted
   const layerStack = [];
 
+  // Multi-line custom property accumulation state.
+  // Some Sass-compiled values span multiple lines (e.g. font-family stacks,
+  // multi-value box-shadow). We buffer across lines until the trailing ; is found.
+  let pendingName  = null;  // --name being accumulated
+  let pendingValue = '';    // value parts seen so far (no trailing ;)
+  let pendingLine  = -1;    // line number of the declaration start
+  let pendingLayer = null;  // @layer name at declaration start
+
   const lines = css.split('\n');
 
   for (let i = 0; i < lines.length; i++) {
@@ -207,8 +215,12 @@ function parseCSS(css) {
 
     // ── g) Exit :root ────────────────────────────────────────────────────────
     if (inRoot && braceDepth < rootDepth) {
-      inRoot    = false;
-      rootDepth = -1;
+      inRoot       = false;
+      rootDepth    = -1;
+      pendingName  = null;  // discard any incomplete declaration (should not occur)
+      pendingValue = '';
+      pendingLine  = -1;
+      pendingLayer = null;
     }
 
     // ── h) Extract content ───────────────────────────────────────────────────
@@ -216,18 +228,50 @@ function parseCSS(css) {
 
     if (inRoot) {
       // Inside :root {} — token definition
-      const defMatch = trimmed.match(/^(--[\w-]+)\s*:\s*(.+?)\s*;/);
-      if (defMatch) {
-        const name  = defMatch[1];
-        const value = defMatch[2];
-        // Keep first definition (tokens layer is processed first and is canonical)
-        if (!tokenDefs.has(name)) {
-          tokenDefs.set(name, {
-            value,
-            refs  : extractVarRefs(value),
-            line  : lineNum,
-            layer : currentLayer,
-          });
+      if (pendingName !== null) {
+        // ── Continuation of a multi-line custom property value ───────────
+        pendingValue += ' ' + trimmed;
+        if (trimmed.endsWith(';')) {
+          // Value is complete — register the token
+          const fullValue = pendingValue.slice(0, -1).trim(); // strip trailing ;
+          if (!tokenDefs.has(pendingName)) {
+            tokenDefs.set(pendingName, {
+              value : fullValue,
+              refs  : extractVarRefs(fullValue),
+              line  : pendingLine,
+              layer : pendingLayer,
+            });
+          }
+          pendingName  = null;
+          pendingValue = '';
+          pendingLine  = -1;
+          pendingLayer = null;
+        }
+      } else {
+        // ── Start of a new declaration: --name: <value...> ───────────────
+        const defMatch = trimmed.match(/^(--[\w-]+)\s*:\s*(.*)/);
+        if (defMatch) {
+          const name = defMatch[1];
+          const rest = defMatch[2].trim(); // everything after the colon
+          if (rest.endsWith(';')) {
+            // Single-line declaration
+            const value = rest.slice(0, -1).trim();
+            // Keep first definition (tokens layer is processed first and is canonical)
+            if (!tokenDefs.has(name)) {
+              tokenDefs.set(name, {
+                value,
+                refs  : extractVarRefs(value),
+                line  : lineNum,
+                layer : currentLayer,
+              });
+            }
+          } else {
+            // Multi-line declaration — begin accumulation
+            pendingName  = name;
+            pendingValue = rest; // may be empty string when value is on next line
+            pendingLine  = lineNum;
+            pendingLayer = currentLayer;
+          }
         }
       }
     } else if (braceDepth > 0) {

@@ -8,7 +8,7 @@
 // =============================================================================
 
 // 1. Component CSS custom properties (public theming API)
-@use 'card.variables';
+@forward 'card.variables';
 
 // 2. Structural styles (uses variables defined above)
-@use 'card';
+@forward 'card';

@@ -1,0 +1,46 @@
+// =============================================================================
+// LAYER: tokens
+// FILE:  tokens/_semantic.shadow.scss
+//
+// PURPOSE:
+//   Semantic shadow/elevation tokens — define the shadow scale for the system.
+//   Shadow values are raw (no var() references) because they are composite
+//   multi-value properties with no primitive shadow token layer.
+//
+//   Components reference these tokens for elevation. Themes can override
+//   these tokens to change the elevation aesthetic (e.g. flat design mode).
+//
+//   Added in Phase 13 to resolve tier violations where the Card component's
+//   --component-card-shadow aliased --component-card-shadow-sm (component→component).
+//
+// ALLOWED REFERENCES: raw values only (shadows are terminal values)
+// FORBIDDEN:          primitive tokens, component tokens, utility classes
+// =============================================================================
+
+@layer tokens {
+
+  :root {
+    // -------------------------------------------------------------------------
+    // Shadow scale — elevation levels
+    //
+    //   none   no shadow (flat)
+    //   sm     subtle lift — cards, dropdowns at rest
+    //   md     moderate lift — popovers, focused cards
+    //   lg     strong lift — modals, sticky panels
+    // -------------------------------------------------------------------------
+    --semantic-shadow-none: none;
+
+    --semantic-shadow-sm:
+      0 1px 3px rgba(0, 0, 0, 0.06),
+      0 1px 2px rgba(0, 0, 0, 0.04);
+
+    --semantic-shadow-md:
+      0 4px 6px rgba(0, 0, 0, 0.07),
+      0 2px 4px rgba(0, 0, 0, 0.05);
+
+    --semantic-shadow-lg:
+      0 10px 15px rgba(0, 0, 0, 0.08),
+      0  4px  6px rgba(0, 0, 0, 0.05);
+  }
+
+}

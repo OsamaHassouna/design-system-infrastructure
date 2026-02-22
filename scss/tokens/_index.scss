@@ -7,6 +7,14 @@
 //   primitives MUST load before semantics — semantics reference primitives
 //   via var() and will resolve to empty if primitives are missing.
 //
+// WHY @forward INSTEAD OF @use:
+//   All files in this directory share name prefixes (primitives.*, semantic.*).
+//   Dart Sass derives the default namespace from the part of the filename before
+//   the first dot, so @use 'primitives.color' and @use 'primitives.spacing'
+//   would both claim the "primitives" namespace — a compile error.
+//   @forward avoids this by not creating a local namespace; it only re-exports
+//   the module's members to upstream consumers and outputs its CSS.
+//
 // IMPORT ORDER:
 //   1. Primitives  (raw values, no dependencies)
 //   2. Semantics   (reference primitives via var())
@@ -15,12 +23,15 @@
 // =============================================================================
 
 // 1. Primitives — raw catalogue values (no dependencies)
-@use 'primitives.color';
-@use 'primitives.spacing';
-@use 'primitives.radius';
-@use 'primitives.typography';
+@forward 'primitives.color';
+@forward 'primitives.spacing';
+@forward 'primitives.radius';
+@forward 'primitives.typography';
 
 // 2. Semantics — intent mappings onto primitives
-@use 'semantic.color';
-@use 'semantic.spacing';
-@use 'semantic.typography';
+@forward 'semantic.color';
+@forward 'semantic.spacing';
+@forward 'semantic.typography';
+@forward 'semantic.radius';
+@forward 'semantic.size';
+@forward 'semantic.shadow';

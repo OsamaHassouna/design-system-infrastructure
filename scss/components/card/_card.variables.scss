@@ -24,7 +24,7 @@
     // -------------------------------------------------------------------------
     --component-card-border-width:   1px;
     --component-card-border-style:   solid;
-    --component-card-border-radius:  var(--primitive-radius-lg);
+    --component-card-border-radius:  var(--semantic-radius-card);
     --component-card-border-color:   var(--semantic-color-border-default);
 
     // -------------------------------------------------------------------------
@@ -35,20 +35,15 @@
     --component-card-bg-sunken:      var(--semantic-color-surface-sunken);
 
     // -------------------------------------------------------------------------
-    // Shadow (elevation)
-    // Shadow values are raw here — no semantic shadow scale exists yet.
-    // TODO (Phase 5): Extract to a semantic shadow token layer.
+    // Shadow (elevation) — resolved from semantic shadow scale (Phase 13)
     // -------------------------------------------------------------------------
-    --component-card-shadow-none:    none;
-    --component-card-shadow-sm:      0 1px 3px rgba(0, 0, 0, 0.06),
-                                     0 1px 2px rgba(0, 0, 0, 0.04);
-    --component-card-shadow-md:      0 4px 6px rgba(0, 0, 0, 0.07),
-                                     0 2px 4px rgba(0, 0, 0, 0.05);
-    --component-card-shadow-lg:      0 10px 15px rgba(0, 0, 0, 0.08),
-                                     0 4px 6px rgba(0, 0, 0, 0.05);
+    --component-card-shadow-none:    var(--semantic-shadow-none);
+    --component-card-shadow-sm:      var(--semantic-shadow-sm);
+    --component-card-shadow-md:      var(--semantic-shadow-md);
+    --component-card-shadow-lg:      var(--semantic-shadow-lg);
 
     // Default shadow for base card
-    --component-card-shadow:         var(--component-card-shadow-sm);
+    --component-card-shadow:         var(--semantic-shadow-sm);
 
     // -------------------------------------------------------------------------
     // Focus ring

@@ -2,18 +2,21 @@
  * PLAYGROUND ENGINE
  * preview/js/playground.js
  *
- * Responsibilities:
+ * Phase 13 responsibilities:
  *   1. Navigation — switch between component sections in the main pane
  *      and sync right panel (token table, playground controls, docs).
- *   2. Theme switching — toggle data-theme="dark" on the root element.
+ *   2. Theme selector — applyTheme(id) sets data-theme on :root via <select>.
  *   3. Token table — render a searchable, copyable token table for
  *      the active component using DS_TOKENS from token-registry.js.
  *   4. Playground controls — render editable inputs for each token;
  *      on change, write CSS custom properties directly to :root so
  *      previews update in real time with zero rebuild.
- *   5. Export — generate a downloadable CSS file with all user overrides.
- *   6. Snippet copy — copy HTML snippet blocks to clipboard.
- *   7. Badge flow demo — render the component addition simulation.
+ *   5. Inline tier validation — warn when a value bypasses the semantic tier.
+ *   6. Diff pane — live list of all overrides with per-token reset.
+ *   7. Pages pane — inject arbitrary CSS into @layer page via <style> tag.
+ *   8. Export — CSS / SCSS / JSON / page.css downloadable artefacts.
+ *   9. Snippet copy — copy HTML snippet blocks to clipboard.
+ *  10. Badge flow demo — render the component addition simulation.
  *
  * Token manipulation flow:
  *   User input → playground.setToken(name, value)
@@ -29,18 +32,21 @@
   const state = {
     activeComponent: 'button',
     activeTab:       'tokens',
-    isDark:          false,
+    activeTheme:     'light',
     overrides:       {},          // { varName: value }
     originals:       {},          // { varName: originalComputedValue }
+    pageCSS:         '',          // user page-level CSS (Pages pane)
   };
 
   /* ── DOM refs ───────────────────────────────────────────────────────────── */
   let root;
-  let themeToggle;
+  let themeSelect;
   let tokenSearchInput;
   let tokenTableBody;
   let playgroundPane;
   let docsPane;
+  let diffPane;
+  let pagesPane;
   let toast;
 
   /* ────────────────────────────────────────────────────────────────────────
@@ -48,11 +54,13 @@
   ──────────────────────────────────────────────────────────────────────── */
   function init() {
     root             = document.documentElement;
-    themeToggle      = document.getElementById('pg-theme-toggle');
+    themeSelect      = document.getElementById('pg-theme-select');
     tokenSearchInput = document.getElementById('pg-token-search');
     tokenTableBody   = document.getElementById('pg-token-table-body');
     playgroundPane   = document.getElementById('pg-playground-pane');
     docsPane         = document.getElementById('pg-docs-pane');
+    diffPane         = document.getElementById('pg-diff-pane');
+    pagesPane        = document.getElementById('pg-pages-pane');
     toast            = document.getElementById('pg-toast');
 
     // Navigation
@@ -60,9 +68,10 @@
       btn.addEventListener('click', () => navigateTo(btn.dataset.nav));
     });
 
-    // Theme toggle
-    if (themeToggle) {
-      themeToggle.addEventListener('click', toggleTheme);
+    // Theme selector (replaces toggle button)
+    if (themeSelect) {
+      themeSelect.value = state.activeTheme;
+      themeSelect.addEventListener('change', () => applyTheme(themeSelect.value));
     }
 
     // Panel tabs
@@ -75,9 +84,34 @@
       tokenSearchInput.addEventListener('input', () => filterTokenTable(tokenSearchInput.value));
     }
 
-    // Export button
-    const exportBtn = document.getElementById('pg-export-btn');
-    if (exportBtn) exportBtn.addEventListener('click', exportTheme);
+    // Export dropdown toggle
+    const exportBtn  = document.getElementById('pg-export-btn');
+    const exportMenu = document.getElementById('pg-export-menu');
+    if (exportBtn && exportMenu) {
+      exportBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = !exportMenu.hidden;
+        exportMenu.hidden = isOpen;
+        exportBtn.setAttribute('aria-expanded', String(!isOpen));
+      });
+      // Close on outside click
+      document.addEventListener('click', () => {
+        exportMenu.hidden = true;
+        exportBtn.setAttribute('aria-expanded', 'false');
+      });
+      // Export menu items
+      exportMenu.querySelectorAll('[data-export]').forEach(item => {
+        item.addEventListener('click', () => {
+          exportMenu.hidden = true;
+          exportBtn.setAttribute('aria-expanded', 'false');
+          const type = item.dataset.export;
+          if (type === 'css')   exportCSS();
+          if (type === 'scss')  exportSCSS();
+          if (type === 'json')  exportJSON();
+          if (type === 'page')  exportPageCSS();
+        });
+      });
+    }
 
     // Copy snippet buttons
     document.querySelectorAll('[data-copy-target]').forEach(btn => {
@@ -86,6 +120,9 @@
 
     // Badge flow demo (renders on page load)
     renderBadgeFlowDemo();
+
+    // Render Pages pane on init
+    renderPagesPane();
 
     // Initial render — navigate to first registered component (or 'button' as fallback)
     const firstComponentId = (window.DS_REGISTRY && Object.keys(window.DS_REGISTRY.components || {})[0]) || 'button';
@@ -128,20 +165,16 @@
     document.querySelectorAll('[data-pane]').forEach(pane => {
       pane.classList.toggle('is-active', pane.dataset.pane === tabId);
     });
+    if (tabId === 'diff') renderDiffPane();
   }
 
   /* ────────────────────────────────────────────────────────────────────────
-     THEME TOGGLE
+     THEME
   ──────────────────────────────────────────────────────────────────────── */
-  function toggleTheme() {
-    state.isDark = !state.isDark;
-    root.setAttribute('data-theme', state.isDark ? 'dark' : 'light');
-    if (themeToggle) {
-      const icon = themeToggle.querySelector('.pg-theme-toggle__icon');
-      const label = themeToggle.querySelector('.pg-theme-toggle__label');
-      if (icon)  icon.textContent  = state.isDark ? '☀️' : '🌑';
-      if (label) label.textContent = state.isDark ? 'Light mode' : 'Dark mode';
-    }
+  function applyTheme(themeId) {
+    state.activeTheme = themeId;
+    root.setAttribute('data-theme', themeId);
+    if (themeSelect) themeSelect.value = themeId;
   }
 
   /* ────────────────────────────────────────────────────────────────────────
@@ -304,12 +337,29 @@
       });
     });
 
-    // Bind text inputs (colour or freeform value)
+    // Bind text inputs (colour or freeform value) with inline tier validation
     playgroundPane.querySelectorAll('input[type="text"][data-token]').forEach(input => {
       input.addEventListener('change', (e) => {
         const val = e.target.value;
         setToken(input.dataset.token, val);
         updateSwatches(input.dataset.token, val);
+
+        // Show inline tier-violation warning if applicable
+        const group = input.closest('.pg-control-group');
+        if (group) {
+          group.querySelector('.pg-validation-msg')?.remove();
+          const result = validateTokenTier(input.dataset.token, val);
+          if (result) {
+            const msg = document.createElement('div');
+            msg.className = `pg-validation-msg pg-validation-msg--${result.level}`;
+            msg.textContent = result.message;
+            group.appendChild(msg);
+            input.classList.toggle('has-warn', result.level === 'warn');
+            input.classList.toggle('has-error', result.level === 'error');
+          } else {
+            input.classList.remove('has-warn', 'has-error');
+          }
+        }
       });
     });
 
@@ -335,6 +385,7 @@
     }
     state.overrides[varName] = value;
     root.style.setProperty(varName, value);
+    updateDiffBadge();
   }
 
   function resetToken(varName) {
@@ -345,6 +396,7 @@
       root.style.removeProperty(varName);
     }
     delete state.overrides[varName];
+    updateDiffBadge();
   }
 
   function resetAllTokens(componentId) {
@@ -362,43 +414,103 @@
   /* ────────────────────────────────────────────────────────────────────────
      EXPORT
   ──────────────────────────────────────────────────────────────────────── */
-  function exportTheme() {
+  function exportCSS() {
     if (Object.keys(state.overrides).length === 0) {
       showToast('No overrides to export — edit tokens in the Playground tab first.');
       return;
     }
-
-    const themeId = 'custom';
     const lines = [
       `/* ================================================================`,
-      `   EXPORTED CUSTOM THEME`,
-      `   Generated by DS Preview Playground — ${new Date().toISOString()}`,
+      `   DS PLAYGROUND — USER TOKEN OVERRIDES (CSS)`,
+      `   Generated: ${new Date().toISOString()}`,
       `   Component: ${state.activeComponent}`,
+      `   Theme: ${state.activeTheme}`,
       `   Override count: ${Object.keys(state.overrides).length}`,
       `   ================================================================ */`,
       ``,
-      `/* Import this after your core DS CSS and apply by adding`,
-      `   data-theme="${themeId}" to any ancestor element. */`,
-      ``,
       `@layer themes {`,
       ``,
-      `  [data-theme="${themeId}"] {`,
+      `  [data-theme="${state.activeTheme}"] {`,
     ];
-
     Object.entries(state.overrides).forEach(([name, val]) => {
       lines.push(`    ${name}: ${val};`);
     });
-
     lines.push(`  }`, ``, `}`);
+    downloadText(lines.join('\n'), 'user-theme.css', 'text/css');
+    showToast('user-theme.css downloaded!');
+  }
 
-    const blob = new Blob([lines.join('\n')], { type: 'text/css' });
+  function exportSCSS() {
+    if (Object.keys(state.overrides).length === 0) {
+      showToast('No overrides to export — edit tokens in the Playground tab first.');
+      return;
+    }
+    const lines = [
+      `// ================================================================`,
+      `// DS PLAYGROUND — USER TOKEN OVERRIDES (SCSS)`,
+      `// Generated: ${new Date().toISOString()}`,
+      `// Component: ${state.activeComponent}`,
+      `// ================================================================`,
+      ``,
+      `@layer themes {`,
+      `  [data-theme="${state.activeTheme}"] {`,
+    ];
+    Object.entries(state.overrides).forEach(([name, val]) => {
+      lines.push(`    ${name}: ${val};`);
+    });
+    lines.push(`  }`, `}`);
+    downloadText(lines.join('\n'), '_user-theme.scss', 'text/plain');
+    showToast('_user-theme.scss downloaded!');
+  }
+
+  function exportJSON() {
+    if (Object.keys(state.overrides).length === 0) {
+      showToast('No overrides to export — edit tokens in the Playground tab first.');
+      return;
+    }
+    const payload = {
+      _meta: {
+        generated: new Date().toISOString(),
+        component: state.activeComponent,
+        theme: state.activeTheme,
+        overrideCount: Object.keys(state.overrides).length,
+      },
+      overrides: state.overrides,
+    };
+    downloadText(JSON.stringify(payload, null, 2), 'overrides.json', 'application/json');
+    showToast('overrides.json downloaded!');
+  }
+
+  function exportPageCSS() {
+    const css = state.pageCSS.trim();
+    if (!css) {
+      showToast('No page CSS to export — add CSS in the Pages tab first.');
+      return;
+    }
+    const lines = [
+      `/* ================================================================`,
+      `   DS PLAYGROUND — PAGE MODULE CSS`,
+      `   Generated: ${new Date().toISOString()}`,
+      `   ================================================================ */`,
+      ``,
+      `@layer page {`,
+      ``,
+      css,
+      ``,
+      `}`,
+    ];
+    downloadText(lines.join('\n'), 'page.css', 'text/css');
+    showToast('page.css downloaded!');
+  }
+
+  function downloadText(text, filename, mimeType) {
+    const blob = new Blob([text], { type: mimeType });
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
     a.href     = url;
-    a.download = `theme-${themeId}-${state.activeComponent}.css`;
+    a.download = filename;
     a.click();
     URL.revokeObjectURL(url);
-    showToast('Theme CSS downloaded!');
   }
 
   /* ────────────────────────────────────────────────────────────────────────
@@ -525,6 +637,153 @@
   }
 
   /* ────────────────────────────────────────────────────────────────────────
+     DIFF PANE
+  ──────────────────────────────────────────────────────────────────────── */
+  function updateDiffBadge() {
+    const badge = document.getElementById('pg-diff-badge');
+    if (!badge) return;
+    const count = Object.keys(state.overrides).length;
+    badge.textContent = count > 0 ? String(count) : '';
+    badge.style.display = count > 0 ? '' : 'none';
+  }
+
+  function renderDiffPane() {
+    if (!diffPane) return;
+    const overrides = state.overrides;
+    const keys = Object.keys(overrides);
+
+    if (keys.length === 0) {
+      diffPane.innerHTML = '<p class="pg-playground-intro">No overrides yet. Edit tokens in the Playground tab to see the diff here.</p>';
+      return;
+    }
+
+    const items = keys.map(name => {
+      const original = state.originals[name] || '(default)';
+      const newVal   = overrides[name];
+      const isColorNew = /^#[0-9a-f]{3,8}$/i.test(newVal);
+      const isColorOld = /^#[0-9a-f]{3,8}$/i.test(original);
+      const oldSwatch = isColorOld
+        ? `<span class="pg-diff-swatch" style="background:${original}"></span>` : '';
+      const newSwatch = isColorNew
+        ? `<span class="pg-diff-swatch" style="background:${newVal}"></span>` : '';
+      return `
+        <div class="pg-diff-item">
+          <div class="pg-diff-item__name">${escHtml(name)}</div>
+          <div class="pg-diff-item__values">
+            <span class="pg-diff-item__old">${oldSwatch}${escHtml(original)}</span>
+            <span class="pg-diff-item__arrow">→</span>
+            <span class="pg-diff-item__new">${newSwatch}${escHtml(newVal)}</span>
+          </div>
+          <button class="pg-diff-item__reset" data-reset-token="${escHtml(name)}" title="Reset this token">↺</button>
+        </div>`;
+    }).join('');
+
+    diffPane.innerHTML = `
+      <div class="pg-playground-intro">
+        <strong>${keys.length}</strong> token${keys.length === 1 ? '' : 's'} overridden
+        — <button class="pg-reset-btn" id="pg-diff-reset-all">↺ Reset all</button>
+      </div>
+      ${items}`;
+
+    diffPane.querySelectorAll('[data-reset-token]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        resetToken(btn.dataset.resetToken);
+        renderPlaygroundControls(state.activeComponent);
+        renderTokenTable(state.activeComponent);
+        renderDiffPane();
+      });
+    });
+
+    const resetAllBtn = document.getElementById('pg-diff-reset-all');
+    if (resetAllBtn) {
+      resetAllBtn.addEventListener('click', () => {
+        resetAllTokens(state.activeComponent);
+        renderDiffPane();
+      });
+    }
+  }
+
+  /* ────────────────────────────────────────────────────────────────────────
+     PAGES PANE
+  ──────────────────────────────────────────────────────────────────────── */
+  function renderPagesPane() {
+    if (!pagesPane) return;
+    pagesPane.innerHTML = `
+      <div class="pg-playground-intro">
+        Write page-level CSS below. It is injected into an
+        <code>@layer page</code> block — after <code>adapters</code> in the cascade —
+        so it can safely override component tokens without fighting specificity.
+      </div>
+      <textarea
+        id="pg-pages-textarea"
+        class="pg-pages-textarea"
+        placeholder="/* e.g. */&#10;.hero-button {&#10;  --component-button-bg: var(--primitive-color-brand-600);&#10;}"
+        aria-label="Page-level CSS editor"
+        spellcheck="false"
+      >${escHtml(state.pageCSS)}</textarea>
+      <div class="pg-pages-actions">
+        <button class="pg-reset-btn" id="pg-pages-apply">▶ Apply</button>
+        <button class="pg-reset-btn" id="pg-pages-clear">✕ Clear</button>
+      </div>`;
+
+    const textarea = document.getElementById('pg-pages-textarea');
+    const applyBtn = document.getElementById('pg-pages-apply');
+    const clearBtn = document.getElementById('pg-pages-clear');
+
+    if (textarea) {
+      textarea.addEventListener('input', () => { state.pageCSS = textarea.value; });
+    }
+    if (applyBtn) {
+      applyBtn.addEventListener('click', () => {
+        state.pageCSS = textarea ? textarea.value : state.pageCSS;
+        applyPageCSS(state.pageCSS);
+      });
+    }
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        state.pageCSS = '';
+        if (textarea) textarea.value = '';
+        applyPageCSS('');
+        showToast('Page CSS cleared');
+      });
+    }
+  }
+
+  function applyPageCSS(css) {
+    let styleTag = document.getElementById('pg-page-layer');
+    if (!styleTag) {
+      styleTag = document.createElement('style');
+      styleTag.id = 'pg-page-layer';
+      document.head.appendChild(styleTag);
+    }
+    const trimmed = css.trim();
+    styleTag.textContent = trimmed ? `@layer page { ${trimmed} }` : '';
+    showToast(trimmed ? 'Page CSS applied' : 'Page CSS cleared');
+  }
+
+  /* ────────────────────────────────────────────────────────────────────────
+     TIER VALIDATION
+  ──────────────────────────────────────────────────────────────────────── */
+  /**
+   * Check whether a token value bypasses the 3-tier chain.
+   * Returns null (OK), or { level: 'warn'|'error', message: string }.
+   */
+  function validateTokenTier(varName, value) {
+    if (!value) return null;
+    const varRefs = value.match(/var\((--[\w-]+)/g) || [];
+    for (const ref of varRefs) {
+      const refName = ref.replace('var(', '');
+      if (varName.startsWith('--component-') && refName.startsWith('--primitive-')) {
+        return { level: 'warn', message: `Tier skip: ${varName} references ${refName} directly (should go via --semantic-*)` };
+      }
+      if (varName.startsWith('--semantic-') && refName.startsWith('--component-')) {
+        return { level: 'error', message: `Tier violation: semantic token ${varName} must not reference component token ${refName}` };
+      }
+    }
+    return null;
+  }
+
+  /* ────────────────────────────────────────────────────────────────────────
      HELPERS
   ──────────────────────────────────────────────────────────────────────── */
 
@@ -625,6 +884,22 @@
   window.PlaygroundEngine = {
     init,
     renderBadgeFlowDemo,
+    // Token mutation
+    setToken,
+    resetToken,
+    // Theme
+    applyTheme,
+    // Page CSS
+    applyPageCSS,
+    // Diff
+    renderDiffPane,
+    // Export
+    exportCSS,
+    exportSCSS,
+    exportJSON,
+    exportPageCSS,
+    // Validation
+    validateTokenTier,
   };
 
 })();

@@ -13,7 +13,7 @@
 // =============================================================================
 
 // 1. Component CSS custom properties (public theming API)
-@use 'button.variables';
+@forward 'button.variables';
 
 // 2. Structural styles (uses variables defined above)
-@use 'button';
+@forward 'button';

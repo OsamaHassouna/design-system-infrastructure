@@ -1,0 +1,40 @@
+// =============================================================================
+// LAYER: tokens
+// FILE:  tokens/_semantic.radius.scss
+//
+// PURPOSE:
+//   Semantic border-radius tokens — map shape intent onto primitive radius steps.
+//   Components MUST reference these tokens, never primitive radius directly.
+//
+//   Added in Phase 13 to resolve tier violations where components were
+//   referencing --primitive-radius-* directly.
+//
+// ALLOWED REFERENCES: primitive radius tokens only
+// FORBIDDEN:          raw rem/px values, component tokens, utility classes
+// =============================================================================
+
+@layer tokens {
+
+  :root {
+    // -------------------------------------------------------------------------
+    // Interactive controls — buttons, inputs, selects, toggles
+    // -------------------------------------------------------------------------
+    --semantic-radius-interactive: var(--primitive-radius-md);  //  6px
+
+    // -------------------------------------------------------------------------
+    // Containers — cards, panels, dialogs, drawers
+    // -------------------------------------------------------------------------
+    --semantic-radius-card:        var(--primitive-radius-lg);  //  8px
+
+    // -------------------------------------------------------------------------
+    // Pill / badge shape — fully rounded ends
+    // -------------------------------------------------------------------------
+    --semantic-radius-pill:        var(--primitive-radius-full); // 9999px
+
+    // -------------------------------------------------------------------------
+    // Subtle — chips, tags, inline labels
+    // -------------------------------------------------------------------------
+    --semantic-radius-sm:          var(--primitive-radius-sm);  //  4px
+  }
+
+}

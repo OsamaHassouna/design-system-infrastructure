@@ -10,5 +10,5 @@
 // FORBIDDEN: importing anything outside the badge/ directory
 // =============================================================================
 
-@use 'badge.variables';
-@use 'badge';
+@forward 'badge.variables';
+@forward 'badge';

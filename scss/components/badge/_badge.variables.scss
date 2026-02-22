@@ -8,9 +8,6 @@
 //   communicate state, category, or metadata.
 //
 // ALLOWED REFERENCES: semantic tokens only
-//   Exception — structural primitives with no semantic equivalent:
-//     --primitive-radius-full  (pill shape; no semantic radius scale yet)
-//     --primitive-spacing-*    (used for min-height sizing)
 //
 // FORBIDDEN: raw hex/rgb values, direct primitive color references,
 //            other component tokens, utility classes
@@ -59,7 +56,7 @@
     // -------------------------------------------------------------------------
     --component-badge-border-width:    1px;
     --component-badge-border-style:    solid;
-    --component-badge-border-radius:   var(--primitive-radius-full);      // pill
+    --component-badge-border-radius:   var(--semantic-radius-pill);        // pill
     --component-badge-font-weight:     var(--semantic-font-weight-label); // 600
     --component-badge-letter-spacing:  var(--semantic-letter-spacing-caps); // +0.05em
     --component-badge-line-height:     1;
@@ -70,7 +67,7 @@
     --component-badge-sm-font-size:       var(--semantic-font-size-ui-xs);       // 10px
     --component-badge-sm-padding-block:   var(--semantic-spacing-component-2xs); //  4px
     --component-badge-sm-padding-inline:  var(--semantic-spacing-component-xs);  //  8px
-    --component-badge-sm-min-height:      var(--primitive-spacing-5);            //  1.25rem / 20px
+    --component-badge-sm-min-height:      var(--semantic-size-control-xs);       // 20px
     --component-badge-sm-dot-size:        6px;
 
     // -------------------------------------------------------------------------
@@ -79,7 +76,7 @@
     --component-badge-md-font-size:       var(--semantic-font-size-ui-sm);       // 12px
     --component-badge-md-padding-block:   var(--semantic-spacing-component-2xs); //  4px
     --component-badge-md-padding-inline:  var(--semantic-spacing-component-sm);  // 12px
-    --component-badge-md-min-height:      var(--primitive-spacing-6);            //  1.5rem / 24px
+    --component-badge-md-min-height:      var(--semantic-size-control-sm);       // 24px
     --component-badge-md-dot-size:        8px;
 
     // =========================================================================

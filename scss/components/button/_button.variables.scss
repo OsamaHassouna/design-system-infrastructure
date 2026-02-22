@@ -9,9 +9,6 @@
 //   variables to change appearance without touching structural SCSS.
 //
 // ALLOWED REFERENCES: semantic tokens, base contract variables
-//   Exception — structural primitives with no semantic equivalent:
-//     --primitive-radius-md   (no semantic radius layer yet)
-//     --primitive-spacing-*   (used for min-height sizing, not layout intent)
 //
 // FORBIDDEN: raw hex/rgb values, direct primitive color references,
 //            other component tokens, utility classes
@@ -71,7 +68,7 @@
     // -------------------------------------------------------------------------
     --component-button-border-width:    1px;
     --component-button-border-style:    solid;
-    --component-button-border-radius:   var(--primitive-radius-md);     // 6px
+    --component-button-border-radius:   var(--semantic-radius-interactive); // 6px
     --component-button-line-height:     1;                              // tight, button-specific
     --component-button-letter-spacing:  var(--semantic-letter-spacing-ui);
 
@@ -160,7 +157,7 @@
     --component-button-sm-font-size:      var(--semantic-font-size-ui-sm);       // 12px
     --component-button-sm-font-weight:    var(--semantic-font-weight-label);     // 600
     --component-button-sm-gap:            var(--semantic-spacing-inline-xs);     //  4px
-    --component-button-sm-min-height:     var(--primitive-spacing-8);            //  2rem / 32px
+    --component-button-sm-min-height:     var(--semantic-size-control-md);       // 32px
 
     // =========================================================================
     // SIZE: md  —  40px min-height (default)
@@ -170,7 +167,7 @@
     --component-button-md-font-size:      var(--semantic-font-size-ui-md);       // 14px
     --component-button-md-font-weight:    var(--semantic-font-weight-label);     // 600
     --component-button-md-gap:            var(--semantic-spacing-inline-sm);     //  8px
-    --component-button-md-min-height:     var(--primitive-spacing-10);           //  2.5rem / 40px
+    --component-button-md-min-height:     var(--semantic-size-control-lg);       // 40px
 
     // =========================================================================
     // SIZE: lg  —  48px min-height
@@ -180,7 +177,7 @@
     --component-button-lg-font-size:      var(--semantic-font-size-ui-lg);       // 16px
     --component-button-lg-font-weight:    var(--semantic-font-weight-label);     // 600
     --component-button-lg-gap:            var(--semantic-spacing-inline-sm);     //  8px
-    --component-button-lg-min-height:     var(--primitive-spacing-12);           //  3rem / 48px
+    --component-button-lg-min-height:     var(--semantic-size-control-xl);       // 48px
   }
 
 }
