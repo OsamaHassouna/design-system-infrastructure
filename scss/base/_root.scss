@@ -3,36 +3,33 @@
 // FILE:  base/_root.scss
 //
 // PURPOSE:
-//   Declares the @layer stack order for the entire design system.
-//   This MUST be the first @layer declaration encountered by the browser —
-//   it defines layer priority (last declared = highest priority).
+//   Provides :root-level typography and layout baseline values that
+//   complement the token system (e.g. REM anchor, z-index scale, transitions).
 //
-//   Also provides :root-level typography and layout baseline values that
-//   complement the token system (e.g. fluid type scale helpers, REM anchor).
+//   The @layer ordering statement was previously declared here.
+//   It has been moved to scss/_layer-order.scss (Phase 9.5) and is now
+//   emitted as the very first CSS rule by scss/ds-preview.scss.
 //
-// CRITICAL RULE:
-//   The @layer order declaration below governs ALL later @layer blocks.
-//   Importing this file FIRST (via main.scss) is mandatory.
+// ALLOWED REFERENCES: semantic tokens only
+// FORBIDDEN:          @layer ordering statements (see scss/_layer-order.scss)
 //
 // ALLOWED REFERENCES: semantic tokens only
 // FORBIDDEN:          primitive tokens, component tokens, utility classes
 // =============================================================================
 
 // -----------------------------------------------------------------------------
-// @layer stack declaration — determines cascade priority
+// @layer stack order
 //
-// Priority order (lowest → highest):
+// The ordering statement has been moved to scss/_layer-order.scss.
+// It is emitted as the very first CSS rule by the build entry point
+// (scss/ds-preview.scss) before any @layer block appears.
+//
+// Priority (lowest → highest):
 //   tokens < base < utilities < components < themes < adapters
 //
-// Why this order:
-//   - tokens:     foundational values; never override other layers
-//   - base:       browser resets; low specificity
-//   - utilities:  atomic helpers; intentionally low, not trumping components
-//   - components: structured UI elements; override utilities when scoped
-//   - themes:     visual overrides; must win over components
-//   - adapters:   framework glue; must win over themes for framework compat
+// DO NOT add @layer ordering here — it would create a duplicate.
+// See: scss/_layer-order.scss
 // -----------------------------------------------------------------------------
-@layer tokens, base, utilities, components, themes, adapters;
 
 // -----------------------------------------------------------------------------
 // Root baseline

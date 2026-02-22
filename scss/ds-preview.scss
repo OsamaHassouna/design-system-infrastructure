@@ -1,0 +1,96 @@
+// =============================================================================
+// DESIGN SYSTEM — BUILD ENTRY POINT
+// FILE: scss/ds-preview.scss
+//
+// PURPOSE:
+//   Production entry point compiled by the Phase 9.5 build pipeline.
+//   Outputs: dist/ds-preview.css (expanded + autoprefixed)
+//            dist/ds-preview.min.css (compressed + autoprefixed)
+//
+// LAYER ORDER (enforced — see scss/_layer-order.scss):
+//   @layer tokens, base, utilities, components, themes, adapters;
+//
+//   Priority (lowest → highest cascade weight):
+//   ┌──────────────────────────────────────────────────────────────────┐
+//   │  tokens → base → utilities → components → themes → adapters      │
+//   └──────────────────────────────────────────────────────────────────┘
+//
+// IMPORT SEQUENCE — MUST NOT be changed:
+//
+//   0. _layer-order   — Ordering statement FIRST in compiled output (mandatory)
+//   1. tokens/        — Primitive + semantic CSS custom properties
+//   2. base/          — Layer declaration (removed from _root), reset, root baseline
+//   3. utilities/     — Atomic helper classes
+//   4. components/    — Structural component styles
+//   5. themes/        — Primitive token overrides per [data-theme]
+//   6. adapters/      — Framework-specific bridges
+//
+// WHY _layer-order IS @used FIRST:
+//   Dart Sass emits CSS from @use in the order they appear.
+//   Placing _layer-order here guarantees the @layer ordering statement is
+//   the very first CSS rule in the compiled output — before any @layer block
+//   appears. This prevents any ambiguity in layer precedence.
+//
+// FORBIDDEN:
+//   - Defining styles directly in this file
+//   - Importing layers out of order
+//   - Adding a second @layer ordering statement (it lives in _layer-order.scss only)
+//   - Importing the same file twice
+//
+// BUILD VARIANTS (future phases):
+//   ds-preview.headless.scss  — no adapters (React, Vue, CSS-only)
+//   ds-preview.angular.scss   — tokens + base + utilities + components + themes + angular adapter
+//   ds-preview.primeng.scss   — full stack with PrimeNG adapter
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// STEP 0 — LAYER ORDER
+// Emits @layer tokens, base, utilities, components, themes, adapters;
+// This MUST be the very first @use. Do not move it.
+// -----------------------------------------------------------------------------
+@use 'layer-order';
+
+// -----------------------------------------------------------------------------
+// STEP 1 — TOKENS
+// Loads primitive values first, then semantic mappings.
+// @layer tokens is populated here. All downstream layers consume via var().
+// -----------------------------------------------------------------------------
+@use 'tokens/index' as tokens;
+
+// -----------------------------------------------------------------------------
+// STEP 2 — BASE
+// Browser reset + root CSS baseline variables.
+// NOTE: The @layer ordering statement has been removed from base/_root.scss.
+//       It now lives exclusively in scss/_layer-order.scss (Step 0 above).
+// -----------------------------------------------------------------------------
+@use 'base/index' as base;
+
+// -----------------------------------------------------------------------------
+// STEP 3 — UTILITIES
+// Atomic, single-purpose helper classes.
+// Reference semantic tokens. Never reference primitives directly.
+// -----------------------------------------------------------------------------
+@use 'utilities/index' as utilities;
+
+// -----------------------------------------------------------------------------
+// STEP 4 — COMPONENTS
+// Structured UI component styles.
+// Each component loads: variables file → structural file.
+// Reference only --component-{name}-* variables internally.
+// -----------------------------------------------------------------------------
+@use 'components/index' as components;
+
+// -----------------------------------------------------------------------------
+// STEP 5 — THEMES
+// Primitive token overrides per [data-theme] attribute.
+// Themes layer > components — semantic and component vars resolve automatically.
+// -----------------------------------------------------------------------------
+@use 'themes/index' as themes;
+
+// -----------------------------------------------------------------------------
+// STEP 6 — ADAPTERS
+// Framework-specific bridges (Angular, PrimeNG, etc.).
+// Highest cascade priority. Contains only --component-* overrides + selectors.
+// Remove or swap this import for framework-specific build variants.
+// -----------------------------------------------------------------------------
+@use 'adapters/index' as adapters;

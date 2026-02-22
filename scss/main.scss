@@ -1,13 +1,18 @@
 // =============================================================================
-// DESIGN SYSTEM — MONOLITHIC ENTRY POINT
+// DESIGN SYSTEM — LEGACY ENTRY POINT (retained for reference)
 // FILE: main.scss
 //
-// PURPOSE:
-//   Single-file entry point for the complete Design System.
-//   Imports all layers in strict deterministic order.
-//   Compile this file to produce the full design system stylesheet.
+// DEPRECATION NOTICE (Phase 9.5):
+//   The canonical build entry point is now scss/ds-preview.scss.
+//   Run `npm run build` to compile via the production pipeline.
+//   This file is retained for reference and should not be compiled directly.
 //
-// LAYER STACK (declared in base/_root.scss — loaded first):
+// KEY DIFFERENCE FROM ds-preview.scss:
+//   This file does not @use '_layer-order' first. The @layer ordering
+//   statement was previously in base/_root.scss but has been moved to
+//   scss/_layer-order.scss. Compile ds-preview.scss for correct output.
+//
+// LAYER STACK (now declared in scss/_layer-order.scss — Phase 9.5):
 //   @layer tokens, base, utilities, components, themes, adapters;
 //
 //   Priority (lowest → highest cascade weight):

@@ -1,0 +1,30 @@
+// =============================================================================
+// LAYER ORDER DECLARATION
+// FILE: scss/_layer-order.scss
+//
+// PURPOSE:
+//   Declares the CSS @layer cascade priority for the entire design system.
+//   This is the SINGLE canonical source of the layer ordering statement.
+//
+//   This file must be the FIRST @use in the build entry point (ds-preview.scss)
+//   so that the ordering statement is the very first CSS emitted by the compiler.
+//   This guarantees deterministic layer priority regardless of import order issues.
+//
+// CASCADE PRIORITY (lowest → highest):
+//   tokens < base < utilities < components < themes < adapters
+//
+//   tokens     — Raw primitive + semantic CSS custom properties (never overridden)
+//   base       — Browser reset, root baseline, typography normalization
+//   utilities  — Atomic helper classes; low specificity by design
+//   components — Structural UI element styles (button, badge, card…)
+//   themes     — Primitive token overrides per [data-theme]; wins over components
+//   adapters   — Framework-specific bridges (Angular, PrimeNG…); highest priority
+//
+// RULES:
+//   - DO NOT add styles here. Only the @layer ordering statement.
+//   - DO NOT @use or @forward other files from here.
+//   - DO NOT duplicate this statement in any other SCSS file.
+//   - If a new layer is added to the system, it must be registered here first.
+// =============================================================================
+
+@layer tokens, base, utilities, components, themes, adapters;
