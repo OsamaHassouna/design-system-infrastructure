@@ -1,0 +1,19 @@
+// =============================================================================
+// ADAPTER: PrimeNG v18 — index (stub)
+// FILE:  adapters/primeng/v18/_index.scss
+//
+// PURPOSE:
+//   Stub for PrimeNG v18 adapter. Exposes an empty styles() mixin so that
+//   adapters/primeng/_index.scss can @use this module without errors.
+//
+// TODO:
+//   When PrimeNG v18 changes CSS variable names or selector structure,
+//   add component files (_button.scss, _card.scss, etc.) mirroring v17,
+//   with the updated selectors/token names, and call them here.
+//   Until then, v18 projects should use the v17 adapter as a baseline
+//   and override specific rules as needed.
+// =============================================================================
+
+@mixin styles() {
+  // Intentionally empty — v18 overrides to be added here when needed.
+}

@@ -11,13 +11,14 @@
 //   This guarantees deterministic layer priority regardless of import order issues.
 //
 // CASCADE PRIORITY (lowest → highest):
-//   tokens < base < utilities < components < themes < adapters
+//   tokens < base < utilities < components < themes < page < adapters
 //
 //   tokens     — Raw primitive + semantic CSS custom properties (never overridden)
 //   base       — Browser reset, root baseline, typography normalization
 //   utilities  — Atomic helper classes; low specificity by design
 //   components — Structural UI element styles (button, badge, card…)
 //   themes     — Primitive token overrides per [data-theme]; wins over components
+//   page       — Page/route-scoped overrides injected via <style> tag at runtime
 //   adapters   — Framework-specific bridges (Angular, PrimeNG…); highest priority
 //
 // RULES:
@@ -27,4 +28,4 @@
 //   - If a new layer is added to the system, it must be registered here first.
 // =============================================================================
 
-@layer tokens, base, utilities, components, themes, adapters;
+@layer tokens, base, utilities, components, themes, page, adapters;

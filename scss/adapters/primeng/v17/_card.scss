@@ -1,0 +1,62 @@
+// =============================================================================
+// ADAPTER: PrimeNG v17 — Card
+// FILE:  adapters/primeng/v17/_card.scss
+//
+// Maps DS --component-card-* tokens onto PrimeNG v17's .p-card element.
+//
+// PrimeNG v17 Card CSS tokens (Styled Mode):
+//   --p-card-background, --p-card-border-radius, --p-card-shadow, --p-card-color
+//   --p-card-body-padding
+//
+// RULES: Only --component-card-* — never --semantic-* / --primitive-*
+// =============================================================================
+
+@mixin styles() {
+
+  @layer adapters {
+
+    // =========================================================================
+    // PASS 1 — :root token override
+    // =========================================================================
+    :root {
+      --p-card-background:    var(--component-card-bg);
+      --p-card-border-radius: var(--component-card-border-radius);
+      --p-card-shadow:        var(--component-card-shadow);
+      --p-card-color:         var(--component-card-body-color);
+      --p-card-body-padding:  var(--component-card-body-padding-block)
+                              var(--component-card-body-padding-inline);
+    }
+
+    // =========================================================================
+    // PASS 2 — Structural class overrides
+    // =========================================================================
+    .p-card {
+      background:    var(--component-card-bg);
+      border-radius: var(--component-card-border-radius);
+      box-shadow:    var(--component-card-shadow);
+      color:         var(--component-card-body-color);
+      overflow:      hidden;
+    }
+
+    .p-card .p-card-body {
+      padding: var(--component-card-body-padding-block)
+               var(--component-card-body-padding-inline);
+    }
+
+    .p-card .p-card-title {
+      font-size:   var(--component-card-header-title-font-size);
+      font-weight: var(--component-card-header-title-font-weight);
+      color:       var(--component-card-header-title-color);
+    }
+
+    .p-card .p-card-subtitle {
+      color: var(--component-card-header-subtitle-color);
+    }
+
+    .p-card .p-card-footer {
+      padding-block: var(--component-card-footer-padding-block);
+    }
+
+  } // end @layer adapters
+
+} // end @mixin styles

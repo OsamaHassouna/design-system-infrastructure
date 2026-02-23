@@ -959,3 +959,94 @@
   font-size: 0.6875rem;
   padding:   0.3rem 0.5rem;
 }
+
+/* ── Phase 14 — Framework switcher ──────────────────────────────────────── */
+.pg-framework-switcher {
+  display:    flex;
+  gap:        0.375rem;
+  align-items: center;
+}
+
+.pg-framework-switcher .pg-theme-select:disabled {
+  opacity: 0.45;
+  cursor:  not-allowed;
+}
+
+/* ── Phase 14 — Adapter pane ────────────────────────────────────────────── */
+.pg-adapter-section {
+  margin-bottom: 1rem;
+}
+
+.pg-adapter-section__label {
+  font-size:     0.625rem;
+  font-weight:   700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color:         var(--semantic-color-text-subtle);
+  margin-bottom: 0.375rem;
+}
+
+.pg-adapter-section__code {
+  background:    var(--semantic-color-surface-overlay);
+  border:        1px solid var(--semantic-color-border-subtle);
+  border-radius: 4px;
+  padding:       0.5rem 0.625rem;
+  font-family:   var(--primitive-font-family-mono);
+  font-size:     0.6875rem;
+  line-height:   1.6;
+  color:         var(--semantic-color-text-default);
+  white-space:   pre-wrap;
+  word-break:    break-all;
+  margin:        0 0 0.375rem;
+}
+
+.pg-adapter-section__value {
+  font-size:  0.75rem;
+  color:      var(--semantic-color-text-default);
+  font-family: var(--primitive-font-family-mono);
+}
+
+/* Variant row */
+.pg-adapter-variant {
+  background:    var(--semantic-color-surface-default);
+  border:        1px solid var(--semantic-color-border-subtle);
+  border-radius: 6px;
+  padding:       0.5rem 0.625rem;
+  margin-bottom: 0.5rem;
+}
+
+.pg-adapter-variant__label {
+  font-size:     0.625rem;
+  font-weight:   600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color:         var(--semantic-color-text-brand);
+  margin-bottom: 0.25rem;
+}
+
+.pg-adapter-variant__code {
+  font-family: var(--primitive-font-family-mono);
+  font-size:   0.6875rem;
+  line-height: 1.6;
+  color:       var(--semantic-color-text-default);
+  white-space: pre-wrap;
+  word-break:  break-all;
+  margin:      0 0 0.375rem;
+  padding:     0;
+  background:  transparent;
+  border:      none;
+}
+
+.pg-adapter-variant__copy {
+  background:    transparent;
+  border:        1px solid var(--semantic-color-border-default);
+  border-radius: 4px;
+  color:         var(--semantic-color-text-subtle);
+  cursor:        pointer;
+  font-size:     0.625rem;
+  padding:       0.125rem 0.375rem;
+}
+.pg-adapter-variant__copy:hover {
+  background: var(--semantic-color-surface-overlay);
+  color:      var(--semantic-color-text-default);
+}

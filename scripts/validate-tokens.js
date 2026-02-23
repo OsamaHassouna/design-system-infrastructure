@@ -71,6 +71,24 @@ const ALLOWED_DEPS = {
   unknown   : ['primitive', 'semantic', 'component', 'base', 'unknown'],
 };
 
+/**
+ * Token name prefixes that belong to third-party / framework namespaces.
+ * These are defined by our adapter layer (e.g. --p-button-* for PrimeNG)
+ * and consumed by PrimeNG's own CSS engine at runtime — NOT by our own
+ * CSS rules. The validator has no visibility into PrimeNG's consumption,
+ * so without this list every adapter token would appear as an "orphan".
+ *
+ * Rules for adding a prefix here:
+ *   - Must be a known vendor namespace (--p-* = PrimeNG, --bs-* = Bootstrap, …)
+ *   - Must be defined in an @layer adapters block (never in tokens/components)
+ *   - Must reference only --component-* variables (adapter contract enforced)
+ */
+const VENDOR_TOKEN_PREFIXES = [
+  '--p-',   // PrimeNG (v17+)
+  '--bs-',  // Bootstrap (future)
+  '--mdc-', // Material Design Components (future)
+];
+
 // ─── 1. UTILITIES ─────────────────────────────────────────────────────────────
 
 /**
@@ -491,6 +509,9 @@ function findOrphans(tokenDefs, graph, ruleUsages) {
 
   const orphans = [];
   for (const name of tokenDefs.keys()) {
+    // Skip vendor-namespace tokens (--p-*, --bs-*, …) — they are consumed by
+    // third-party CSS engines at runtime and are invisible to our static analysis.
+    if (VENDOR_TOKEN_PREFIXES.some(prefix => name.startsWith(prefix))) continue;
     if (!referencedByTokens.has(name) && !ruleUsages.has(name)) {
       orphans.push(name);
     }

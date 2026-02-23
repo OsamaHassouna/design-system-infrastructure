@@ -8,12 +8,12 @@
 //            dist/ds-preview.min.css (compressed + autoprefixed)
 //
 // LAYER ORDER (enforced — see scss/_layer-order.scss):
-//   @layer tokens, base, utilities, components, themes, adapters;
+//   @layer tokens, base, utilities, components, themes, page, adapters;
 //
 //   Priority (lowest → highest cascade weight):
-//   ┌──────────────────────────────────────────────────────────────────┐
-//   │  tokens → base → utilities → components → themes → adapters      │
-//   └──────────────────────────────────────────────────────────────────┘
+//   ┌──────────────────────────────────────────────────────────────────────┐
+//   │  tokens → base → utilities → components → themes → page → adapters  │
+//   └──────────────────────────────────────────────────────────────────────┘
 //
 // IMPORT SEQUENCE — MUST NOT be changed:
 //

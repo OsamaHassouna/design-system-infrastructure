@@ -1,0 +1,276 @@
+// =============================================================================
+// ADAPTER: PrimeNG v17 — Button
+// FILE:  adapters/primeng/v17/_button.scss
+//
+// Maps DS --component-button-* tokens onto PrimeNG v17's .p-button element.
+// Two-pass strategy:
+//   Pass 1 — :root  → override --p-button-* CSS variables (PrimeNG styled mode)
+//   Pass 2 — class  → target .p-button selectors for state/size/variant gaps
+//
+// RULES (from adapter contract):
+//   • Only --component-button-* variables — never --semantic-* or --primitive-*
+//   • Only .p-button* selectors — never .ds-* or cross-adapter references
+//   • Removing this file leaves the DS core fully functional
+// =============================================================================
+
+@mixin styles() {
+
+  @layer adapters {
+
+    // =========================================================================
+    // PASS 1 — PrimeNG design-token override (:root, PrimeNG v17 Styled Mode)
+    // =========================================================================
+    :root {
+
+      // Structure — shared
+      --p-button-border-radius: var(--component-button-border-radius);
+      --p-button-border-width:  var(--component-button-border-width);
+      --p-button-border-style:  var(--component-button-border-style);
+      --p-button-transition:
+        background-color var(--component-button-transition-duration) var(--component-button-transition-easing),
+        border-color     var(--component-button-transition-duration) var(--component-button-transition-easing),
+        color            var(--component-button-transition-duration) var(--component-button-transition-easing),
+        box-shadow       var(--component-button-transition-duration) var(--component-button-transition-easing),
+        opacity          var(--component-button-transition-duration) var(--component-button-transition-easing);
+      --p-button-disabled-opacity: 0.6;
+
+      // Focus ring
+      --p-focus-ring-width:  var(--component-button-focus-ring-width);
+      --p-focus-ring-offset: var(--component-button-focus-ring-offset);
+      --p-focus-ring-color:  var(--component-button-focus-ring-color);
+      --p-focus-ring-style:  solid;
+
+      // Typography + spacing (md defaults)
+      --p-button-font-size:   var(--component-button-md-font-size);
+      --p-button-font-weight: var(--component-button-md-font-weight);
+      --p-button-gap:         var(--component-button-md-gap);
+      --p-button-padding-y:   var(--component-button-md-padding-block);
+      --p-button-padding-x:   var(--component-button-md-padding-inline);
+
+      // Variant: primary
+      --p-button-primary-background:              var(--component-button-primary-bg);
+      --p-button-primary-hover-background:        var(--component-button-primary-bg-hover);
+      --p-button-primary-active-background:       var(--component-button-primary-bg-active);
+      --p-button-primary-disabled-background:     var(--component-button-primary-bg-disabled);
+      --p-button-primary-color:                   var(--component-button-primary-color);
+      --p-button-primary-hover-color:             var(--component-button-primary-color);
+      --p-button-primary-active-color:            var(--component-button-primary-color);
+      --p-button-primary-disabled-color:          var(--component-button-primary-color-disabled);
+      --p-button-primary-border-color:            var(--component-button-primary-border-color);
+      --p-button-primary-hover-border-color:      var(--component-button-primary-border-color);
+      --p-button-primary-active-border-color:     var(--component-button-primary-border-color);
+      --p-button-primary-disabled-border-color:   var(--component-button-primary-border-color);
+
+      // Variant: secondary
+      --p-button-secondary-background:            var(--component-button-secondary-bg);
+      --p-button-secondary-hover-background:      var(--component-button-secondary-bg-hover);
+      --p-button-secondary-active-background:     var(--component-button-secondary-bg-active);
+      --p-button-secondary-disabled-background:   var(--component-button-secondary-bg-disabled);
+      --p-button-secondary-color:                 var(--component-button-secondary-color);
+      --p-button-secondary-hover-color:           var(--component-button-secondary-color);
+      --p-button-secondary-active-color:          var(--component-button-secondary-color);
+      --p-button-secondary-disabled-color:        var(--component-button-secondary-color-disabled);
+      --p-button-secondary-border-color:          var(--component-button-secondary-border-color);
+      --p-button-secondary-hover-border-color:    var(--component-button-secondary-border-color-hover);
+      --p-button-secondary-active-border-color:   var(--component-button-secondary-border-color-hover);
+      --p-button-secondary-disabled-border-color: var(--component-button-secondary-border-color-disabled);
+
+      // Variant: tertiary (PrimeNG [text] modifier)
+      --p-button-text-primary-color:              var(--component-button-tertiary-color);
+      --p-button-text-primary-hover-color:        var(--component-button-tertiary-color);
+      --p-button-text-primary-active-color:       var(--component-button-tertiary-color);
+      --p-button-text-primary-hover-background:   var(--component-button-tertiary-bg-hover);
+      --p-button-text-primary-active-background:  var(--component-button-tertiary-bg-active);
+
+      // Variant: ghost (PrimeNG [text][plain])
+      --p-button-text-plain-color:                var(--component-button-ghost-color);
+      --p-button-text-plain-hover-color:          var(--component-button-ghost-color);
+      --p-button-text-plain-active-color:         var(--component-button-ghost-color);
+      --p-button-text-plain-hover-background:     var(--component-button-ghost-bg-hover);
+      --p-button-text-plain-active-background:    var(--component-button-ghost-bg-active);
+
+      // Variant: danger
+      --p-button-danger-background:               var(--component-button-danger-bg);
+      --p-button-danger-hover-background:         var(--component-button-danger-bg-hover);
+      --p-button-danger-active-background:        var(--component-button-danger-bg-active);
+      --p-button-danger-disabled-background:      var(--component-button-danger-bg-disabled);
+      --p-button-danger-color:                    var(--component-button-danger-color);
+      --p-button-danger-hover-color:              var(--component-button-danger-color);
+      --p-button-danger-active-color:             var(--component-button-danger-color);
+      --p-button-danger-disabled-color:           var(--component-button-danger-color-disabled);
+      --p-button-danger-border-color:             var(--component-button-danger-border-color);
+      --p-button-danger-hover-border-color:       var(--component-button-danger-border-color);
+      --p-button-danger-active-border-color:      var(--component-button-danger-border-color);
+      --p-button-danger-disabled-border-color:    var(--component-button-danger-border-color);
+    }
+
+    // =========================================================================
+    // PASS 2 — Structural class overrides (.p-button selectors)
+    // =========================================================================
+
+    .p-button {
+      border-radius:  var(--component-button-border-radius);
+      border-width:   var(--component-button-border-width);
+      border-style:   var(--component-button-border-style);
+      letter-spacing: var(--component-button-letter-spacing);
+      line-height:    var(--component-button-line-height);
+      cursor:         pointer;
+      user-select:    none;
+      transition:
+        background-color var(--component-button-transition-duration) var(--component-button-transition-easing),
+        border-color     var(--component-button-transition-duration) var(--component-button-transition-easing),
+        color            var(--component-button-transition-duration) var(--component-button-transition-easing),
+        box-shadow       var(--component-button-transition-duration) var(--component-button-transition-easing),
+        opacity          var(--component-button-transition-duration) var(--component-button-transition-easing);
+
+      &:focus-visible {
+        outline:        var(--component-button-focus-ring-width) solid var(--component-button-focus-ring-color);
+        outline-offset: var(--component-button-focus-ring-offset);
+      }
+    }
+
+    // Primary
+    .p-button.p-button-primary,
+    .p-button:not([class*='p-button-']) {
+      background:   var(--component-button-primary-bg);
+      color:        var(--component-button-primary-color);
+      border-color: var(--component-button-primary-border-color);
+
+      &:hover:not(:disabled)  { background: var(--component-button-primary-bg-hover); }
+      &:active:not(:disabled) { background: var(--component-button-primary-bg-active); }
+      &:disabled, &.p-disabled {
+        background:   var(--component-button-primary-bg-disabled);
+        color:        var(--component-button-primary-color-disabled);
+      }
+    }
+
+    // Secondary (outlined)
+    .p-button.p-button-secondary {
+      background:   var(--component-button-secondary-bg);
+      color:        var(--component-button-secondary-color);
+      border-color: var(--component-button-secondary-border-color);
+
+      &:hover:not(:disabled)  {
+        background:   var(--component-button-secondary-bg-hover);
+        border-color: var(--component-button-secondary-border-color-hover);
+      }
+      &:active:not(:disabled) {
+        background:   var(--component-button-secondary-bg-active);
+        border-color: var(--component-button-secondary-border-color-hover);
+      }
+      &:disabled, &.p-disabled {
+        background:   var(--component-button-secondary-bg-disabled);
+        color:        var(--component-button-secondary-color-disabled);
+        border-color: var(--component-button-secondary-border-color-disabled);
+      }
+    }
+
+    // Tertiary (tonal → PrimeNG [text] + primary)
+    .p-button.p-button-text.p-button-primary {
+      background:   var(--component-button-tertiary-bg);
+      color:        var(--component-button-tertiary-color);
+      border-color: var(--component-button-tertiary-border-color);
+
+      &:hover:not(:disabled)  { background: var(--component-button-tertiary-bg-hover); }
+      &:active:not(:disabled) { background: var(--component-button-tertiary-bg-active); }
+      &:disabled, &.p-disabled {
+        background: var(--component-button-tertiary-bg-disabled);
+        color:      var(--component-button-tertiary-color-disabled);
+      }
+    }
+
+    // Ghost (PrimeNG [text][plain])
+    .p-button.p-button-text.p-button-plain {
+      background:   var(--component-button-ghost-bg);
+      color:        var(--component-button-ghost-color);
+      border-color: var(--component-button-ghost-border-color);
+
+      &:hover:not(:disabled)  { background: var(--component-button-ghost-bg-hover); }
+      &:active:not(:disabled) { background: var(--component-button-ghost-bg-active); }
+      &:disabled, &.p-disabled {
+        background: var(--component-button-ghost-bg-disabled);
+        color:      var(--component-button-ghost-color-disabled);
+      }
+    }
+
+    // Danger
+    .p-button.p-button-danger {
+      background:   var(--component-button-danger-bg);
+      color:        var(--component-button-danger-color);
+      border-color: var(--component-button-danger-border-color);
+
+      &:hover:not(:disabled)  { background: var(--component-button-danger-bg-hover); }
+      &:active:not(:disabled) { background: var(--component-button-danger-bg-active); }
+      &:disabled, &.p-disabled {
+        background: var(--component-button-danger-bg-disabled);
+        color:      var(--component-button-danger-color-disabled);
+      }
+    }
+
+    // Sizes
+    .p-button.p-button-sm {
+      padding-block:  var(--component-button-sm-padding-block);
+      padding-inline: var(--component-button-sm-padding-inline);
+      font-size:      var(--component-button-sm-font-size);
+      font-weight:    var(--component-button-sm-font-weight);
+      gap:            var(--component-button-sm-gap);
+      min-height:     var(--component-button-sm-min-height);
+    }
+    .p-button.p-button-md {
+      padding-block:  var(--component-button-md-padding-block);
+      padding-inline: var(--component-button-md-padding-inline);
+      font-size:      var(--component-button-md-font-size);
+      font-weight:    var(--component-button-md-font-weight);
+      gap:            var(--component-button-md-gap);
+      min-height:     var(--component-button-md-min-height);
+    }
+    .p-button.p-button-lg {
+      padding-block:  var(--component-button-lg-padding-block);
+      padding-inline: var(--component-button-lg-padding-inline);
+      font-size:      var(--component-button-lg-font-size);
+      font-weight:    var(--component-button-lg-font-weight);
+      gap:            var(--component-button-lg-gap);
+      min-height:     var(--component-button-lg-min-height);
+    }
+
+    // States
+    .p-button:disabled,
+    .p-button.p-disabled {
+      cursor:         not-allowed;
+      opacity:        0.6;
+      pointer-events: none;
+    }
+    .p-button.p-button-loading {
+      cursor:         wait;
+      pointer-events: none;
+      opacity:        0.8;
+    }
+    .p-button.p-button-loading .p-button-label {
+      transition: opacity var(--component-button-transition-duration)
+                          var(--component-button-transition-easing);
+      opacity: 0.15;
+    }
+    .p-button.p-button-loading .p-button-loading-icon {
+      width: 1em;
+      height: 1em;
+    }
+
+    // Icon slot
+    .p-button .p-button-icon {
+      display:     inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+      width:       1em;
+      height:      1em;
+    }
+
+    // Icon-only
+    .p-button.p-button-icon-only {
+      padding-inline: var(--component-button-md-padding-block);
+      &.p-button-sm { padding-inline: var(--component-button-sm-padding-block); }
+      &.p-button-lg { padding-inline: var(--component-button-lg-padding-block); }
+    }
+
+  } // end @layer adapters
+
+} // end @mixin styles

@@ -1,0 +1,35 @@
+// =============================================================================
+// PRIMENG VERSION SWITCH
+// FILE: scss/config/_primeng-version.scss
+//
+// PURPOSE:
+//   Declares the PrimeNG major version targeted by the adapter layer.
+//   Changing this value selects a different set of adapter overrides at
+//   build time — no runtime switching, no dead CSS in production.
+//
+// USAGE:
+//   Override at build time:
+//     sass --load-path=scss \
+//          --style=expanded \
+//          --defines "primeng-version=18" \
+//          scss/ds-preview.scss dist/ds-preview.css
+//
+//   Or set directly before building:
+//     Edit this file → change $primeng-version → npm run build
+//
+// SUPPORTED VALUES: 17, 18, 19, 20
+//   17 — Full overrides (Button, Card, InputText, Badge, Dialog)
+//   18 — Stub (same API; add overrides when PrimeNG v18 differs)
+//   19 — Stub
+//   20 — Stub
+//
+// ARCHITECTURE NOTE:
+//   Dart Sass prohibits @use / @forward inside @if control blocks.
+//   Version switching is therefore implemented via @mixin + @include:
+//     Each version module exposes a styles() mixin.
+//     adapters/primeng/_index.scss @includes the selected version only.
+//   The unselected versions are @used (imported) but their styles() mixins
+//   are never called — Dart Sass tree-shakes unused mixins → zero dead CSS.
+// =============================================================================
+
+$primeng-version: 17 !default;

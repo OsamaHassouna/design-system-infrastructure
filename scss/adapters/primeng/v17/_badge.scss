@@ -1,0 +1,73 @@
+// =============================================================================
+// ADAPTER: PrimeNG v17 — Badge
+// FILE:  adapters/primeng/v17/_badge.scss
+//
+// Maps DS --component-badge-* tokens onto PrimeNG v17's .p-badge element.
+//
+// PrimeNG v17 Badge class mapping:
+//   Default (info)            → .p-badge
+//   Severity success          → .p-badge-success
+//   Severity warning          → .p-badge-warning
+//   Severity danger           → .p-badge-danger
+//   Severity secondary/info   → .p-badge-secondary / .p-badge-info
+//
+// RULES: Only --component-badge-* — never --semantic-* / --primitive-*
+// =============================================================================
+
+@mixin styles() {
+
+  @layer adapters {
+
+    // =========================================================================
+    // PASS 1 — :root token override
+    // =========================================================================
+    :root {
+      --p-badge-border-radius:   var(--component-badge-border-radius);
+      --p-badge-font-size:       var(--component-badge-md-font-size);
+      --p-badge-font-weight:     var(--component-badge-font-weight);
+      --p-badge-padding:         var(--component-badge-md-padding-block)
+                                 var(--component-badge-md-padding-inline);
+
+      // Severity tokens (filled mode)
+      --p-badge-primary-background:   var(--component-badge-info-bg);
+      --p-badge-primary-color:        var(--component-badge-info-color);
+      --p-badge-success-background:   var(--component-badge-success-bg);
+      --p-badge-success-color:        var(--component-badge-success-color);
+      --p-badge-warning-background:   var(--component-badge-warning-bg);
+      --p-badge-warning-color:        var(--component-badge-warning-color);
+      --p-badge-danger-background:    var(--component-badge-danger-bg);
+      --p-badge-danger-color:         var(--component-badge-danger-color);
+      --p-badge-secondary-background: var(--component-badge-neutral-bg);
+      --p-badge-secondary-color:      var(--component-badge-neutral-color);
+    }
+
+    // =========================================================================
+    // PASS 2 — Structural class overrides
+    // =========================================================================
+    .p-badge {
+      background:    var(--component-badge-info-bg);
+      color:         var(--component-badge-info-color);
+      border-radius: var(--component-badge-border-radius);
+      font-size:     var(--component-badge-md-font-size);
+      font-weight:   var(--component-badge-font-weight);
+      padding:       var(--component-badge-md-padding-block)
+                     var(--component-badge-md-padding-inline);
+    }
+
+    .p-badge-success   { background: var(--component-badge-success-bg);  color: var(--component-badge-success-color); }
+    .p-badge-warning   { background: var(--component-badge-warning-bg);  color: var(--component-badge-warning-color); }
+    .p-badge-danger    { background: var(--component-badge-danger-bg);   color: var(--component-badge-danger-color);  }
+    .p-badge-secondary { background: var(--component-badge-neutral-bg);  color: var(--component-badge-neutral-color); }
+
+    // PrimeNG dot badge (.p-badge-dot) — no text, circular indicator
+    .p-badge-dot {
+      width:         var(--component-badge-md-dot-size);
+      height:        var(--component-badge-md-dot-size);
+      border-radius: 50%;
+      padding:       0;
+      min-width:     unset;
+    }
+
+  } // end @layer adapters
+
+} // end @mixin styles

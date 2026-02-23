@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DS Preview &amp; Playground — Phase 13</title>
+  <title>DS Preview &amp; Playground — Phase 14</title>
   <link rel="stylesheet" href="css/ds-preview.css">
   <link rel="stylesheet" href="css/playground.css">
   <!--
@@ -34,11 +34,34 @@
       <div class="pg-topbar__logo-mark" aria-hidden="true">DS</div>
       <div>
         <div class="pg-topbar__title">Design System</div>
-        <div class="pg-topbar__subtitle">Preview &amp; Playground — Phase 13</div>
+        <div class="pg-topbar__subtitle">Preview &amp; Playground — Phase 14</div>
       </div>
     </div>
 
     <div class="pg-topbar__controls">
+      <!-- Framework switcher — Phase 14 -->
+      <div class="pg-framework-switcher" id="pg-framework-switcher" role="group" aria-label="Framework and library selection">
+        <label class="sr-only" for="pg-framework-select">Framework</label>
+        <select id="pg-framework-select" class="pg-theme-select" aria-label="Select framework" title="Framework">
+          <option value="html">HTML</option>
+          <option value="angular">Angular</option>
+        </select>
+
+        <label class="sr-only" for="pg-library-select">Component library</label>
+        <select id="pg-library-select" class="pg-theme-select" aria-label="Select component library" title="Library" disabled>
+          <option value="none">No library</option>
+          <option value="primeng">PrimeNG</option>
+        </select>
+
+        <label class="sr-only" for="pg-version-select">Library version</label>
+        <select id="pg-version-select" class="pg-theme-select" aria-label="Select library version" title="Version" disabled>
+          <option value="17">v17</option>
+          <option value="18">v18</option>
+          <option value="19">v19</option>
+          <option value="20">v20</option>
+        </select>
+      </div>
+
       <label class="sr-only" for="pg-theme-select">Theme</label>
       <select id="pg-theme-select" class="pg-theme-select" aria-label="Select theme">
         <option value="light">☀️ Light</option>
@@ -60,6 +83,12 @@
           <li role="none"><button role="menuitem" data-export="scss">_user-theme.scss</button></li>
           <li role="none"><button role="menuitem" data-export="json">overrides.json</button></li>
           <li role="none"><button role="menuitem" data-export="page">page.css</button></li>
+          <li role="none" id="pg-export-adapter-item" hidden>
+            <button role="menuitem" data-export="adapter">primeng-adapter.css</button>
+          </li>
+          <li role="none" id="pg-export-readme-item" hidden>
+            <button role="menuitem" data-export="readme">README.txt</button>
+          </li>
         </ul>
       </div>
     </div>
@@ -93,6 +122,7 @@
       <span class="pg-sidebar__section-label">Layer stack</span>
       <div style="font-size:0.625rem;line-height:1.9;font-family:var(--primitive-font-family-mono);color:var(--semantic-color-text-subtle);padding:0 0.375rem;">
         <div style="color:var(--semantic-color-text-disabled);">adapters</div>
+        <div style="color:var(--semantic-color-text-subtle);">page</div>
         <div style="color:var(--semantic-color-text-subtle);">themes</div>
         <div style="color:var(--semantic-color-text-default);font-weight:600;">components ◀ preview</div>
         <div style="color:var(--semantic-color-text-subtle);">utilities</div>
@@ -139,6 +169,9 @@
       </button>
       <button class="pg-panel__tab" type="button" role="tab" data-tab="pages" aria-selected="false" id="tab-pages">
         Pages
+      </button>
+      <button class="pg-panel__tab" type="button" role="tab" data-tab="adapter" aria-selected="false" id="tab-adapter">
+        Adapter
       </button>
     </div>
 
@@ -189,6 +222,13 @@
     <div class="pg-panel__pane" data-pane="pages" role="tabpanel" aria-labelledby="tab-pages">
       <div id="pg-pages-pane">
         <!-- Populated by playground.js renderPagesPane() -->
+      </div>
+    </div>
+
+    <!-- Adapter pane — Phase 14 -->
+    <div class="pg-panel__pane" data-pane="adapter" role="tabpanel" aria-labelledby="tab-adapter">
+      <div id="pg-adapter-pane">
+        <!-- Populated by playground.js renderAdapterPane() -->
       </div>
     </div>
 

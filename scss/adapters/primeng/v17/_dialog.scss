@@ -1,0 +1,41 @@
+// =============================================================================
+// ADAPTER: PrimeNG v17 — Dialog (stub)
+// FILE:  adapters/primeng/v17/_dialog.scss
+//
+// STATUS: Stub — no DS Modal/Dialog component variables exist yet.
+//
+// TO ACTIVATE:
+//   1. Create scss/components/modal/_modal.variables.scss declaring
+//      --component-modal-* custom properties following the 3-tier chain.
+//   2. Register the component in component.registry.json.
+//   3. Replace this stub with the full mapping (see template below).
+//
+// TEMPLATE (uncomment when --component-modal-* tokens are defined):
+//
+//   :root {
+//     --p-overlay-modal-background:     var(--component-modal-bg);
+//     --p-overlay-modal-border-radius:  var(--component-modal-border-radius);
+//     --p-overlay-modal-shadow:         var(--component-modal-shadow);
+//     --p-overlay-modal-padding:        var(--component-modal-body-padding);
+//     --p-overlay-modal-header-padding: var(--component-modal-header-padding);
+//     --p-overlay-modal-footer-padding: var(--component-modal-footer-padding);
+//     --p-overlay-modal-mask-background: var(--component-modal-backdrop);
+//   }
+//   .p-dialog {
+//     background:    var(--component-modal-bg);
+//     border-radius: var(--component-modal-border-radius);
+//     box-shadow:    var(--component-modal-shadow);
+//     color:         var(--component-modal-color);
+//   }
+//   .p-dialog .p-dialog-header { padding: var(--component-modal-header-padding); }
+//   .p-dialog .p-dialog-content { padding: var(--component-modal-body-padding); }
+//   .p-dialog .p-dialog-footer  { padding: var(--component-modal-footer-padding); }
+//   .p-overlay-mask { background: var(--component-modal-backdrop); }
+//
+// RULES: Only --component-modal-* — never --semantic-* / --primitive-*
+// =============================================================================
+
+@mixin styles() {
+  // Intentionally empty until the DS modal component is created.
+  // See template in file header to activate.
+}

@@ -1,24 +1,48 @@
 // =============================================================================
-// LAYER: adapters / primeng
+// ADAPTER: PrimeNG — version router
 // FILE:  adapters/primeng/_index.scss
 //
 // PURPOSE:
-//   Barrel entry point for the PrimeNG adapter.
-//   Import this directory to apply DS → PrimeNG token mappings.
+//   Reads $primeng-version from scss/config/_primeng-version.scss and routes
+//   to the correct versioned adapter directory.
 //
-// CONTENTS:
-//   _primeng.adapter.scss  — full PrimeNG button (and future component) bridge
+// BUILD-TIME VERSION SWITCH:
+//   Change $primeng-version in scss/config/_primeng-version.scss then rebuild.
+//   Dart Sass prohibits @use / @forward inside @if control blocks, so each
+//   version module exposes a styles() mixin. Only the selected version's
+//   mixin is called — Dart Sass emits no CSS for uncalled mixins.
 //
-// USAGE:
-//   Consumed by adapters/_index.scss for the monolithic build.
-//   For PrimeNG-only builds, import this file directly:
-//     @use 'scss/adapters/primeng';
+// SUPPORTED VERSIONS:
+//   17 — Full overrides (Button, Card, InputText, Badge, Dialog)
+//   18 — Stub (empty styles(); extend as needed)
+//   19 — Stub
+//   20 — Stub
 //
-// ADAPTER CONTRACT SUMMARY:
-//   • Only --component-* variables are referenced (never --semantic-* / --primitive-*).
-//   • Only PrimeNG vendor selectors/tokens are targeted (never DS .ds-* classes).
-//   • Removing this entire directory leaves the core DS unaffected.
-//   • Theme switching works automatically — no adapter changes required.
+// ADAPTER CONTRACT (summary):
+//   • References only --component-* variables
+//   • Targets only PrimeNG vendor selectors (.p-*)
+//   • Removing this directory leaves the DS core unaffected
+//   • Theme switching is automatic — no adapter changes required
 // =============================================================================
 
-@use 'primeng.adapter';
+@use '../../config/primeng-version' as config;
+
+// @use all versions upfront (required by Dart Sass — @use must be at top level)
+// Only the selected version's styles() mixin will be @included below.
+@use 'v17';
+@use 'v18';
+@use 'v19';
+@use 'v20';
+
+// Version dispatch — exactly one @include fires at build time
+@if config.$primeng-version == 17 {
+  @include v17.styles();
+} @else if config.$primeng-version == 18 {
+  @include v18.styles();
+} @else if config.$primeng-version == 19 {
+  @include v19.styles();
+} @else if config.$primeng-version == 20 {
+  @include v20.styles();
+} @else {
+  @warn "Unknown PrimeNG version: #{config.$primeng-version}. Set \$primeng-version to 17, 18, 19, or 20 in scss/config/_primeng-version.scss.";
+}

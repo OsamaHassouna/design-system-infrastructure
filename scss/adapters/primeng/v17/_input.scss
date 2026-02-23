@@ -1,0 +1,45 @@
+// =============================================================================
+// ADAPTER: PrimeNG v17 — InputText (stub)
+// FILE:  adapters/primeng/v17/_input.scss
+//
+// STATUS: Stub — no DS InputText component variables exist yet.
+//
+// TO ACTIVATE:
+//   1. Create scss/components/input/_input.variables.scss declaring
+//      --component-input-* custom properties following the 3-tier chain.
+//   2. Register the component in component.registry.json.
+//   3. Replace this stub with the full mapping (see template below).
+//
+// TEMPLATE (uncomment when --component-input-* tokens are defined):
+//
+//   :root {
+//     --p-inputtext-background:         var(--component-input-bg);
+//     --p-inputtext-color:              var(--component-input-color);
+//     --p-inputtext-border-color:       var(--component-input-border-color);
+//     --p-inputtext-hover-border-color: var(--component-input-border-color-hover);
+//     --p-inputtext-focus-border-color: var(--component-input-border-color-focus);
+//     --p-inputtext-border-radius:      var(--component-input-border-radius);
+//     --p-inputtext-padding-y:          var(--component-input-padding-block);
+//     --p-inputtext-padding-x:          var(--component-input-padding-inline);
+//     --p-inputtext-font-size:          var(--component-input-font-size);
+//   }
+//   .p-inputtext {
+//     background:     var(--component-input-bg);
+//     color:          var(--component-input-color);
+//     border-color:   var(--component-input-border-color);
+//     border-radius:  var(--component-input-border-radius);
+//     padding-block:  var(--component-input-padding-block);
+//     padding-inline: var(--component-input-padding-inline);
+//     font-size:      var(--component-input-font-size);
+//     &:hover:not(:disabled)  { border-color: var(--component-input-border-color-hover); }
+//     &:focus:not(:disabled)  { border-color: var(--component-input-border-color-focus); outline: none; }
+//     &:disabled { background: var(--component-input-bg-disabled); color: var(--component-input-color-disabled); }
+//   }
+//
+// RULES: Only --component-input-* — never --semantic-* / --primitive-*
+// =============================================================================
+
+@mixin styles() {
+  // Intentionally empty until the DS input component is created.
+  // See template in file header to activate.
+}

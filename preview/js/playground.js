@@ -36,6 +36,10 @@
     overrides:       {},          // { varName: value }
     originals:       {},          // { varName: originalComputedValue }
     pageCSS:         '',          // user page-level CSS (Pages pane)
+    // Phase 14 — framework switcher
+    framework:       'html',      // 'html' | 'angular'
+    library:         'none',      // 'none' | 'primeng'
+    libraryVersion:  '17',        // '17' | '18' | '19' | '20'
   };
 
   /* ── DOM refs ───────────────────────────────────────────────────────────── */
@@ -47,6 +51,7 @@
   let docsPane;
   let diffPane;
   let pagesPane;
+  let adapterPane;
   let toast;
 
   /* ────────────────────────────────────────────────────────────────────────
@@ -61,6 +66,7 @@
     docsPane         = document.getElementById('pg-docs-pane');
     diffPane         = document.getElementById('pg-diff-pane');
     pagesPane        = document.getElementById('pg-pages-pane');
+    adapterPane      = document.getElementById('pg-adapter-pane');
     toast            = document.getElementById('pg-toast');
 
     // Navigation
@@ -68,10 +74,40 @@
       btn.addEventListener('click', () => navigateTo(btn.dataset.nav));
     });
 
-    // Theme selector (replaces toggle button)
+    // Theme selector
     if (themeSelect) {
       themeSelect.value = state.activeTheme;
       themeSelect.addEventListener('change', () => applyTheme(themeSelect.value));
+    }
+
+    // Framework switcher — Phase 14
+    const frameworkSelect = document.getElementById('pg-framework-select');
+    const librarySelect   = document.getElementById('pg-library-select');
+    const versionSelect   = document.getElementById('pg-version-select');
+    if (frameworkSelect) {
+      frameworkSelect.addEventListener('change', () => {
+        state.framework = frameworkSelect.value;
+        const isPrimeNG = state.framework === 'angular' && state.library === 'primeng';
+        if (librarySelect) librarySelect.disabled = state.framework !== 'angular';
+        if (versionSelect) versionSelect.disabled = !isPrimeNG;
+        updateAdapterExportItems();
+        renderAdapterPane();
+      });
+    }
+    if (librarySelect) {
+      librarySelect.addEventListener('change', () => {
+        state.library = librarySelect.value;
+        const isPrimeNG = state.library === 'primeng';
+        if (versionSelect) versionSelect.disabled = !isPrimeNG;
+        updateAdapterExportItems();
+        renderAdapterPane();
+      });
+    }
+    if (versionSelect) {
+      versionSelect.addEventListener('change', () => {
+        state.libraryVersion = versionSelect.value;
+        renderAdapterPane();
+      });
     }
 
     // Panel tabs
@@ -105,10 +141,12 @@
           exportMenu.hidden = true;
           exportBtn.setAttribute('aria-expanded', 'false');
           const type = item.dataset.export;
-          if (type === 'css')   exportCSS();
-          if (type === 'scss')  exportSCSS();
-          if (type === 'json')  exportJSON();
-          if (type === 'page')  exportPageCSS();
+          if (type === 'css')     exportCSS();
+          if (type === 'scss')    exportSCSS();
+          if (type === 'json')    exportJSON();
+          if (type === 'page')    exportPageCSS();
+          if (type === 'adapter') exportAdapterCSS();
+          if (type === 'readme')  exportREADME();
         });
       });
     }
@@ -165,7 +203,8 @@
     document.querySelectorAll('[data-pane]').forEach(pane => {
       pane.classList.toggle('is-active', pane.dataset.pane === tabId);
     });
-    if (tabId === 'diff') renderDiffPane();
+    if (tabId === 'diff')    renderDiffPane();
+    if (tabId === 'adapter') renderAdapterPane();
   }
 
   /* ────────────────────────────────────────────────────────────────────────
@@ -503,6 +542,94 @@
     showToast('page.css downloaded!');
   }
 
+  function exportAdapterCSS() {
+    const isPrimeNG = state.framework === 'angular' && state.library === 'primeng';
+    if (!isPrimeNG) {
+      showToast('Select Angular + PrimeNG to export the adapter CSS.');
+      return;
+    }
+    if (Object.keys(state.overrides).length === 0) {
+      showToast('No token overrides — edit tokens in the Playground tab first.');
+      return;
+    }
+    const v = state.libraryVersion;
+    const lines = [
+      `/* ================================================================`,
+      `   DS PLAYGROUND — PRIMENG v${v} ADAPTER OVERRIDE`,
+      `   Generated: ${new Date().toISOString()}`,
+      `   Component: ${state.activeComponent}`,
+      `   Theme: ${state.activeTheme}`,
+      `   ================================================================ */`,
+      ``,
+      `/* Load order: PrimeNG theme → ds-preview.css → user-theme.css → this file */`,
+      ``,
+      `@layer adapters {`,
+      `  :root {`,
+    ];
+    Object.entries(state.overrides).forEach(([name, val]) => {
+      lines.push(`    ${name}: ${val};`);
+    });
+    lines.push(`  }`, `}`);
+    downloadText(lines.join('\n'), 'primeng-adapter.css', 'text/css');
+    showToast('primeng-adapter.css downloaded!');
+  }
+
+  function exportREADME() {
+    const isPrimeNG = state.framework === 'angular' && state.library === 'primeng';
+    if (!isPrimeNG) {
+      showToast('Select Angular + PrimeNG to export the README.');
+      return;
+    }
+    const v = state.libraryVersion;
+    const lines = [
+      `DS PLAYGROUND — INTEGRATION README`,
+      `Generated: ${new Date().toISOString()}`,
+      ``,
+      `FILES IN THIS EXPORT`,
+      `────────────────────`,
+      `  user-theme.css        — Your custom DS token overrides`,
+      `  primeng-adapter.css   — PrimeNG v${v} adapter overrides (your token changes reflected)`,
+      ``,
+      `INSTALLATION STEPS`,
+      `──────────────────`,
+      `1. Install PrimeNG v${v}:`,
+      `   npm install primeng@${v}`,
+      ``,
+      `2. In your Angular app's styles (angular.json or styles.scss), import in this order:`,
+      ``,
+      `   /* 1. PrimeNG base theme — must load FIRST */`,
+      `   @import "primeng/resources/themes/lara-light-blue/theme.css";`,
+      `   @import "primeng/resources/primeng.css";`,
+      ``,
+      `   /* 2. Design System core — tokens + components + themes */`,
+      `   @import "path/to/ds-preview.css";`,
+      ``,
+      `   /* 3. Your custom token overrides */`,
+      `   @import "path/to/user-theme.css";`,
+      ``,
+      `   /* 4. PrimeNG adapter — MUST be last (highest cascade layer) */`,
+      `   @import "path/to/primeng-adapter.css";`,
+      ``,
+      `ARCHITECTURE`,
+      `────────────`,
+      `  Token flow:  primitives → semantics → components → adapters`,
+      `  Layer order: tokens | base | utilities | components | themes | page | adapters`,
+      ``,
+      `  PrimeNG adapter overrides sit in @layer adapters — they automatically win`,
+      `  over all DS layers without needing !important.`,
+      ``,
+      `  Theme switching: apply data-theme="dark" to <html> or any ancestor.`,
+      `  PrimeNG components update automatically — no adapter code changes needed.`,
+      ``,
+      `DS PLAYGROUND`,
+      `─────────────`,
+      `  Open preview/index.html to continue editing tokens live.`,
+      `  Re-export when satisfied with the result.`,
+    ];
+    downloadText(lines.join('\n'), 'README.txt', 'text/plain');
+    showToast('README.txt downloaded!');
+  }
+
   function downloadText(text, filename, mimeType) {
     const blob = new Blob([text], { type: mimeType });
     const url  = URL.createObjectURL(blob);
@@ -762,6 +889,116 @@
   }
 
   /* ────────────────────────────────────────────────────────────────────────
+     ADAPTER PANE  (Phase 14)
+  ──────────────────────────────────────────────────────────────────────── */
+
+  /**
+   * Show/hide the adapter + readme export items in the export dropdown
+   * based on whether Angular + PrimeNG is currently selected.
+   */
+  function updateAdapterExportItems() {
+    const isPrimeNG = state.framework === 'angular' && state.library === 'primeng';
+    const adapterItem = document.getElementById('pg-export-adapter-item');
+    const readmeItem  = document.getElementById('pg-export-readme-item');
+    if (adapterItem) adapterItem.hidden = !isPrimeNG;
+    if (readmeItem)  readmeItem.hidden  = !isPrimeNG;
+  }
+
+  /**
+   * Render the Adapter panel for the active component and framework selection.
+   * Shows HTML snippet for HTML mode; shows PrimeNG Angular markup for Angular+PrimeNG.
+   */
+  function renderAdapterPane() {
+    if (!adapterPane) return;
+
+    const compId   = state.activeComponent;
+    const registry = window.DS_REGISTRY && window.DS_REGISTRY.components;
+    const compMeta = registry && registry[compId];
+    const isPrimeNG = state.framework === 'angular' && state.library === 'primeng';
+
+    if (!compMeta) {
+      adapterPane.innerHTML = '<p class="pg-playground-intro">No component metadata.</p>';
+      return;
+    }
+
+    if (!isPrimeNG) {
+      adapterPane.innerHTML = `
+        <div class="pg-playground-intro">
+          Select <strong>Angular</strong> + <strong>PrimeNG</strong> in the top bar
+          to view adapter snippets and framework-specific HTML.
+        </div>
+        <div class="pg-adapter-section">
+          <div class="pg-adapter-section__label">Framework</div>
+          <div class="pg-adapter-section__value">${escHtml(state.framework.toUpperCase())}</div>
+        </div>`;
+      return;
+    }
+
+    const adapterMeta = compMeta.adapters &&
+                        compMeta.adapters.primeng &&
+                        compMeta.adapters.primeng[`v${state.libraryVersion}`];
+
+    if (!adapterMeta) {
+      adapterPane.innerHTML = `
+        <p class="pg-playground-intro">
+          No PrimeNG v${escHtml(state.libraryVersion)} adapter snippet for
+          <strong>${escHtml(compMeta.name || compId)}</strong>.
+          This component may not have a PrimeNG equivalent, or the mapping
+          is pending implementation.
+        </p>`;
+      return;
+    }
+
+    const variantKeys = Object.keys(adapterMeta.variants || {});
+    const variantRows = variantKeys.map(key => `
+      <div class="pg-adapter-variant">
+        <div class="pg-adapter-variant__label">${escHtml(key)}</div>
+        <pre class="pg-adapter-variant__code">${escHtml(adapterMeta.variants[key])}</pre>
+        <button class="pg-adapter-variant__copy"
+                data-adapter-copy="${escHtml(adapterMeta.variants[key])}"
+                type="button">⎘ Copy</button>
+      </div>`).join('');
+
+    adapterPane.innerHTML = `
+      <div class="pg-playground-intro">
+        <strong>PrimeNG v${escHtml(state.libraryVersion)}</strong> adapter snippets for
+        <strong>${escHtml(compMeta.name || compId)}</strong>.
+        Token overrides apply automatically — theme switching works without adapter changes.
+      </div>
+
+      <div class="pg-adapter-section">
+        <div class="pg-adapter-section__label">NgModule import</div>
+        <pre class="pg-adapter-section__code">${escHtml(adapterMeta.import)}</pre>
+      </div>
+
+      <div class="pg-adapter-section">
+        <div class="pg-adapter-section__label">Module name</div>
+        <div class="pg-adapter-section__value">${escHtml(adapterMeta.module)}</div>
+      </div>
+
+      ${adapterMeta.notes ? `
+      <div class="pg-adapter-section">
+        <div class="pg-adapter-section__label">Notes</div>
+        <div class="pg-adapter-section__value" style="font-size:0.75rem;line-height:1.6;">${escHtml(adapterMeta.notes)}</div>
+      </div>` : ''}
+
+      <div class="pg-adapter-section">
+        <div class="pg-adapter-section__label">HTML snippets</div>
+        ${variantRows}
+      </div>`;
+
+    // Wire copy buttons
+    adapterPane.querySelectorAll('[data-adapter-copy]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        navigator.clipboard?.writeText(btn.dataset.adapterCopy).then(() => {
+          btn.textContent = '✓ Copied!';
+          setTimeout(() => { btn.textContent = '⎘ Copy'; }, 1800);
+        });
+      });
+    });
+  }
+
+  /* ────────────────────────────────────────────────────────────────────────
      TIER VALIDATION
   ──────────────────────────────────────────────────────────────────────── */
   /**
@@ -893,11 +1130,15 @@
     applyPageCSS,
     // Diff
     renderDiffPane,
+    // Adapter (Phase 14)
+    renderAdapterPane,
     // Export
     exportCSS,
     exportSCSS,
     exportJSON,
     exportPageCSS,
+    exportAdapterCSS,
+    exportREADME,
     // Validation
     validateTokenTier,
   };

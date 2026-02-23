@@ -1,4 +1,4 @@
-@layer tokens, base, utilities, components, themes, adapters;
+@layer tokens, base, utilities, components, themes, page, adapters;
 @layer tokens {
   :root {
     --primitive-color-neutral-0: #ffffff;
@@ -1434,19 +1434,16 @@
   .p-button.p-button-primary:hover:not(:disabled),
   .p-button:not([class*=p-button-]):hover:not(:disabled) {
     background: var(--component-button-primary-bg-hover);
-    border-color: var(--component-button-primary-border-color);
   }
   .p-button.p-button-primary:active:not(:disabled),
   .p-button:not([class*=p-button-]):active:not(:disabled) {
     background: var(--component-button-primary-bg-active);
-    border-color: var(--component-button-primary-border-color);
   }
   .p-button.p-button-primary:disabled, .p-button.p-button-primary.p-disabled,
   .p-button:not([class*=p-button-]):disabled,
   .p-button:not([class*=p-button-]).p-disabled {
     background: var(--component-button-primary-bg-disabled);
     color: var(--component-button-primary-color-disabled);
-    border-color: var(--component-button-primary-border-color);
   }
   .p-button.p-button-secondary {
     background: var(--component-button-secondary-bg);
@@ -1473,16 +1470,13 @@
   }
   .p-button.p-button-text.p-button-primary:hover:not(:disabled) {
     background: var(--component-button-tertiary-bg-hover);
-    border-color: var(--component-button-tertiary-border-color);
   }
   .p-button.p-button-text.p-button-primary:active:not(:disabled) {
     background: var(--component-button-tertiary-bg-active);
-    border-color: var(--component-button-tertiary-border-color);
   }
   .p-button.p-button-text.p-button-primary:disabled, .p-button.p-button-text.p-button-primary.p-disabled {
     background: var(--component-button-tertiary-bg-disabled);
     color: var(--component-button-tertiary-color-disabled);
-    border-color: var(--component-button-tertiary-border-color);
   }
   .p-button.p-button-text.p-button-plain {
     background: var(--component-button-ghost-bg);
@@ -1491,16 +1485,13 @@
   }
   .p-button.p-button-text.p-button-plain:hover:not(:disabled) {
     background: var(--component-button-ghost-bg-hover);
-    border-color: var(--component-button-ghost-border-color);
   }
   .p-button.p-button-text.p-button-plain:active:not(:disabled) {
     background: var(--component-button-ghost-bg-active);
-    border-color: var(--component-button-ghost-border-color);
   }
   .p-button.p-button-text.p-button-plain:disabled, .p-button.p-button-text.p-button-plain.p-disabled {
     background: var(--component-button-ghost-bg-disabled);
     color: var(--component-button-ghost-color-disabled);
-    border-color: var(--component-button-ghost-border-color);
   }
   .p-button.p-button-danger {
     background: var(--component-button-danger-bg);
@@ -1509,16 +1500,13 @@
   }
   .p-button.p-button-danger:hover:not(:disabled) {
     background: var(--component-button-danger-bg-hover);
-    border-color: var(--component-button-danger-border-color);
   }
   .p-button.p-button-danger:active:not(:disabled) {
     background: var(--component-button-danger-bg-active);
-    border-color: var(--component-button-danger-border-color);
   }
   .p-button.p-button-danger:disabled, .p-button.p-button-danger.p-disabled {
     background: var(--component-button-danger-bg-disabled);
     color: var(--component-button-danger-color-disabled);
-    border-color: var(--component-button-danger-border-color);
   }
   .p-button.p-button-sm {
     padding-block: var(--component-button-sm-padding-block);
@@ -1554,7 +1542,6 @@
     cursor: wait;
     pointer-events: none;
     opacity: 0.8;
-    position: relative;
   }
   .p-button.p-button-loading .p-button-label {
     transition: opacity var(--component-button-transition-duration) var(--component-button-transition-easing);
@@ -1579,5 +1566,86 @@
   }
   .p-button.p-button-icon-only.p-button-lg {
     padding-inline: var(--component-button-lg-padding-block);
+  }
+}
+@layer adapters {
+  :root {
+    --p-card-background: var(--component-card-bg);
+    --p-card-border-radius: var(--component-card-border-radius);
+    --p-card-shadow: var(--component-card-shadow);
+    --p-card-color: var(--component-card-body-color);
+    --p-card-body-padding: var(--component-card-body-padding-block)
+                            var(--component-card-body-padding-inline);
+  }
+  .p-card {
+    background: var(--component-card-bg);
+    border-radius: var(--component-card-border-radius);
+    box-shadow: var(--component-card-shadow);
+    color: var(--component-card-body-color);
+    overflow: hidden;
+  }
+  .p-card .p-card-body {
+    padding: var(--component-card-body-padding-block) var(--component-card-body-padding-inline);
+  }
+  .p-card .p-card-title {
+    font-size: var(--component-card-header-title-font-size);
+    font-weight: var(--component-card-header-title-font-weight);
+    color: var(--component-card-header-title-color);
+  }
+  .p-card .p-card-subtitle {
+    color: var(--component-card-header-subtitle-color);
+  }
+  .p-card .p-card-footer {
+    padding-block: var(--component-card-footer-padding-block);
+  }
+}
+@layer adapters {
+  :root {
+    --p-badge-border-radius: var(--component-badge-border-radius);
+    --p-badge-font-size: var(--component-badge-md-font-size);
+    --p-badge-font-weight: var(--component-badge-font-weight);
+    --p-badge-padding: var(--component-badge-md-padding-block)
+                               var(--component-badge-md-padding-inline);
+    --p-badge-primary-background: var(--component-badge-info-bg);
+    --p-badge-primary-color: var(--component-badge-info-color);
+    --p-badge-success-background: var(--component-badge-success-bg);
+    --p-badge-success-color: var(--component-badge-success-color);
+    --p-badge-warning-background: var(--component-badge-warning-bg);
+    --p-badge-warning-color: var(--component-badge-warning-color);
+    --p-badge-danger-background: var(--component-badge-danger-bg);
+    --p-badge-danger-color: var(--component-badge-danger-color);
+    --p-badge-secondary-background: var(--component-badge-neutral-bg);
+    --p-badge-secondary-color: var(--component-badge-neutral-color);
+  }
+  .p-badge {
+    background: var(--component-badge-info-bg);
+    color: var(--component-badge-info-color);
+    border-radius: var(--component-badge-border-radius);
+    font-size: var(--component-badge-md-font-size);
+    font-weight: var(--component-badge-font-weight);
+    padding: var(--component-badge-md-padding-block) var(--component-badge-md-padding-inline);
+  }
+  .p-badge-success {
+    background: var(--component-badge-success-bg);
+    color: var(--component-badge-success-color);
+  }
+  .p-badge-warning {
+    background: var(--component-badge-warning-bg);
+    color: var(--component-badge-warning-color);
+  }
+  .p-badge-danger {
+    background: var(--component-badge-danger-bg);
+    color: var(--component-badge-danger-color);
+  }
+  .p-badge-secondary {
+    background: var(--component-badge-neutral-bg);
+    color: var(--component-badge-neutral-color);
+  }
+  .p-badge-dot {
+    width: var(--component-badge-md-dot-size);
+    height: var(--component-badge-md-dot-size);
+    border-radius: 50%;
+    padding: 0;
+    min-width: unset;
   }
 }

@@ -1,0 +1,33 @@
+// =============================================================================
+// ADAPTER: PrimeNG v17 — index
+// FILE:  adapters/primeng/v17/_index.scss
+//
+// PURPOSE:
+//   Barrel for all PrimeNG v17 component adapters.
+//   Exposes a single styles() mixin consumed by adapters/primeng/_index.scss.
+//
+// COMPONENTS:
+//   _button.scss  — .p-button all variants + sizes + states
+//   _card.scss    — .p-card layout
+//   _input.scss   — .p-inputtext all states + sizes
+//   _badge.scss   — .p-badge all severities + dot
+//   _dialog.scss  — .p-dialog header/body/footer + backdrop
+//
+// ADDING A NEW COMPONENT:
+//   1. Create adapters/primeng/v17/_{component}.scss with a styles() mixin
+//   2. @use it here and call @include {component}.styles() inside styles()
+// =============================================================================
+
+@use 'button';
+@use 'card';
+@use 'input';
+@use 'badge';
+@use 'dialog';
+
+@mixin styles() {
+  @include button.styles();
+  @include card.styles();
+  @include input.styles();
+  @include badge.styles();
+  @include dialog.styles();
+}

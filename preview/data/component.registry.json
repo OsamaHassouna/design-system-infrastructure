@@ -20,6 +20,23 @@
       "tokenRegistryKey": "button",
       "supportedAdapters": ["primeng", "angular"],
 
+      "adapters": {
+        "primeng": {
+          "v17": {
+            "module": "ButtonModule",
+            "import": "import { ButtonModule } from 'primeng/button';",
+            "variants": {
+              "primary":   "<button pButton type=\"button\" label=\"Save\"></button>",
+              "secondary": "<button pButton type=\"button\" severity=\"secondary\" label=\"Cancel\"></button>",
+              "tertiary":  "<button pButton type=\"button\" [text]=\"true\" label=\"Learn more\"></button>",
+              "ghost":     "<button pButton type=\"button\" [text]=\"true\" [plain]=\"true\" label=\"Dismiss\"></button>",
+              "danger":    "<button pButton type=\"button\" severity=\"danger\" label=\"Delete\"></button>"
+            },
+            "notes": "Uses two-pass adapter: Pass 1 overrides --p-button-* CSS variables in :root; Pass 2 targets .p-button* class selectors."
+          }
+        }
+      },
+
       "flags": {
         "hasLoading":     true,
         "hasIconOnly":    true,
@@ -157,6 +174,23 @@
       "tokenRegistryKey": "badge",
       "supportedAdapters": ["primeng"],
 
+      "adapters": {
+        "primeng": {
+          "v17": {
+            "module": "BadgeModule",
+            "import": "import { BadgeModule } from 'primeng/badge';",
+            "variants": {
+              "success": "<p-badge value=\"New\" severity=\"success\"></p-badge>",
+              "warning": "<p-badge value=\"3\" severity=\"warning\"></p-badge>",
+              "danger":  "<p-badge value=\"!\" severity=\"danger\"></p-badge>",
+              "info":    "<p-badge value=\"Info\"></p-badge>",
+              "neutral": "<p-badge value=\"Label\" severity=\"secondary\"></p-badge>"
+            },
+            "notes": "PrimeNG Badge severities: default=info, secondary=neutral. Dot variant: add [dot] attribute."
+          }
+        }
+      },
+
       "flags": {
         "hasLoading":     false,
         "hasIconOnly":    false,
@@ -265,6 +299,19 @@
       "tokenPrefix": "--component-card",
       "tokenRegistryKey": "card",
       "supportedAdapters": ["primeng"],
+
+      "adapters": {
+        "primeng": {
+          "v17": {
+            "module": "CardModule",
+            "import": "import { CardModule } from 'primeng/card';",
+            "variants": {
+              "default": "<p-card header=\"Title\" subheader=\"Subtitle\">\n  <p>Card body content.</p>\n  <ng-template pTemplate=\"footer\">\n    <button pButton label=\"Action\"></button>\n  </ng-template>\n</p-card>"
+            },
+            "notes": "PrimeNG Card maps to DS card layout tokens. Header, subtitle, body, and footer slots all consume --component-card-* variables."
+          }
+        }
+      },
 
       "flags": {
         "hasLoading":     false,
