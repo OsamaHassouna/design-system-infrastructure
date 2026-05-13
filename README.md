@@ -1,5 +1,7 @@
 # Design System Infrastructure
 
+**Live demo:** https://design-system-infrastructure.vercel.app
+
 A framework-agnostic design system with a deterministic CSS build pipeline. Define tokens once, generate CSS for any framework.
 
 ## What it is
